@@ -32,11 +32,27 @@ class CreatePerson(APIView):
 
 class CreateEvent(APIView):
     
+    def check(self, date_start, date_end):
+        
+        print("EVEVEVEV type is ",type(date_start))
+        evs= Event.objects.filter(date_start__range= (date_start, date_end))
+        el= len(evs)
+        evs= Event.objects.filter(date_end__range= (date_start, date_end))
+        el+= len(evs)
+        print("EVEVEVEV len is ", len(evs))
+        print("EVEVEVEV is ", evs)
+        if(len(evs)==0):
+            return True
+        return False 
+
     def post(self, request):
         author= request.data.get("author")
         title= request.data.get("title")
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
+
+        self.check(date_start, date_end)
+
         data= {
             "author": author,
             "title": title,
