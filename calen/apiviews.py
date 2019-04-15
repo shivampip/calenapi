@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status 
+from rest_framework import generics
 
 from .models import Person, Event
 from .serializers import PersonSerializer, EventSerializer
@@ -29,6 +30,10 @@ class CreatePerson(APIView):
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+
+class CreateEventGen(generics.ListCreateAPIView):
+    queryset= Event.objects.all()
+    serializer_class= EventSerializer
 
 class CreateEvent(APIView):
     
