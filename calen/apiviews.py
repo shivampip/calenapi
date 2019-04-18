@@ -64,7 +64,9 @@ class CreateEvent(APIView):
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
 
-        self.check(date_start, date_end)
+        is_slot_empty= self.check(date_start, date_end)
+        if(not is_slot_empty):
+            return Response({"Error": "Slot not empty"})
 
         data= {
             "author": author,
