@@ -6,6 +6,8 @@ from rest_framework import generics
 from .models import Person, Event
 from .serializers import PersonSerializer, EventSerializer
 
+from dateutil.parser import parse
+from datetime import timedelta
 
 class CreatePerson(APIView):
 
@@ -39,13 +41,19 @@ class CreateEvent(APIView):
     
     def check(self, date_start, date_end):
         
-        print("EVEVEVEV type is ",type(date_start))
-        evs= Event.objects.filter(date_start__range= (date_start, date_end))
+        start_dt= parse(date_start)
+        end_dt= parse(date_end)
+        print("START DATE BEFORE {}".format(start_dt))
+        start_dt= start_dt + timedelta(seconds= 1)
+        print("START DATE AFTER {}".format(start_dt))
+
+        
+        evs= Event.objects.filter(date_start__range= (start_dt, end_dt))
         el= len(evs)
-        evs= Event.objects.filter(date_end__range= (date_start, date_end))
+        evs= Event.objects.filter(date_end__range= (start_dt, end_dt))
         el+= len(evs)
+
         print("EVEVEVEV len is ", len(evs))
-        print("EVEVEVEV is ", evs)
         if(len(evs)==0):
             return True
         return False 
