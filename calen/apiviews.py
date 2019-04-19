@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 
 from .models import Person, Event
-from .serializers import PersonSerializer, EventSerializer
+from .serializers import PersonSerializer, EventSerializer, UserSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -80,3 +80,8 @@ class CreateEvent(APIView):
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
+
+class CreateUser(generics.CreateAPIView):
+    serializer_class= UserSerializer
