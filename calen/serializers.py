@@ -1,9 +1,9 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from .models import Person, Event
 
 from django.contrib.auth.models import User
-
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,4 +30,5 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
+        Token.objects.create(user= user)
         return user 

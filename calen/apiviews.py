@@ -84,4 +84,6 @@ class CreateEvent(APIView):
 
 
 class CreateUser(generics.CreateAPIView):
+    authentication_classes= ()
+    permission_classes= ()
     serializer_class= UserSerializer
