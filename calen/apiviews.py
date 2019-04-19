@@ -5,36 +5,11 @@ from rest_framework import generics
 
 from django.contrib.auth import authenticate
 
-from .models import Person, Event
-from .serializers import PersonSerializer, EventSerializer, UserSerializer
+from .models import Event
+from .serializers import EventSerializer, UserSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
-
-class CreatePerson(APIView):
-
-    def post(self, request):
-        #return Response(data= {"SHIVAM AGRAWAL"}, status= status.HTTP_200_OK)
-
-        print("HHHHHH User is {}".format(request.user))
-
-        name= request.data.get("name")
-        if(name is not None):
-            fname, lname= name.split()
-        else:
-            fname= request.data.get("fname")
-            lname= request.data.get("lname")
-        
-        data= {
-            "fname": fname,
-            "lname": lname
-        }
-        serializer= PersonSerializer(data= data)
-        if(serializer.is_valid()):
-            person= serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
 class CreateEventGen(generics.ListCreateAPIView):
@@ -86,6 +61,16 @@ class CreateEvent(APIView):
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
+
+class ListEvents(APIView):
+    permission_classes= ()
+
+    def get(self, request):
+        user= request.user
+        print("\nLIST\n {}".format(user))
+        evs= Event.objects.filter(author= user)
+        print("\nLIST\n {}".format(evs))
+        return Response(evs, status= status.HTTP_200_OK)
 
 class CreateUser(generics.CreateAPIView):
     authentication_classes= ()

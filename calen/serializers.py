@@ -1,14 +1,9 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import Person, Event
+from .models import Event
 
 from django.contrib.auth.models import User
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model= Person
-        fields= '__all__'
 
 
 class EventSerializer(serializers.ModelSerializer):
