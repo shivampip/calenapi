@@ -16,6 +16,8 @@ class CreatePerson(APIView):
     def post(self, request):
         #return Response(data= {"SHIVAM AGRAWAL"}, status= status.HTTP_200_OK)
 
+        print("HHHHHH User is {}".format(request.user))
+
         name= request.data.get("name")
         if(name is not None):
             fname, lname= name.split()
