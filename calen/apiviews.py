@@ -38,7 +38,8 @@ class CreateEvent(APIView):
         return False 
 
     def post(self, request):
-        author= request.data.get("author")
+        #author= request.data.get("author")
+        author= request.user
         title= request.data.get("title")
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
@@ -70,7 +71,8 @@ class ListEvents(APIView):
         print("\nLIST\n {}".format(user))
         evs= Event.objects.filter(author= user)
         print("\nLIST\n {}".format(evs))
-        return Response(evs, status= status.HTTP_200_OK)
+        serializer= EventSerializer(evs, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
 
 class CreateUser(generics.CreateAPIView):
     authentication_classes= ()
