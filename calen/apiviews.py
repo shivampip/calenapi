@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 
 from django.contrib.auth import authenticate
+from django.http.response import HttpResponse
 
 from .models import Event
 from .serializers import EventSerializer, UserSerializer
@@ -12,9 +13,11 @@ from dateutil.parser import parse
 from datetime import timedelta
 
 
+
 class CreateEventGen(generics.ListCreateAPIView):
     queryset= Event.objects.all()
     serializer_class= EventSerializer
+
 
 class CreateEvent(APIView):
     
@@ -74,21 +77,4 @@ class ListEvents(APIView):
         serializer= EventSerializer(evs, many= True)
         return Response(serializer.data, status= status.HTTP_200_OK)
 
-class CreateUser(generics.CreateAPIView):
-    authentication_classes= ()
-    permission_classes= ()
-    serializer_class= UserSerializer
 
-
-
-class LoginView(APIView):
-    permission_classes= ()
-
-    def post(self, request):
-        username= request.data.get("username")
-        password= request.data.get("password")
-        user= authenticate(username= username, password= password)
-        if(user):
-            return Response({"token": user.auth_token.key}, status= status.HTTP_200_OK)
-        else:
-            return Response({"error": "Wrong credentials"}, status= status.HTTP_400_BAD_REQUEST)
