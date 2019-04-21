@@ -21,18 +21,15 @@ class CreateEventGen(generics.ListCreateAPIView):
 
 class CreateEvent(APIView):
     
-    def check(self, date_start, date_end):
+    def check(self, author, date_start, date_end):
         
         start_dt= parse(date_start)
         end_dt= parse(date_end)
-        print("START DATE BEFORE {}".format(start_dt))
         start_dt= start_dt + timedelta(seconds= 1)
-        print("START DATE AFTER {}".format(start_dt))
 
-        
-        evs= Event.objects.filter(date_start__range= (start_dt, end_dt))
+        evs= Event.objects.filter(author= author, date_start__range= (start_dt, end_dt))
         el= len(evs)
-        evs= Event.objects.filter(date_end__range= (start_dt, end_dt))
+        evs= Event.objects.filter(author= author, date_end__range= (start_dt, end_dt))
         el+= len(evs)
 
         print("EVEVEVEV len is ", len(evs))
@@ -42,12 +39,12 @@ class CreateEvent(APIView):
 
     def post(self, request):
         #author= request.data.get("author")
-        author= request.user
+        author= request.user.id 
         title= request.data.get("title")
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
 
-        is_slot_empty= self.check(date_start, date_end)
+        is_slot_empty= self.check(author, date_start, date_end)
         if(not is_slot_empty):
             return Response({"Error": "Slot not empty"})
 
