@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.http.response import HttpResponse
 
 from .models import Event
@@ -12,6 +13,8 @@ from .serializers import EventSerializer, UserSerializer
 from dateutil.parser import parse
 from datetime import timedelta
 
+from .hiutil import username_to_id
+import json 
 
 
 class CreateEventGen(generics.ListCreateAPIView):
@@ -43,6 +46,12 @@ class CreateEvent(APIView):
         title= request.data.get("title")
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
+        include_author= request.data.get("include_author")
+        
+        raw_members= request.data.get("members")
+        members= raw_members.split()
+        if(include_author):
+            members.append(str(request.user))
 
         is_slot_empty= self.check(author, date_start, date_end)
         if(not is_slot_empty):
@@ -52,7 +61,8 @@ class CreateEvent(APIView):
             "author": author,
             "title": title,
             "date_start": date_start,
-            "date_end": date_end
+            "date_end": date_end,
+            "members": json.dumps(members)
         }
         serializer= EventSerializer(data= data)
         if(serializer.is_valid()):
@@ -75,3 +85,14 @@ class ListEvents(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
 
 
+
+class TestEvent(APIView):
+    def get(self, request):
+        username= request.GET['name']
+        print("USER is "+username)
+        uid= username_to_id(username)
+        print("USER ID is "+str(uid)) 
+
+        evs= Event.objects.filter(author= uid)
+        serializer= EventSerializer(evs, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
