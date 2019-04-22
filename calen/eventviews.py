@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.http.response import HttpResponse
 
 from .models import Event, PendingEvent, Invite
-from .serializers import EventSerializer, UserSerializer, PendingEventSerializer
+from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -172,14 +172,19 @@ class ShowPMSatus(APIView):
         pes= PendingEvent.objects.filter(author= user)
         out= ""
         for pe in pes:
-            out+= "<br>Pending Event is "+str(pe)
+            out+= "<h4>"+str(pe)+"</h4>"
+            out+= "<table border= '1px solid black'>"
             invs= pe.invite_set.all()
             total= len(invs)
             accepted= 0
             for inv in invs:
                 if(inv.accepted):
                     accepted+=1
-            out+= "<br>"+str(accepted)+" invites have been accepted out of "+str(total)
+                    out+= "<tr><td>"+str(inv.ref)+"</td><td>Accepted</td></tr>"
+                else:
+                    out+= "<tr><td>"+str(inv.ref)+"</td><td>Not accepted</td></tr>"
+            out+= "</table>"
+            out+= "<br><b>"+str(accepted)+" invites have been accepted out of "+str(total)+"</b>"
         if(out==""):
             return HttpResponse("No event")
         return HttpResponse(out)
@@ -188,6 +193,8 @@ class ShowInvites(APIView):
     def get(self, request):
         user= request.user
         invites= user.invite_set.all()
+        serializer= InviteSerializer(invites, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
         if(len(invites)<=0):
             return HttpResponse("No Invite")
         res= ""
@@ -199,7 +206,11 @@ class ShowInvites(APIView):
 class AcceptInvite(APIView):
     def get(self, request):
         user= request.user
-        invite = user.invite_set.all()[0]
-        invite.accepted= True
-        invite.save()
-        return HttpResponse(str(invite)+" successfully accepted")
+        id= request.GET['id']
+        invite = Invite.objects.get(id= id)
+        if(invite.ref==user):
+            invite.accepted= True
+            invite.save()
+            return HttpResponse(str(invite)+" successfully accepted")
+        else:
+            return HttpResponse("Unauthenticated try")
