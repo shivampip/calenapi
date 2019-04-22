@@ -24,3 +24,24 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class PendingEvent(models.Model):
+    author= models.ForeignKey(User, related_name="pending_events", on_delete= models.CASCADE)
+    title= models.CharField(max_length= 200)
+    date_start= models.DateTimeField("From")
+    date_end= models.DateTimeField("To")
+
+
+
+    def __str__(self):
+        return self.title
+
+
+class Invite(models.Model):
+    pe= models.ForeignKey(PendingEvent, on_delete= models.CASCADE)
+    ref= models.ForeignKey(User, on_delete= models.CASCADE)
+
+    def __str__(self):
+        return str(self.pe.title)+" for "+str(self.ref.username)
