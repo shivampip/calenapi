@@ -32,7 +32,7 @@ class PendingEvent(models.Model):
     title= models.CharField(max_length= 200)
     date_start= models.DateTimeField("From")
     date_end= models.DateTimeField("To")
-
+    members= models.CharField(max_length= 200)
 
 
     def __str__(self):
@@ -42,6 +42,7 @@ class PendingEvent(models.Model):
 class Invite(models.Model):
     pe= models.ForeignKey(PendingEvent, on_delete= models.CASCADE)
     ref= models.ForeignKey(User, on_delete= models.CASCADE)
+    accepted= models.BooleanField('accepted', default=False)
 
     def __str__(self):
         return str(self.pe.title)+" for "+str(self.ref.username)

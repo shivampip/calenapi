@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import Event
+from .models import Event, PendingEvent
 
 from django.contrib.auth.models import User
 
@@ -9,6 +9,12 @@ from django.contrib.auth.models import User
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model= Event
+        fields= '__all__'
+
+
+class PendingEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= PendingEvent
         fields= '__all__'
 
 
