@@ -119,12 +119,15 @@ class CreatePE(APIView):
         return False 
 
 
-    def send_invite(self, pe, members):
+    def send_invite(self, pe, members, cuser):
         print("### Sending invite of "+str(pe))
         for member in members:
             # send invite
             user= User.objects.get(username= member)
-            invite= Invite(pe= pe, ref= user, accepted= False)
+            if(user==cuser):
+                invite= Invite(pe= pe, ref= user, accepted= True)
+            else:
+                invite= Invite(pe= pe, ref= user, accepted= False)
             invite.save()
             print("### Invite sent to "+str(user.username))
 
@@ -157,17 +160,46 @@ class CreatePE(APIView):
         serializer= PendingEventSerializer(data= data)
         if(serializer.is_valid()):
             pe= serializer.save()
-            self.send_invite(pe, members)
+            self.send_invite(pe, members, request.user)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
+class ShowPMSatus(APIView):
+    def get(self, request):
+        user= request.user
+        pes= PendingEvent.objects.filter(author= user)
+        out= ""
+        for pe in pes:
+            out+= "<br>Pending Event is "+str(pe)
+            invs= pe.invite_set.all()
+            total= len(invs)
+            accepted= 0
+            for inv in invs:
+                if(inv.accepted):
+                    accepted+=1
+            out+= "<br>"+str(accepted)+" invites have been accepted out of "+str(total)
+        if(out==""):
+            return HttpResponse("No event")
+        return HttpResponse(out)
+
 class ShowInvites(APIView):
     def get(self, request):
         user= request.user
         invites= user.invite_set.all()
+        if(len(invites)<=0):
+            return HttpResponse("No Invite")
         res= ""
         for invite in invites:
             res+= "<br>Your invite is "+str(invite)
         return HttpResponse(res)
+
+
+class AcceptInvite(APIView):
+    def get(self, request):
+        user= request.user
+        invite = user.invite_set.all()[0]
+        invite.accepted= True
+        invite.save()
+        return HttpResponse(str(invite)+" successfully accepted")
