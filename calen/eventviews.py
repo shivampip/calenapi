@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
 
-from .models import Event, PendingEvent
+from .models import Event, PendingEvent, Invite
 from .serializers import EventSerializer, UserSerializer, PendingEventSerializer
 
 from dateutil.parser import parse
@@ -113,10 +113,20 @@ class CreatePE(APIView):
         pes= PendingEvent.objects.filter(author= author, date_end__range= (start_dt, end_dt))
         pel+= len(pes)
 
-        print("EVEVEVEV len is ", len(pel))
-        if(len(pel)==0):
+        print("EVEVEVEV len is ", str(pel))
+        if(pel==0):
             return True
         return False 
+
+
+    def send_invite(self, pe, members):
+        print("### Sending invite of "+str(pe))
+        for member in members:
+            # send invite
+            user= User.objects.get(username= member)
+            invite= Invite(pe= pe, ref= user, accepted= False)
+            invite.save()
+            print("### Invite sent to "+str(user.username))
 
     def post(self, request):
         #author= request.data.get("author")
@@ -146,8 +156,18 @@ class CreatePE(APIView):
         }
         serializer= PendingEventSerializer(data= data)
         if(serializer.is_valid()):
-            event= serializer.save()
+            pe= serializer.save()
+            self.send_invite(pe, members)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+
+class ShowInvites(APIView):
+    def get(self, request):
+        user= request.user
+        invites= user.invite_set.all()
+        res= ""
+        for invite in invites:
+            res+= "<br>Your invite is "+str(invite)
+        return HttpResponse(res)

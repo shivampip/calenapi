@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import CreateEvent, CreateEventGen, ListEvents, TestEvent, CreatePE
+from .eventviews import CreateEvent, CreateEventGen, ListEvents, TestEvent, CreatePE, ShowInvites
 
 from .useriviews import Home, CreateUser, LoginView
 
@@ -16,5 +16,6 @@ urlpatterns = [
     path('meg/', CreateEventGen.as_view(), name= 'make_event_gen'),
     path('le/', ListEvents.as_view(), name= "list_evens"),
     path('te/', TestEvent.as_view(), name= "test_event"),
+    path('si/', ShowInvites.as_view(), name= 'show_invites'),
     #path('llogin/', obtain_auth_token, name= "llogin_view"),
 ]
