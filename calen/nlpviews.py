@@ -17,12 +17,21 @@ mb.initNlu()
 
 class Talk(APIView):
     def get(self, request):
-        msg= request.GET['msg']
-        out= mb.runNlu(msg)
-        entities= out["entities"]
-        res= ""
-        for entity in entities:
-            name= entity['entity']
-            value= entity['value']
-            res+= name+": "+value+"<br>"
-        return HttpResponse(res, status= status.HTTP_200_OK)
+        msg= request.GET.get('msg', None)
+        if(msg is not None):
+            out= mb.runNlu(msg)
+            entities= out["entities"]
+            res= ""
+            fields= ['person', 'time', 'duration']
+            for entity in entities:
+                name= entity['entity']
+                value= entity['value']
+                res+= name+": "+value+"<br>"
+                if(name in fields):
+                    fields.remove(name)
+            res+= "Remaining fields: "+str(fields)
+            return HttpResponse(res, status= status.HTTP_200_OK)
+        person= request.GET.get('person', None)
+        if(person is not None):
+            return HttpResponse("person is "+person, status= status.HTTP_200_OK)
+        return HttpResponse("Nothign found", status= status.HTTP_200_OK)
