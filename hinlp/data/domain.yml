@@ -1,0 +1,45 @@
+intents:
+  - set_meeting
+  - greet
+##--------------------------------------------------
+
+
+actions:
+  - utter_ok
+  - utter_thanks_for_pi
+  - action_default_fallback
+
+
+
+entities:
+ - time
+ - person
+ - name
+
+
+slots:
+  time:
+    type: text
+  name:
+    type: unfeaturized
+
+forms:
+  - meeting_manager
+
+templates:
+  utter_ask_name:
+  - text: "What should I call you?"
+  - text: "What's your name?"
+  - text: "What is your good name?"
+
+  utter_ok:
+  - text: "OK"
+  - text: "Alright"
+  - text: "Okay"
+
+  utter_thanks_for_pi
+  - text: "Thanks for providing information"
+
+
+  utter_default:
+  - text: "Performing Default Aciton"

@@ -209,7 +209,7 @@ class AcceptInvite(APIView):
         id= request.GET['id']
         invite = Invite.objects.get(id= id)
         if(invite.ref==user):
-            invite.accepted= True
+            invite.accepted= True   
             invite.save()
             return HttpResponse(str(invite)+" successfully accepted")
         else:
