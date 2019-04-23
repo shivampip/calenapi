@@ -4,6 +4,8 @@ from .eventviews import CreateEvent, CreateEventGen, ListEvents, TestEvent, Crea
 
 from .useriviews import Home, CreateUser, LoginView
 
+from .nlpviews import Talk
+
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -20,4 +22,6 @@ urlpatterns = [
     path('ai/', AcceptInvite.as_view(), name= 'accept_invite'),
     path('spes/', ShowPMSatus.as_view(), name= 'show_pe_status'),
     #path('llogin/', obtain_auth_token, name= "llogin_view"),
+
+    path('bot/', Talk.as_view(), name= 'talk'),
 ]

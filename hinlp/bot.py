@@ -39,14 +39,14 @@ from rasa_core.interpreter import RasaNLUInterpreter
 
 class MyBot:
     def initNlu(self):
-        self.interpreter= Interpreter.load("models/current/nlu")
+        self.interpreter= Interpreter.load("hinlp/models/current/nlu")
 
     def initIn(self):
-        self.interpreter= Interpreter.load("models/current/nlu")
+        self.interpreter= Interpreter.load("hinlp/models/current/nlu")
         #self.agent = Agent.load('models/dialogue')
 
     def initAll(self):
-        self.interpreter= RasaNLUInterpreter("models/current/nlu")
+        self.interpreter= RasaNLUInterpreter("hinlp/models/current/nlu")
         #self.agent= Agent.load("models/dialogue", interpreter= self.interpreter)
 
     def runNlu(self, msg):
@@ -60,7 +60,7 @@ class MyBot:
         pass
         #return self.agent.handle_message(msg)
 
-
+'''
 bot= Bot()
 bot.trainNlu()
 
@@ -80,3 +80,4 @@ while(True):
     out= mb.runNlu(msg)
     out= json.dumps(out, indent=4)
     print("\n\n\n\nBot:- ",out)
+'''
