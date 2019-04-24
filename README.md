@@ -23,6 +23,7 @@ python manage.py runserver
 ```
 
 * Browse at **http://localhost:8000/**
+* Note: since its just backend, gui is not good. and gui is not available for all actions.
 
 
 
