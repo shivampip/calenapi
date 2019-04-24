@@ -28,21 +28,23 @@ python manage.py runserver
 
 ## API Documentation
 
-| Action  | Request type |  URL  |  arguments  | response
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| Signup  | POST  | http://localhost:8000/signup/  |  username, password  | username  |
-| Login  | POST  | http://localhost:8000/login/  |  username, password  | auth-token  |
-| Home  | POST  | http://localhost:8000/  |  None  | html  |
-| Verify user  | POST  | http://localhost:8000/home/  |  None  | html  |
-| Create Event  | POST  | http://localhost:8000/me/  |  title, date_start, date_end, members  | Ack  |
-| List Event  | GET  | http://localhost:8000/le/  |  None  | Event list  |
-| Show Invites  | GET  | http://localhost:8000/si/  |  None  | Invite list  |
-| Accept Invite  | POST  | http://localhost:8000/ai/  |  id  | Ack  |
-| Create Pending Event  | POST  | http://localhost:8000/mpe/  |  title, date_start, date_end, members, include_author  | Ack  |
-| Pending Event Status  | GET  | http://localhost:8000/spes/  |  None  | All pending events status  |
+| Action  | Request type |  URL  |  arguments  | response | Authentication |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| Signup  | POST  | http://localhost:8000/signup/  |  username, password  | username  | False |
+| Login  | POST  | http://localhost:8000/login/  |  username, password  | auth-token  | False |
+| Home  | POST  | http://localhost:8000/  |  None  | html  | True |
+| Verify user  | POST  | http://localhost:8000/home/  |  None  | html  |  True |
+| Create Event  | POST  | http://localhost:8000/me/  |  title, date_start, date_end, members  | Ack  | True |
+| List Event  | GET  | http://localhost:8000/le/  |  None  | Event list  | True |
+| Show Invites  | GET  | http://localhost:8000/si/  |  None  | Invite list  | True |
+| Accept Invite  | POST  | http://localhost:8000/ai/  |  id  | Ack  | True |
+| Create Pending Event  | POST  | http://localhost:8000/mpe/  |  title, date_start, date_end, members, include_author  | Ack  | True |
+| Pending Event Status  | GET  | http://localhost:8000/spes/  |  None  | All pending events status  | True |
 
 
+## Progress
 
+* Authentication [![Generic badge](https://img.shields.io/badge/Authentication-ONGOING-YELLOW.svg)](https://shields.io/)
 
 ## Diagram
 
