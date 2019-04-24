@@ -41,6 +41,7 @@ python manage.py runserver
 | Create Pending Event  | POST  | http://localhost:8000/mpe/  |  title, date_start, date_end, members, include_author  | Ack  | True |
 | Pending Event Status  | GET  | http://localhost:8000/spes/  |  None  | All pending events status  | True |
 
+Detailed formats will be provided, once its completed.
 
 ## Progress
 
