@@ -44,7 +44,12 @@ python manage.py runserver
 
 ## Progress
 
-* Authentication [![Generic badge](https://img.shields.io/badge/Authentication-ONGOING-YELLOW.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/Authentication-ONGOING-1abc9c.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/NLP-ONGOING-1abc9c.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/Meeting Management-ONGOING-1abc9c.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/Architecture-DONE-green.svg)](https://shields.io/)
+
+
 
 ## Diagram
 
