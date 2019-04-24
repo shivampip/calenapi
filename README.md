@@ -30,8 +30,18 @@ python manage.py runserver
 
 | Action  | Request type |  URL  |  arguments  | response
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Signup  | POST  | http://localhost:8000/signup/  |  none  | none  |
+| Signup  | POST  | http://localhost:8000/signup/  |  username, password  | username  |
 | Login  | POST  | http://localhost:8000/login/  |  username, password  | auth-token  |
+| Home  | POST  | http://localhost:8000/  |  None  | html  |
+| Verify user  | POST  | http://localhost:8000/home/  |  None  | html  |
+| Create Event  | POST  | http://localhost:8000/me/  |  title, date_start, date_end, members  | Ack  |
+| List Event  | GET  | http://localhost:8000/le/  |  None  | Event list  |
+| Show Invites  | GET  | http://localhost:8000/si/  |  None  | Invite list  |
+| Accept Invite  | POST  | http://localhost:8000/ai/  |  id  | Ack  |
+| Create Pending Event  | POST  | http://localhost:8000/mpe/  |  title, date_start, date_end, members, include_author  | Ack  |
+| Pending Event Status  | GET  | http://localhost:8000/spes/  |  None  | All pending events status  |
+
+
 
 
 ## Diagram
