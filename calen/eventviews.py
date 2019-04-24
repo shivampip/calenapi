@@ -217,7 +217,7 @@ class AcceptInvite(APIView):
 
 
 from datetime import datetime
-from pytz import timezone 
+#from pytz import timezone 
 
 class AvailableSlots(APIView):
 
@@ -245,8 +245,8 @@ class AvailableSlots(APIView):
             print("## Start DT: {}".format(ev.date_start))
             ds= datetime.timestamp(ev.date_start)
             ct= datetime.fromtimestamp(ds)
-            new_ct= ct.astimezone(timezone('utc'))
-            print("## Conve DT: {}".format(str(new_ct)))
+            #new_ct= ct.astimezone(timezone('utc'))
+            print("## Conve DT: {}".format(str(ct)))
 
             de= datetime.timestamp(ev.date_end)
             na_slots.append((ds, de))
