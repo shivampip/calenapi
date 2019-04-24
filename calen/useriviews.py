@@ -12,6 +12,10 @@ from .serializers import EventSerializer, UserSerializer
 from dateutil.parser import parse
 from datetime import timedelta
 
+class Welcome(APIView):
+    def get(self, request):
+        out= "<h2>Welcome to Scheduling Bot</h2>"
+        return HttpResponse(out, status= status.HTTP_200_OK)
 
 class Home(APIView):
     def get(self, request):

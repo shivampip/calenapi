@@ -57,7 +57,7 @@ ROOT_URLCONF = 'calenapi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['raw'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

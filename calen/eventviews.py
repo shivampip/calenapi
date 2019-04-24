@@ -214,3 +214,71 @@ class AcceptInvite(APIView):
             return HttpResponse(str(invite)+" successfully accepted")
         else:
             return HttpResponse("Unauthenticated try")
+
+
+from datetime import datetime
+from pytz import timezone 
+
+class AvailableSlots(APIView):
+
+    #### MAKE MEETING BOOK TIMES TIMEZONE FREE
+    #### AT PRESENT IT IS TAKING INPUT, ADDING 5:30 INTO IT AND STORING AS UTC (0:00)
+    #### INSHORT WHILE ADD MEETING TAKE PROPER DATETIME INPUT KEEPING TIMEZONE IN MIND
+
+    def post(self, request):
+        start_date= request.data.get("start_date")
+        end_date= request.data.get("end_date")
+        duration= request.data.get("duration")
+
+        user= request.user
+        
+        evs1= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
+        evs2= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
+
+        el1= [ev for ev in evs1]
+        el2= [ev for ev in evs2]
+        el= list(set(el1) | (set(el2)))
+        print("## EL is {}".format(str(el1)))
+
+        na_slots= []
+        for ev in el:
+            print("## Start DT: {}".format(ev.date_start))
+            ds= datetime.timestamp(ev.date_start)
+            ct= datetime.fromtimestamp(ds)
+            new_ct= ct.astimezone(timezone('utc'))
+            print("## Conve DT: {}".format(str(new_ct)))
+
+            de= datetime.timestamp(ev.date_end)
+            na_slots.append((ds, de))
+
+        print("## NA_SLOTS are {}".format(str(na_slots)))
+
+
+        start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
+        end_dt= datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%SZ")
+        
+        out= ""
+        out+= "<h3>Required slot</h3>"
+
+        out+= "Start: {}".format(str(start_dt))+"<br>"
+        out+= "End  : {}".format(str(end_dt))+"<br><br>"
+        out+= "Duration :{}".format(str(duration))+"<br>"
+        out+= "Max Available duration: {}".format(str(datetime.timestamp(end_dt)- datetime.timestamp(start_dt)))
+
+        out+= "<h3>Not available slots</h3>"
+
+        for ds, de in na_slots:
+            dsn= datetime.fromtimestamp(ds).astimezone(timezone('utc'))
+            den= datetime.fromtimestamp(de).astimezone(timezone('utc'))
+            
+            out+= "Start: "+str(dsn)+"<br>End  : "+str(den)+"<br><br>"
+
+        out+= "<h3>Available slots</h3>"
+
+        na_slots.append((0 , datetime.timestamp(start_dt)))
+        na_slots.append((datetime.timestamp(end_dt), 0))
+        na_slots.sort()
+
+        print("## NOW NA is {}".format(str(na_slots)))
+
+        return HttpResponse(out, status= status.HTTP_200_OK)
