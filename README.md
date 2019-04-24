@@ -26,6 +26,12 @@ python manage.py runserver
 * Note: since its just backend, gui is not good. and gui is not available for all actions.
 
 
+## API Documentation
+
+| Action  | Request type |  URL  |
+| ------------- | ------------- | ------------- |
+| Signup  | POST  | localhost:8000/signup/  |
+| Content Cell  | Content Cell  | Content Cell  |
 
 
 ## Diagram
