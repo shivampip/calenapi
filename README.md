@@ -47,7 +47,7 @@ python manage.py runserver
 *  [![Generic badge](https://img.shields.io/badge/Authentication-ONGOING-1abc9c.svg)](https://shields.io/)
 *  [![Generic badge](https://img.shields.io/badge/NLP-ONGOING-1abc9c.svg)](https://shields.io/)
 *  [![Generic badge](https://img.shields.io/badge/Meeting_Management-ONGOING-1abc9c.svg)](https://shields.io/)
-*  [![Generic badge](https://img.shields.io/badge/Architecture-DONE-green.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/Framework-DONE-green.svg)](https://shields.io/)
 
 
 
