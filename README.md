@@ -15,11 +15,18 @@ cd calenapi
 pip install -r requirements.txt
 ```
 
+## Run
+
+* Run server
+```
+python manage.py runserver
+```
+
+* Browse at **http://localhost:8000/**
 
 
 
 
-
-
+## Diagram
 
 ![Scheduling flow](raw/VSchedule.png)
