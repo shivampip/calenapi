@@ -28,10 +28,10 @@ python manage.py runserver
 
 ## API Documentation
 
-| Action  | Request type |  URL  |
-| ------------- | ------------- | ------------- |
-| Signup  | POST  | localhost:8000/signup/  |
-| Content Cell  | Content Cell  | Content Cell  |
+| Action  | Request type |  URL  |  arguments  | response
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| Signup  | POST  | http://localhost:8000/signup/  |  none  | none  |
+| Login  | POST  | http://localhost:8000/login/  |  username, password  | auth-token  |
 
 
 ## Diagram
