@@ -30,15 +30,16 @@ python manage.py runserver
 
 | Action  | Request type |  URL  |  arguments  | response | Authentication |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Signup  | POST  | http://localhost:8000/register/  |  username, password  | username  | False |
+| Signup  | POST  | http://localhost:8000/signup/  |  username, password  | username  | False |
 | Login  | POST  | http://localhost:8000/login/  |  username, password  | auth-token  | False |
-| Home  | POST  | http://localhost:8000/home/  |  None  | html  | True |
-| Create Event  | POST  | http://localhost:8000/CreateEvent/  |  title, date_start, date_end, members  | Ack  | True |
-| List Event  | GET  | http://localhost:8000/ListEvent/  |  None  | Event list  | True |
-| Show Invites  | GET  | http://localhost:8000/ShowInvites/  |  None  | Invite list  | True |
-| Accept Invite  | POST  | http://localhost:8000/AcceptInvites/  |  id  | Ack  | True |
-| Create Pending Event  | POST  | http://localhost:8000/CreatePendingEvent/  |  title, date_start, date_end, members, include_author  | Ack  | True |
-| Pending Event Status  | GET  | http://localhost:8000/ShowPendingEventStatus/  |  None  | All pending events status  | True |
+| Home  | POST  | http://localhost:8000/  |  None  | html  | True |
+| Verify user  | POST  | http://localhost:8000/home/  |  None  | html  |  True |
+| Create Event  | POST  | http://localhost:8000/me/  |  title, date_start, date_end, members  | Ack  | True |
+| List Event  | GET  | http://localhost:8000/le/  |  None  | Event list  | True |
+| Show Invites  | GET  | http://localhost:8000/si/  |  None  | Invite list  | True |
+| Accept Invite  | POST  | http://localhost:8000/ai/  |  id  | Ack  | True |
+| Create Pending Event  | POST  | http://localhost:8000/mpe/  |  title, date_start, date_end, members, include_author  | Ack  | True |
+| Pending Event Status  | GET  | http://localhost:8000/spes/  |  None  | All pending events status  | True |
 
 Detailed formats will be provided, once its completed.
 
