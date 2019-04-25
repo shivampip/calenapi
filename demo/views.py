@@ -65,4 +65,4 @@ def get_available_slots(request):
     pass 
 
 def talk(request):
-    pass 
+    return render(request, "demo/talk.html")

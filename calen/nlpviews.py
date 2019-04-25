@@ -11,20 +11,20 @@ from .serializers import EventSerializer, UserSerializer, PendingEventSerializer
 
 import json 
 
-#from duckling import DucklingWrapper
+from duckling import DucklingWrapper
 
 from datetime import timedelta
 
-'''
+
 from hinlp.bot import MyBot
 print("Importing NLU model....", end= "")
 mb= MyBot()
 mb.initNlu()
 print("DONE")
 print("Importing Duckling.....", end= "")
-#dw= DucklingWrapper()
+dw= DucklingWrapper()
 print("DONE")
-'''
+
 
 class Talk(APIView):
 
