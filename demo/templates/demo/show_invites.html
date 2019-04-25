@@ -1,0 +1,8 @@
+<h3>Blank </h3>
+
+<p> {{ data.value }} </p>
+
+
+{% for d in data %}
+<a href="http://localhost:8000/calen/ai?id={{d.id}}"><h3>{{ d.id }}</h3></a>
+{% endfor %}
