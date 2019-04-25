@@ -229,6 +229,7 @@ class AvailableSlots(APIView):
         start_date= request.data.get("start_date")
         end_date= request.data.get("end_date")
         duration= request.data.get("duration")
+        duration= int(duration)
 
         user= request.user
         
@@ -254,8 +255,8 @@ class AvailableSlots(APIView):
         print("## NA_SLOTS are {}".format(str(na_slots)))
 
 
-        start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
-        end_dt= datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%SZ")
+        start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+        end_dt= datetime.strptime(end_date, "%Y-%m-%dT%H:%M")
         
         out= ""
         out+= "<h3>Required slot</h3>"
@@ -263,22 +264,32 @@ class AvailableSlots(APIView):
         out+= "Start: {}".format(str(start_dt))+"<br>"
         out+= "End  : {}".format(str(end_dt))+"<br><br>"
         out+= "Duration :{}".format(str(duration))+"<br>"
-        out+= "Max Available duration: {}".format(str(datetime.timestamp(end_dt)- datetime.timestamp(start_dt)))
 
         out+= "<h3>Not available slots</h3>"
 
         for ds, de in na_slots:
-            dsn= datetime.fromtimestamp(ds).astimezone(timezone('utc'))
-            den= datetime.fromtimestamp(de).astimezone(timezone('utc'))
-            
-            out+= "Start: "+str(dsn)+"<br>End  : "+str(den)+"<br><br>"
+            dsn= datetime.fromtimestamp(ds)
+            den= datetime.fromtimestamp(de)            
+            out+= "From "+str(dsn)+" to "+str(den)+"<br>"
 
-        out+= "<h3>Available slots</h3>"
 
         na_slots.append((0 , datetime.timestamp(start_dt)))
         na_slots.append((datetime.timestamp(end_dt), 0))
         na_slots.sort()
 
-        print("## NOW NA is {}".format(str(na_slots)))
+        out+= "<h3>Available slots</h3>"
+
+        for i in range(1, len(na_slots)):
+            my_start= na_slots[i-1][1]
+            my_end= na_slots[i][0]
+            if((my_end- my_start)>=duration):
+                while((my_end- my_start)>=duration):
+                    s_start= my_start
+                    e_end= my_start+duration
+                    my_start= e_end
+                    dsn= datetime.fromtimestamp(s_start)
+                    den= datetime.fromtimestamp(e_end)            
+                    out+= "From "+str(dsn)+" to "+str(den)+"<br>"
+            #out+= "<br>"
 
         return HttpResponse(out, status= status.HTTP_200_OK)
