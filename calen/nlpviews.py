@@ -4,7 +4,7 @@ from rest_framework import status
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 
 from .models import Event, PendingEvent, Invite
 from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer
@@ -14,7 +14,7 @@ import json
 
 from datetime import timedelta
 
-'''
+
 from duckling import DucklingWrapper
 
 from hinlp.bot import MyBot
@@ -25,9 +25,24 @@ print("DONE")
 print("Importing Duckling.....", end= "")
 dw= DucklingWrapper()
 print("DONE")
-'''
+
 
 class Talk(APIView):
+
+    def get_time(self, data):
+        out={}
+        for dd in data:
+            value= dd['value']
+            in_value= value['value']
+
+            if('grain' not in value):
+                out['to']= in_value['to']
+                out['from']= in_value['from']
+            else:
+                out['value']= in_value
+                out['grain']= value['grain']
+        return out 
+    
 
 
     def get_duration(self, data):
@@ -54,31 +69,37 @@ class Talk(APIView):
             out+= "Duration in seconds: "+str(tt)+"<br>"
             total+= tt 
         out+= "<b>Total duration in seconds: "+str(total)+"</b><br>"
-        return out 
+        return out, total 
 
     def get(self, request):
         msg= request.GET.get('msg', None)
         if(msg is not None):
             out= mb.runNlu(msg)
             entities= out["entities"]
-            res= ""
-            fields= ['person', 'time', 'duration']
+            res= {}
+            persons= []
             for entity in entities:
-                name= entity['entity']
-                value= entity['value']
-                res+= name+": "+value+"<br>"
-                if(name in fields):
-                    fields.remove(name)
-            res+= "Remaining fields: "+str(fields)
+                if(entity['entity']=='person'):
+                    persons.append(entity['value'])
+            res['members']= persons 
 
-            res+="<br><br>Time<br>"
-            res+= str(dw.parse_time(msg))
+            #res+="<br><br>Time<br>"
+            #res+= str(dw.parse_time(msg))
+            ttime= dw.parse_time(msg)
+            res['time_raw']= ttime
 
-            res+="<br><br>Duration<br>"
+            res['time']= self.get_time(ttime)
+
+            #res+="<br><br>Duration<br>"
             duration= dw.parse_duration(msg)
-            res+= str(duration)
+            #res+= str(duration)
+            res['duration_raw']= duration
 
-            res+= "<br><br>"+str(self.get_duration(duration))
+            _, res['duration']= self.get_duration(duration)
+
+            #res+= "<br><br>"+str(self.get_duration(duration))
+
+            return JsonResponse(res, status= status.HTTP_200_OK)
 
             return HttpResponse(res, status= status.HTTP_200_OK)
         person= request.GET.get('person', None)
