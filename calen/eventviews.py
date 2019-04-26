@@ -278,6 +278,7 @@ class AvailableSlots(APIView):
         na_slots.sort()
 
         out+= "<h3>Available slots</h3>"
+        result= []
 
         for i in range(1, len(na_slots)):
             my_start= na_slots[i-1][1]
@@ -290,6 +291,22 @@ class AvailableSlots(APIView):
                     dsn= datetime.fromtimestamp(s_start)
                     den= datetime.fromtimestamp(e_end)            
                     out+= "From "+str(dsn)+" to "+str(den)+"<br>"
+                    result.append({"from": dsn, "to": den})
             #out+= "<br>"
 
-        return HttpResponse(out, status= status.HTTP_200_OK)
+        # Readable response
+        #return HttpResponse(out, status= status.HTTP_200_OK)
+
+        astatus= ""
+        if(len(result)<=0):
+            astatus= "no slot available"
+        else:
+            astatus= "success"
+
+        output= {"status": astatus, "data": result}
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        result= json.dumps(output, default= myconverter)
+        return HttpResponse(result, status= status.HTTP_200_OK)
+

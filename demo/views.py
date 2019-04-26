@@ -62,7 +62,7 @@ def show_pending_event_status(request):
     pass 
 
 def get_available_slots(request):
-    pass 
+    return render(request, "demo/available_slots.html") 
 
 def talk(request):
     return render(request, "demo/talk.html")

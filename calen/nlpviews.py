@@ -11,10 +11,11 @@ from .serializers import EventSerializer, UserSerializer, PendingEventSerializer
 
 import json 
 
-from duckling import DucklingWrapper
 
 from datetime import timedelta
 
+'''
+from duckling import DucklingWrapper
 
 from hinlp.bot import MyBot
 print("Importing NLU model....", end= "")
@@ -24,7 +25,7 @@ print("DONE")
 print("Importing Duckling.....", end= "")
 dw= DucklingWrapper()
 print("DONE")
-
+'''
 
 class Talk(APIView):
 
@@ -83,4 +84,4 @@ class Talk(APIView):
         person= request.GET.get('person', None)
         if(person is not None):
             return HttpResponse("person is "+person, status= status.HTTP_200_OK)
-        return HttpResponse("Nothign found", status= status.HTTP_200_OK)
+        return HttpResponse("Nothing found", status= status.HTTP_200_OK)

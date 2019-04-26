@@ -17,6 +17,8 @@ urlpatterns = [
     path('ShowInvites/', views.show_invites),
     path('AcceptInvites/', views.accept_invite),
 
+    path('AvailableSlots/', views.get_available_slots),
+
     path('bot/', views.talk),
 ]
 
