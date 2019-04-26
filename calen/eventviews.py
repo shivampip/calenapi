@@ -5,7 +5,7 @@ from rest_framework import generics
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 
 from .models import Event, PendingEvent, Invite
 from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer
@@ -304,9 +304,5 @@ class AvailableSlots(APIView):
             astatus= "success"
 
         output= {"status": astatus, "data": result}
-        def myconverter(o):
-            if isinstance(o, datetime):
-                return o.__str__()
-        result= json.dumps(output, default= myconverter)
-        return HttpResponse(result, status= status.HTTP_200_OK)
+        return JsonResponse(output, status= status.HTTP_200_OK)
 
