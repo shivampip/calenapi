@@ -73,6 +73,11 @@ def talk(request):
     print("#### msg is {}".format(msg))
     data= {'msg': msg}
     response= just_post(make_url("calen/bot/".format(msg)), data) 
-    print("#### response.content is {}".format(response.content))
+    print("$$$$ Response received")
+    print("$$$$ Response content is {}".format(response.content))
+    print("$$$$ Response json is {}".format(response.json()))
     context= {'data': response.json()}
+    print("$$$$ Context created")
+    jres= response.json()
+    print("$$$$ LEN inside is {}".format(len(jres['slots'])))
     return render(request, "demo/talk.html", context) 

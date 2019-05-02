@@ -2,12 +2,19 @@
     <body>
         <h3>Talk to schedule</h3>
 
-        <h4>{{ data.reply }}</h4> 
+        <h4>Total available slots:  {{ data.slots|length }} </h4>
+
+        {% for slot in data.slots %}
+            From {{ slot.from }}<br>
+            To {{ slot.to }}<br>
+            <!-- Book form HERE -->
+            <br>
+        {% endfor %}
 
         <form action="http://localhost:8000/bot/" method="GET">
             Enter your message <input type="text" name="msg"><br>
             <input type="submit">
         </form>
 
-    </body>
+    </body> 
 </html>
