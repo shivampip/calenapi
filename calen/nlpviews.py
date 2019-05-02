@@ -112,7 +112,7 @@ class Talk(APIView):
                     my_start= e_end
                     dsn= datetime.fromtimestamp(s_start)
                     den= datetime.fromtimestamp(e_end)       
-                    value= {'from': str(dsn), 'to': str(den)}      
+                    value= {'from': dsn.isoformat(), 'to': den.isoformat()}      
                     result.append(value)
 
         return result
@@ -216,6 +216,7 @@ class Talk(APIView):
             res['members']= ['shivam', 'gg']
             res['time']= {'from':'2019-04-24T06:00', 'to': '2019-04-25T11:30'}
             res['duration']= 7100
+            
 
             #############################
             

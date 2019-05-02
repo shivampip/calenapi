@@ -8,6 +8,15 @@
             From {{ slot.from }}<br>
             To {{ slot.to }}<br>
             <!-- Book form HERE -->
+            <form action="http://localhost:8000/calen/mpe/" method="POST">
+            From <input type="datetime-local" name="date_start" value="{{slot.from}}"><br>
+            To <input type="datetime-local" name="date_end" value="{{slot.to}}"><br>
+            Title <input type="text" name="title" value="demo title"><br>
+            Include author <input type="checkbox" name="include_author" checked><br> 
+            Members <input type="text" name="members" value="sittu gg"><br>
+            <input type="submit" value="Book">
+
+        </form> 
             <br>
         {% endfor %}
 
