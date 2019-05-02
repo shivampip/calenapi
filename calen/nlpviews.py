@@ -212,10 +212,10 @@ class Talk(APIView):
             res= {}
             res['user']= str(request.user)
             res['members']= ['shivam', 'gg']
-            res['time']= {'from':'2019-04-25T06:00', 'to': '2019-04-26T11:30'}
+            res['time']= {'from':'2019-04-27T06:00', 'to': '2019-04-29T11:30'}
             res['duration']= 7100
             res['title']= 'hello world title'
-            res['include_author']= False 
+            res['include_author']= True  
 
             #############################
             
