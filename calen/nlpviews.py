@@ -146,7 +146,6 @@ class Talk(APIView):
 
         # All fields are available, Now process
         # Call get available slots method
-        print("$$$$$ Everything is given")
         result= {}
         result['status']= 'accepted'
         result['data']= data 
@@ -155,21 +154,19 @@ class Talk(APIView):
         d_from= data['time']['from']
         d_to= data['time']['to']
         d_duration= data['duration']
-        print("$$$$$ Values are extracted for user  {}".format(d_user))
 
         result= {}
         result['status']= 'success'
 
 
         available_slots= self.get_available_slots(ruser, d_from, d_to, d_duration)
-        print("$$$$ Type is {}".format(type(available_slots)))
         #available_slots= json.dumps(available_slots)
-        print("$$$$ Now type is {}".format(type(available_slots)))
         result['slots']= available_slots
+        #result['members']= data['members']
+        result['members']= " ".join(data['members'])
+        result['title']= data['title']
+        result['include_author']= "checked" if data['include_author'] else " "
 
-
-        print("$$$$ Result prepared")
-        print("$$$$ Result is {}".format(result))
         return result
 
 
@@ -209,14 +206,16 @@ class Talk(APIView):
             _, res['duration']= self.get_duration(duration)
             '''
             
+            ## Dummy Data ###############
             #############################
             
             res= {}
             res['user']= str(request.user)
             res['members']= ['shivam', 'gg']
-            res['time']= {'from':'2019-04-24T06:00', 'to': '2019-04-25T11:30'}
+            res['time']= {'from':'2019-04-25T06:00', 'to': '2019-04-26T11:30'}
             res['duration']= 7100
-            
+            res['title']= 'hello world title'
+            res['include_author']= False 
 
             #############################
             

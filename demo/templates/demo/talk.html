@@ -9,11 +9,11 @@
             To {{ slot.to }}<br>
             <!-- Book form HERE -->
             <form action="http://localhost:8000/calen/mpe/" method="POST">
-            From <input type="datetime-local" name="date_start" value="{{slot.from}}"><br>
-            To <input type="datetime-local" name="date_end" value="{{slot.to}}"><br>
-            Title <input type="text" name="title" value="demo title"><br>
-            Include author <input type="checkbox" name="include_author" checked><br> 
-            Members <input type="text" name="members" value="sittu gg"><br>
+            <input type="hidden" name="date_start" value="{{slot.from}}">
+            <input type="hidden" name="date_end" value="{{slot.to}}">
+            <input type="hidden" name="title" value="{{data.title}}">
+            <input type="checkbox" name="include_author" {{data.include_author}}>
+            <input type="hidden" name="members" value="{{data.members}}">
             <input type="submit" value="Book">
 
         </form> 
