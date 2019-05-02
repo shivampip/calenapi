@@ -14,7 +14,7 @@ import json
 
 from datetime import timedelta
 
-
+'''
 from duckling import DucklingWrapper
 
 from hinlp.bot import MyBot
@@ -25,7 +25,7 @@ print("DONE")
 print("Importing Duckling.....", end= "")
 dw= DucklingWrapper()
 print("DONE")
-
+'''
 
 class Talk(APIView):
 
@@ -71,38 +71,72 @@ class Talk(APIView):
         out+= "<b>Total duration in seconds: "+str(total)+"</b><br>"
         return out, total 
 
-    def get(self, request):
-        msg= request.GET.get('msg', None)
+
+    def process(self, data):
+        requirements= []
+        if('members' not in data):
+            requirements.append({
+                "field": "members",
+                "msg": "Please specify the members"
+            })
+        if('duration' not in data):
+            requirements.append({
+                "field": "duration",
+                "msg": "Please specify the duration"
+            })
+        if('time' not in data):
+            requirements.append({
+                "field": "time",
+                "msg": "Please specify the time"
+            })
+        
+        # If some requried fields are not given
+        if(len(requirements)>0):
+            result= {}
+            result['status']= 'require'
+            result['data']= 'data'
+            return JsonResponse(result, status= status.HTTP_200_OK)
+
+        # All fields are available, Now process
+        # Call get available slots method
+
+
+    def post(self, request):
+        msg= request.POST.get('msg', None)
+        data= {}
         if(msg is not None):
+
+            data['msg']= msg 
+            ##########################
+            data['reply']= "Bot: {}".format(msg) 
+            return JsonResponse(data , status= status.HTTP_202_ACCEPTED)
+            ##########################
+
             out= mb.runNlu(msg)
             entities= out["entities"]
             res= {}
+
+            # Members
             persons= []
             for entity in entities:
                 if(entity['entity']=='person'):
                     persons.append(entity['value'])
             res['members']= persons 
 
-            #res+="<br><br>Time<br>"
-            #res+= str(dw.parse_time(msg))
+            # Time
             ttime= dw.parse_time(msg)
             res['time_raw']= ttime
-
             res['time']= self.get_time(ttime)
 
-            #res+="<br><br>Duration<br>"
+            # Duration
             duration= dw.parse_duration(msg)
             #res+= str(duration)
             res['duration_raw']= duration
-
             _, res['duration']= self.get_duration(duration)
 
-            #res+= "<br><br>"+str(self.get_duration(duration))
+            self.process(res)
 
-            return JsonResponse(res, status= status.HTTP_200_OK)
-
-            return HttpResponse(res, status= status.HTTP_200_OK)
-        person= request.GET.get('person', None)
+        person= request.POST.get('person', None)
         if(person is not None):
             return HttpResponse("person is "+person, status= status.HTTP_200_OK)
         return HttpResponse("Nothing found", status= status.HTTP_200_OK)

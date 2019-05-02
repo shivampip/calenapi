@@ -11,6 +11,10 @@ def just_get(url):
     response= requests.get(url, headers= {'Authorization': "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"})
     return response
 
+def just_post(url, data):
+    response= requests.post(url, data, headers= {'Authorization': "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"})
+    return response
+
 def index(request):
 
     information = {
@@ -65,4 +69,10 @@ def get_available_slots(request):
     return render(request, "demo/available_slots.html") 
 
 def talk(request):
-    return render(request, "demo/talk.html")
+    msg= request.GET.get('msg')
+    print("#### msg is {}".format(msg))
+    data= {'msg': msg}
+    response= just_post(make_url("calen/bot/".format(msg)), data) 
+    print("#### response.content is {}".format(response.content))
+    context= {'data': response.json()}
+    return render(request, "demo/talk.html", context) 
