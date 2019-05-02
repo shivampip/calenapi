@@ -71,7 +71,12 @@ def get_available_slots(request):
 def talk(request):
     msg= request.GET.get('msg')
     data= {'msg': msg}
-    response= just_post(make_url("calen/bot/".format(msg)), data) 
-    context= {'data': response.json()}
-    jres= response.json()
-    return render(request, "demo/talk.html", context) 
+    response= just_post(make_url("calen/bot/".format(msg)), data)
+    output= response.json()
+    status= output['status']
+    if(status== 'require'):
+        context= {'data': output}
+        return render(request, "demo/talk.html", context) 
+    elif(status== 'accepted'):
+        context= {'data': output}
+        return render(request, "demo/talk.html", context) 

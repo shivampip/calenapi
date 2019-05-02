@@ -142,7 +142,7 @@ class Talk(APIView):
             result= {}
             result['status']= 'require'
             result['data']= requirements
-            return JsonResponse(result, status= status.HTTP_200_OK)
+            return result
 
         # All fields are available, Now process
         # Call get available slots method
@@ -211,15 +211,17 @@ class Talk(APIView):
             
             res= {}
             res['user']= str(request.user)
-            res['members']= ['shivam', 'gg']
+            #res['members']= ['shivam', 'gg']
             res['time']= {'from':'2019-04-27T06:00', 'to': '2019-04-29T11:30'}
-            res['duration']= 7100
+            #res['duration']= 7100
             res['title']= 'hello world title'
             res['include_author']= True  
 
             #############################
             
             result= self.process(res, request.user)
+            print(">>>> Result found")
+            print(">>>> Result is {}".format(str(result)))
             return JsonResponse(result, status= status.HTTP_200_OK)
 
         #person= request.POST.get('person', None)
