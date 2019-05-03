@@ -2,6 +2,11 @@ from django.shortcuts import render
 
 import requests
 
+from calen.mylog import log 
+
+log.info("Inside Demo Views")
+
+
 # Create your views here.
 
 def make_url(path):
@@ -69,14 +74,42 @@ def get_available_slots(request):
     return render(request, "demo/available_slots.html") 
 
 def talk(request):
-    msg= request.GET.get('msg')
-    data= {'msg': msg}
-    response= just_post(make_url("calen/bot/".format(msg)), data)
+    type= request.POST.get('type', None)
+    if(type is None):
+        return render(request, "demo/talk.html")
+
+    data= {}
+    if(type == 'new'):
+        log.info("New request")
+        msg= request.POST.get('msg', None)
+        log.info("Message is {}".format(msg)) 
+        if(msg is None):
+            return render(request, "demo/talk.html")   
+        else:
+            data['type']= 'new'
+            data['msg']= msg 
+
+    elif(type == 'update'):
+        log.info("Upate request")
+        data= {}
+        data['type']= 'update'
+        data['members']= request.POST.get('members', None) 
+        data['from']= request.POST.get('from', None) 
+        data['to']= request.POST.get('to', None)
+        data['duration']= request.POST.get("duration", None) 
+        data['title']= request.POST.get("title", None)                  
+        data['include_author']= request.POST.get("include_author", None) 
+
+    log.info("data is {}".format(str(data)))
+    response= just_post(make_url('calen/bot/'), data)
+    log.info("Received response")
     output= response.json()
+    log.info("JSON parsed")
     status= output['status']
+    log.info("Response output status is {}".format(status)) 
     if(status== 'require'):
         context= {'data': output}
         return render(request, "demo/talk.html", context) 
-    elif(status== 'accepted'):
+    elif(status== 'success'):
         context= {'data': output}
         return render(request, "demo/talk.html", context) 

@@ -1,0 +1,6 @@
+Data is {'members': "['shivam', 'gg']", 'time': {'from': '2019-04-27T06:00', 'to': '2019-04
+-29T11:30'}, 'duration': '7100', 'title': 'kuch bihi'}
+
+
+Data is {'user': 'shivam', 'members': ['shivam', 'gg'], 'time': {'from': '2019-04-27T06:00'
+, 'to': '2019-04-29T11:30'}, 'duration': 7100, 'title': 'hello world title', 'include_author': True}

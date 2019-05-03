@@ -1,0 +1,46 @@
+<html>
+    <body>
+        <h3>Talk to schedule</h3>
+
+
+        {% if data.status == "require" %}
+        <h3>Required fields</h3>
+        <form action="http://localhost:8000/calen/mpe/" method="POST">
+
+            {% for field in data.data %}
+                {{ field.msg }} <input type="text" name="{{field.field}}"><br>
+            {% endfor %}
+            <input type="submit">
+        </form>
+        {% endif %}
+
+
+
+
+        <h4>Total available slots:  {{ data.slots|length }} </h4>
+
+        {% for slot in data.slots %}
+            From {{ slot.from }}<br>
+            To {{ slot.to }}<br>
+            <!-- Book form HERE -->
+        <form action="http://localhost:8000/calen/mpe/" method="POST">
+            
+            <input type="hidden" name="date_start" value="{{slot.from}}">
+            <input type="hidden" name="date_end" value="{{slot.to}}">
+            <input type="hidden" name="title" value="{{data.title}}">
+            <input type="checkbox" name="include_author" {{data.include_author}} style="display:none">
+            <input type="hidden" name="members" value="{{data.members}}">
+            <input type="submit" value="Book">
+
+        </form> 
+        <br>
+        {% endfor %}
+
+        
+        <form action="http://localhost:8000/bot/" method="GET">
+            Enter your message <input type="text" name="msg"><br>
+            <input type="submit">
+        </form>
+
+    </body> 
+</html>

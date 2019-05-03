@@ -14,6 +14,11 @@ import json
 
 from datetime import timedelta, datetime 
 
+from .mylog import log
+
+log.debug("NLP Views")
+
+
 '''
 from duckling import DucklingWrapper
 
@@ -120,35 +125,52 @@ class Talk(APIView):
 
 
     def process(self, data, ruser):
+        log.info("Now processing")
+        required= {
+            'members': "Please specify the members",
+            'duration': "You forgot the duration",
+            'time': "Please mention time",
+            'title': "Give a suitable title"
+        }
         requirements= []
-        if('members' not in data):
-            requirements.append({
-                "field": "members",
-                "msg": "Please specify the members and try again."
-            })
-        if('duration' not in data):
-            requirements.append({
-                "field": "duration",
-                "msg": "Please specify the duration and try again."
-            })
-        if('time' not in data):
-            requirements.append({
-                "field": "time",
-                "msg": "Please specify the time and try again."
-            })
+        found= []
         
+        log.info("required defined")
+
+        for field, message in required.items():
+            if(field not in data):
+                requirements.append({
+                    "field": field,
+                    "msg": message
+                })
+            else:
+                # Parse them correctly. below
+                if(field == "time"):
+                    found.append({
+                        "field": "from",
+                        "value": data['time']['from']
+                    })
+                    found.append({
+                        "field": "to",
+                        "value": data['time']['to']
+                    })
+                else:
+                    found.append({
+                        "field": field,
+                        "value": data[field] # error aa sakti hai yaha
+                    })
+        
+        log.info("Requirement: {} and Found: {}".format(len(requirements), len(found)))
         # If some requried fields are not given
         if(len(requirements)>0):
             result= {}
             result['status']= 'require'
-            result['data']= requirements
+            result['requirements']= requirements
+            result['found']= found    
             return result
 
-        # All fields are available, Now process
-        # Call get available slots method
-        result= {}
-        result['status']= 'accepted'
-        result['data']= data 
+        log.info("Everythin is found")
+        log.info("Data is {}".format(str(data)))
 
         d_user= data['user']
         d_from= data['time']['from']
@@ -160,9 +182,7 @@ class Talk(APIView):
 
 
         available_slots= self.get_available_slots(ruser, d_from, d_to, d_duration)
-        #available_slots= json.dumps(available_slots)
         result['slots']= available_slots
-        #result['members']= data['members']
         result['members']= " ".join(data['members'])
         result['title']= data['title']
         result['include_author']= "checked" if data['include_author'] else " "
@@ -172,59 +192,66 @@ class Talk(APIView):
 
 
     def post(self, request):
-        msg= request.POST.get('msg', None)
-        data= {}
-        data['user']= str(request.user)
-        if(msg is not None):
+        mtype= request.POST.get('type', None)
+        res= {}
 
-            data['msg']= msg 
-            ##########################
-            data['reply']= "Bot: {}".format(msg) 
-            #return JsonResponse(data , status= status.HTTP_202_ACCEPTED)
-            ##########################
-            '''
-            out= mb.runNlu(msg)
-            entities= out["entities"]
-            res= {}
+        log.info("mtype is {}".format(mtype))
 
-            # Members
-            persons= []
-            for entity in entities:
-                if(entity['entity']=='person'):
-                    persons.append(entity['value'])
-            res['members']= persons 
+        if(mtype== "new"):
+            msg= request.POST.get("msg", None) 
+            log.info("Now message is {}".format(msg))
+            if(msg is not None):
+                log.info("Putting fake data") 
+                #Dummy data for testing
+                res['user']= str(request.user)
+                res['members']= ['shivam', 'gg']
+                res['time']= {'from':'2019-04-27T06:00', 'to': '2019-04-29T11:30'}
+                res['duration']= 7100
+                res['title']= 'hello world title'
+                res['include_author']= True  
 
-            # Time
-            ttime= dw.parse_time(msg)
-            res['time_raw']= ttime
-            res['time']= self.get_time(ttime)
+        elif(mtype== "update"):
+            r_members= request.POST.get('members', None) 
+            r_from= request.POST.get('from', None) 
+            r_to= request.POST.get('to', None)
+            r_duration= request.POST.get("duration", None) 
+            r_title= request.POST.get("title", None)                  
+            r_include_author= request.POST.get("include_author", None)                 
 
-            # Duration
-            duration= dw.parse_duration(msg)
-            #res+= str(duration)
-            res['duration_raw']= duration
-            _, res['duration']= self.get_duration(duration)
-            '''
-            
-            ## Dummy Data ###############
-            #############################
-            
-            res= {}
-            res['user']= str(request.user)
-            #res['members']= ['shivam', 'gg']
-            res['time']= {'from':'2019-04-27T06:00', 'to': '2019-04-29T11:30'}
-            #res['duration']= 7100
-            res['title']= 'hello world title'
-            res['include_author']= True  
+            if(r_members is not None):
+                res['members']= r_members 
+            if(r_from is not None and r_to is not None):
+                res['time']= {'from': r_from, 'to': r_to }
+            if(r_duration is not None):
+                res['duration']= r_duration 
+            if(r_title is not None):
+                res['title']= r_title 
+            if(r_include_author is not None):
+                res['include_author']= r_include_author  
 
-            #############################
-            
-            result= self.process(res, request.user)
-            print(">>>> Result found")
-            print(">>>> Result is {}".format(str(result)))
-            return JsonResponse(result, status= status.HTTP_200_OK)
+       
+        '''
+        out= mb.runNlu(msg)
+        entities= out["entities"]
+        res= {}
+        # Members
+        persons= []
+        for entity in entities:
+            if(entity['entity']=='person'):
+                persons.append(entity['value'])
+        res['members']= persons 
+        # Time
+        ttime= dw.parse_time(msg)
+        res['time_raw']= ttime
+        res['time']= self.get_time(ttime)
+        # Duration
+        duration= dw.parse_duration(msg)
+        #res+= str(duration)
+        res['duration_raw']= duration
+        _, res['duration']= self.get_duration(duration)
+        '''
 
-        #person= request.POST.get('person', None)
-        #if(person is not None):
-        #    return HttpResponse("person is "+person, status= status.HTTP_200_OK)
-        #return HttpResponse("Nothing found", status= status.HTTP_200_OK)
+        result= self.process(res, request.user)
+        log.info("Result got. now sending JsonResponse") 
+        return JsonResponse(result, status= status.HTTP_200_OK)
+           
