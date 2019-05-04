@@ -13,15 +13,15 @@ import json
 
 
 from datetime import timedelta, datetime 
+from dateutil.parser import parse 
 
 from .mylog import log
 
 log.debug("NLP Views")
 
 
-'''
-from duckling import DucklingWrapper
 
+from duckling import DucklingWrapper
 from hinlp.bot import MyBot
 print("Importing NLU model....", end= "")
 mb= MyBot()
@@ -30,7 +30,7 @@ print("DONE")
 print("Importing Duckling.....", end= "")
 dw= DucklingWrapper()
 print("DONE")
-'''
+
 
 class Talk(APIView):
 
@@ -46,6 +46,19 @@ class Talk(APIView):
             else:
                 out['value']= in_value
                 out['grain']= value['grain']
+
+                grain= value['grain']
+                out['from']= in_value 
+                if(grain=='day'):
+                    log.info('Before converting: {}'.format(in_value))
+                    #out_from= datetime.strptime(in_value, "%Y-%m-%dT%H:%M")
+                    #out_from= datetime.strptime(in_value, "YYYY-MM-DDTHH:MM:SS.mmmmmm")
+                    # yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffzz
+                    out_from= parse(in_value)
+                    log.info('After converting: {}'.format(out_from))
+                    log.info('Type: {}'.format(type(out_from)))
+                    out['to']= out_from + timedelta(days=1) 
+                    log.info('Final to: {}'.format(out['to']))
         return out 
     
 
@@ -145,6 +158,13 @@ class Talk(APIView):
                 })
             else:
                 # Parse them correctly. below
+                if(field == "members"):
+                    log.info('Before Member: {}'.format(data['members']))
+                    log.info('After Mamber: {}'.format(data['members'][0]))
+                    found.append({
+                        "field": "members",
+                        "value": data['members'][0]
+                    })
                 if(field == "time"):
                     found.append({
                         "field": "from",
@@ -189,6 +209,35 @@ class Talk(APIView):
 
         return result
 
+    
+
+    def extract(self, msg):
+        log.info("Extracting from msg")
+        out= mb.runNlu(msg)
+        entities= out["entities"]
+        res= {}
+        # Members
+        persons= []
+        for entity in entities:
+            if(entity['entity']=='person'):
+                persons.append(entity['value'])
+        #res['members']= persons 
+        res['members']= " ".join(persons) 
+        log.info('Extract member: {}'.format(res['members']))
+        log.info('Members: {}'.format(str(persons)))
+        # Time
+        ttime= dw.parse_time(msg)
+        res['time_raw']= ttime
+        res['time']= self.get_time(ttime)
+        log.info('Time: {}'.format(res['time']))
+        # Duration
+        duration= dw.parse_duration(msg)
+        #res+= str(duration)
+        res['duration_raw']= duration
+        _, res['duration']= self.get_duration(duration)
+        log.info('Duration: {}'.format(res['duration']))
+
+        return res  
 
 
     def post(self, request):
@@ -201,14 +250,18 @@ class Talk(APIView):
             msg= request.POST.get("msg", None) 
             log.info("Now message is {}".format(msg))
             if(msg is not None):
-                log.info("Putting fake data") 
+                '''
                 #Dummy data for testing
+                log.info("Putting fake data") 
                 res['user']= str(request.user)
                 res['members']= ['shivam', 'gg']
                 res['time']= {'from':'2019-04-27T06:00', 'to': '2019-04-29T11:30'}
                 res['duration']= 7100
                 res['title']= 'hello world title'
                 res['include_author']= True  
+                '''
+                res= self.extract(msg)
+
 
         elif(mtype== "update"):
             r_members= request.POST.get('members', None) 
@@ -219,6 +272,10 @@ class Talk(APIView):
             r_include_author= request.POST.get("include_author", None)                 
 
             if(r_members is not None):
+                log.info('Raw member is {}'.format(r_members))
+                members= r_members
+                #if(include_author):
+                #    members.append(str(request.user))
                 res['members']= r_members 
             if(r_from is not None and r_to is not None):
                 res['time']= {'from': r_from, 'to': r_to }
@@ -228,6 +285,7 @@ class Talk(APIView):
                 res['title']= r_title 
             if(r_include_author is not None):
                 res['include_author']= r_include_author  
+            
 
        
         '''

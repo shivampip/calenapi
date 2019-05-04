@@ -1,0 +1,2 @@
+a= ['shivam']
+print(a)

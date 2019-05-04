@@ -19,7 +19,8 @@
 - schedule [4 hour](duration) meeting with [ram](person) [tomorrow](time)
 - schedule [15 min](duration) conference call with [kavita](person) and [mohan](person) [today evening](time)
 - schedule [half an hour](duration) meeting with [kabir](person), [golu](person) and [naina](person) [tomorrow morning](time)
-
+- fix a meeting with [ram](person) and [shyam](person) on next monday.
+- set [30 min](duration) conference call with [sita](person) [geeta](person) and [naman](person) [tomorrow afternoon](time)
 
 ## intent:greet
 - hello
