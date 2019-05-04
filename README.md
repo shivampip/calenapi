@@ -22,7 +22,7 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-* Once server starts running, Browse at **http://localhost:8000/**
+* Once server starts running, Browse at **http://localhost:8000/home/**
 * Note: since its just backend, gui is not good. and gui is not available for all actions.
 
 
