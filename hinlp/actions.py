@@ -12,6 +12,9 @@ import math
 import json
 import logging as l 
 
+from calen import forchat
+l.debug("FORCHAT imported")
+
 
 
 l.basicConfig(level=l.DEBUG)
