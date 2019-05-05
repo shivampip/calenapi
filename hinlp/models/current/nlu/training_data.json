@@ -125,13 +125,19 @@
         "intent": "set_meeting",
         "entities": [
           {
-            "start": 35,
-            "end": 47,
+            "start": 19,
+            "end": 27,
+            "value": "tomorrow",
+            "entity": "time"
+          },
+          {
+            "start": 33,
+            "end": 45,
             "value": "lnt infotech",
             "entity": "person"
           }
         ],
-        "text": "schedule a meeting [tomorrow] with lnt infotech"
+        "text": "schedule a meeting tomorrow with lnt infotech"
       },
       {
         "intent": "set_meeting",
@@ -362,6 +368,60 @@
         "text": "schedule half an hour meeting with kabir, golu and naina tomorrow morning"
       },
       {
+        "intent": "set_meeting",
+        "entities": [
+          {
+            "start": 19,
+            "end": 22,
+            "value": "ram",
+            "entity": "person"
+          },
+          {
+            "start": 27,
+            "end": 32,
+            "value": "shyam",
+            "entity": "person"
+          }
+        ],
+        "text": "fix a meeting with ram and shyam on next monday."
+      },
+      {
+        "intent": "set_meeting",
+        "entities": [
+          {
+            "start": 4,
+            "end": 10,
+            "value": "30 min",
+            "entity": "duration"
+          },
+          {
+            "start": 32,
+            "end": 36,
+            "value": "sita",
+            "entity": "person"
+          },
+          {
+            "start": 37,
+            "end": 42,
+            "value": "geeta",
+            "entity": "person"
+          },
+          {
+            "start": 47,
+            "end": 52,
+            "value": "naman",
+            "entity": "person"
+          },
+          {
+            "start": 53,
+            "end": 71,
+            "value": "tomorrow afternoon",
+            "entity": "time"
+          }
+        ],
+        "text": "set 30 min conference call with sita geeta and naman tomorrow afternoon"
+      },
+      {
         "intent": "greet",
         "text": "hello"
       },
@@ -372,6 +432,22 @@
       {
         "intent": "greet",
         "text": "hellooo"
+      },
+      {
+        "intent": "greet",
+        "text": "hi"
+      },
+      {
+        "intent": "show_events",
+        "text": "show upcoming events"
+      },
+      {
+        "intent": "show_events",
+        "text": "what are my upcoming events"
+      },
+      {
+        "intent": "show_events",
+        "text": "show upcoming event list"
       }
     ],
     "regex_features": [],

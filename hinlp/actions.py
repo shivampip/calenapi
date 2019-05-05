@@ -23,40 +23,52 @@ l.debug('This will get logged')
         
 
 class SetMeetingForm(FormAction):
+
    def name(self):
       return "meeting_manager"
 
    @staticmethod
    def required_slots(tracker):
+      print("##### In Meeting Form Action")
       return [
-         "name",
-         "time"
+         "person",
+         "time",
+         "duration"
       ]
 
+   def slot_mappings(self):
+      print("inside slot_mappings")
+      return {
+         "person": self.from_text(),
+         "time": self.from_text(),
+         "duration": self.from_text()
+         }
+
+
    def validate(self, dispatcher, tracker, domain):
+      print("inside validate")
       slot_values = self.extract_other_slots(dispatcher, tracker, domain)
-      slot = tracker.get_slot(REQUESTED_SLOT)
+      slot_to_fill = tracker.get_slot(REQUESTED_SLOT)
+      if slot_to_fill:
+            slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
       
-      if slot:
-         slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
-         if slot_values:
-            value= slot_values[slot]
-            l.info("Slot is "+slot+" Value is "+value)
-         if not slot_values:
-            l.info("Value couldn't be extracted")
-            if(slot=="name"):
-               da= str((tracker.latest_message)['text'])
-               slot_values['name'] = da
-            if(slot=="time"):
-               da= str((tracker.latest_message)['text'])
-               slot_values['time'] = da
-            
-
+      for slot, value in slot_values.items():
+         print("### Slot: {}, Value: {}".format(slot, value))
+         
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
-
 
    def submit(self, dispatcher, tracker, domain):
       dispatcher.utter_template("utter_thanks_for_pi", tracker)
       return []
 
 ################################################################################################
+
+
+class ActionDefaultFallback(Action):
+
+   def name(self):
+      return "action_default_fallback"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_template('utter_default', tracker)
+      return [UserUtteranceReverted()]

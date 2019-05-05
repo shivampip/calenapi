@@ -9,7 +9,7 @@
 - set a meeting [tomorrow](time)
 - i have to meet [mr. bansal](person) [tomorrow](time)
 - set a meeting with [shivam agrawal](person) [day after tomorrow](time)
-- schedule a meeting [tomorrow] with [lnt infotech](person)
+- schedule a meeting [tomorrow](time) with [lnt infotech](person)
 - book a meeting with [indian gov](person) [tomorrow](time)
 - can you book a meeting [today afternoon](time) with [ms goyal](person)
 - book appointment with [doctor](person) [in the evening](time)
@@ -26,7 +26,13 @@
 - hello
 - hey
 - hellooo
+- hi
 
+
+## intent:show_events
+- show upcoming events
+- what are my upcoming events
+- show upcoming event list
 
 
 <!------------------------------------------------------------------------------>

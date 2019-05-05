@@ -42,3 +42,4 @@ class LoginView(APIView):
             return Response({"token": user.auth_token.key}, status= status.HTTP_200_OK)
         else:
             return Response({"error": "Wrong credentials"}, status= status.HTTP_400_BAD_REQUEST)
+
