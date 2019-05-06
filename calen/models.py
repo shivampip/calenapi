@@ -46,3 +46,15 @@ class Invite(models.Model):
 
     def __str__(self):
         return str(self.pe.title)+" for "+str(self.ref.username)
+
+
+class BusySlot(models.Model):
+    author= models.ForeignKey(User, related_name= "busy_slot", on_delete= models.CASCADE)
+    title= models.CharField(max_length= 200)
+    week_days= models.ListCharField(
+        base_field= models.IntegerField(),
+        size= 7,
+        max_length= 21
+    )
+    start_time= models.TimeField()
+    end_time= models.TimeField() 

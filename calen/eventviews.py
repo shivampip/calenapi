@@ -22,6 +22,18 @@ class CreateEventGen(generics.ListCreateAPIView):
     serializer_class= EventSerializer
 
 
+class BusySlot(APIView):
+    
+    def post(self, request):
+        author= request.user.id 
+        title= request.data.get("title")
+        week_day= request.data.get("week_day")
+        start_time= request.data.get("start_time")
+        end_time= request.data.get("end_time")
+        
+        # Implement it 
+
+
 class CreateEvent(APIView):
     
     def check(self, author, date_start, date_end):
