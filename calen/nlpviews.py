@@ -20,17 +20,17 @@ from .mylog import log
 log.debug("NLP Views")
 
 
-
+'''
 from duckling import DucklingWrapper
-from hinlp.bot import MyBot
+#from hinlp.bot import MyBot
 print("Importing NLU model....", end= "")
-mb= MyBot()
-mb.initNlu()
+#mb= MyBot()
+#mb.initNlu()
 print("DONE")
 print("Importing Duckling.....", end= "")
 dw= DucklingWrapper()
 print("DONE")
-
+'''
 
 class Talk(APIView):
 
@@ -213,7 +213,8 @@ class Talk(APIView):
 
     def extract(self, msg):
         log.info("Extracting from msg")
-        out= mb.runNlu(msg)
+        #out= mb.runNlu(msg)
+        out= {}
         entities= out["entities"]
         res= {}
         # Members

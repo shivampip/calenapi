@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import CreateEvent, CreateEventGen, ListEvents, TestEvent, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots
+from .eventviews import CreateEvent, CreateEventGen, ListEvents, TestEvent, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlot, CreateBusySlots, GetBusySlot
 
 from .useriviews import Home, CreateUser, LoginView, Welcome
 
@@ -23,11 +23,14 @@ urlpatterns = [
     path('le/', ListEvents.as_view(), name= "list_evens"),
     path('te/', TestEvent.as_view(), name= "test_event"),
     path('si/', ShowInvites.as_view(), name= 'show_invites'),
-    path('ai/', AcceptInvite.as_view(), name= 'accept_invite'),
+    path('ai', AcceptInvite.as_view(), name= 'accept_invite'),
     path('spes/', ShowPMSatus.as_view(), name= 'show_pe_status'),
     #path('llogin/', obtain_auth_token, name= "llogin_view"),
+    path('bs/', CreateBusySlot.as_view(), name= "busy_slot"),
+    path('bss/', CreateBusySlots.as_view(), name= "busy_slots"),
+    path('getbs/', GetBusySlot.as_view(), name= "get_busy_slots"),
 
     path('as/', AvailableSlots.as_view(), name= 'availabel_slots'),
 
-    path('bot/', Talk.as_view(), name= 'talk'),
+    #path('bot/', Talk.as_view(), name= 'talk'),
 ]

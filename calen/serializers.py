@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import Event, PendingEvent, Invite
+from .models import Event, PendingEvent, Invite, BusySlot
 
 from django.contrib.auth.models import User
 
@@ -21,6 +21,12 @@ class InviteSerializer(serializers.ModelSerializer):
     class Meta:
         model= Invite
         fields= '__all__'
+
+class BusySlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= BusySlot
+        fields= '__all__'
+        
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

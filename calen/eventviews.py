@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse, JsonResponse
 
-from .models import Event, PendingEvent, Invite
-from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer
+from .models import Event, PendingEvent, Invite, BusySlot
+from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -22,7 +22,7 @@ class CreateEventGen(generics.ListCreateAPIView):
     serializer_class= EventSerializer
 
 
-class BusySlot(APIView):
+class CreateBusySlot(APIView):
     
     def post(self, request):
         author= request.user.id 
@@ -31,7 +31,59 @@ class BusySlot(APIView):
         start_time= request.data.get("start_time")
         end_time= request.data.get("end_time")
         
-        # Implement it 
+        data= {
+            "author": author,
+            "title": title,
+            "week_day": week_day,
+            "start_time": start_time,
+            "end_time": end_time
+        }
+        serializer= BusySlotSerializer(data= data)
+        if(serializer.is_valid()):
+            event= serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
+class GetBusySlot(APIView):
+    
+    def get(self, request):
+        user= request.user
+        evs= BusySlot.objects.filter(author= user)
+        serializer= BusySlotSerializer(evs, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
+        
+
+
+
+class CreateBusySlots(APIView):
+    
+    def post(self, request):
+        author= request.user.id 
+        title= request.data.get("title")
+        week_days= request.data.get("week_day")
+        start_time= request.data.get("start_time")
+        end_time= request.data.get("end_time")
+        
+        week_days= [int(x) for x in week_days.split(',')]
+        for day in week_days:
+            data= {
+                "author": author,
+                "title": title,
+                "week_day": day,
+                "start_time": start_time,
+                "end_time": end_time
+            }
+            serializer= BusySlotSerializer(data= data)
+            if(serializer.is_valid()):
+                event= serializer.save()
+                #return Response(serializer.data, status= status.HTTP_201_CREATED)
+            #else:
+                #return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        return Response("Done", status= status.HTTP_201_CREATED)
+
+
 
 
 class CreateEvent(APIView):
