@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse, JsonResponse
 
-from .models import Event, PendingEvent, Invite, BusySlot
-from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer
+from .models import Event, PendingEvent, Invite, BusySlot, AASlot
+from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -16,10 +16,64 @@ from datetime import timedelta
 from .hiutil import username_to_id
 import json 
 
+from .mylog import log 
 
-class CreateEventGen(generics.ListCreateAPIView):
-    queryset= Event.objects.all()
-    serializer_class= EventSerializer
+
+class CreateAASlot(APIView):
+    
+    def post(self, request):
+        author= request.user.id 
+        title= request.data.get("title")
+        week_day= request.data.get("week_day")
+        start_time= request.data.get("start_time")
+        end_time= request.data.get("end_time")
+        
+        data= {
+            "author": author,
+            "title": title,
+            "week_day": week_day,
+            "start_time": start_time,
+            "end_time": end_time
+        }
+        serializer= AASlotSerializer(data= data)
+        if(serializer.is_valid()):
+            event= serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
+class CreateAASlots(APIView):
+    
+    def post(self, request):
+        author= request.user.id 
+        title= request.data.get("title")
+        week_days= request.data.get("week_day")
+        start_time= request.data.get("start_time")
+        end_time= request.data.get("end_time")
+        
+        week_days= [int(x) for x in week_days.split(',')]
+        is_error= False 
+        for day in week_days:
+            data= {
+                "author": author,
+                "title": title,
+                "week_day": day,
+                "start_time": start_time,
+                "end_time": end_time
+            }
+            serializer= AASlotSerializer(data= data)
+            if(serializer.is_valid()):
+                event= serializer.save()
+                #return Response(serializer.data, status= status.HTTP_201_CREATED)
+            else:
+                is_error= True 
+                #return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        if(not is_error):
+            return JsonResponse({"status": "success"}, status= status.HTTP_201_CREATED)
+        else: 
+            return JsonResponse({"status": "error"}, status= status.HTTP_400_BAD_REQUEST)
+
 
 
 class CreateBusySlot(APIView):
@@ -45,17 +99,7 @@ class CreateBusySlot(APIView):
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
-
-class GetBusySlot(APIView):
-    
-    def get(self, request):
-        user= request.user
-        evs= BusySlot.objects.filter(author= user)
-        serializer= BusySlotSerializer(evs, many= True)
-        return Response(serializer.data, status= status.HTTP_200_OK)
-        
-
-
+  
 
 class CreateBusySlots(APIView):
     
@@ -67,6 +111,7 @@ class CreateBusySlots(APIView):
         end_time= request.data.get("end_time")
         
         week_days= [int(x) for x in week_days.split(',')]
+        is_error= False 
         for day in week_days:
             data= {
                 "author": author,
@@ -78,63 +123,22 @@ class CreateBusySlots(APIView):
             serializer= BusySlotSerializer(data= data)
             if(serializer.is_valid()):
                 event= serializer.save()
-                #return Response(serializer.data, status= status.HTTP_201_CREATED)
-            #else:
-                #return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        return Response("Done", status= status.HTTP_201_CREATED)
-
-
-
-
-class CreateEvent(APIView):
-    
-    def check(self, author, date_start, date_end):
-        
-        start_dt= parse(date_start)
-        end_dt= parse(date_end)
-        start_dt= start_dt + timedelta(seconds= 1)
-
-        evs= Event.objects.filter(author= author, date_start__range= (start_dt, end_dt))
-        el= len(evs)
-        evs= Event.objects.filter(author= author, date_end__range= (start_dt, end_dt))
-        el+= len(evs)
-
-        print("EVEVEVEV len is ", len(evs))
-        if(len(evs)==0):
-            return True
-        return False 
-
-    def post(self, request):
-        #author= request.data.get("author")
-        author= request.user.id 
-        title= request.data.get("title")
-        date_start= request.data.get("date_start")
-        date_end= request.data.get("date_end")
-        include_author= request.data.get("include_author")
-        
-        raw_members= request.data.get("members")
-        members= raw_members.split()
-        if(include_author):
-            members.append(str(request.user))
-
-        is_slot_empty= self.check(author, date_start, date_end)
-        if(not is_slot_empty):
-            return Response({"Error": "Slot not empty"})
-
-        data= {
-            "author": author,
-            "title": title,
-            "date_start": date_start,
-            "date_end": date_end,
-            "members": json.dumps(members)
-        }
-        serializer= EventSerializer(data= data)
-        if(serializer.is_valid()):
-            event= serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
+            else:
+                is_error= True 
+        if(not is_error):
+            return JsonResponse({"status": "success"}, status= status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"status": "error"}, status= status.HTTP_400_BAD_REQUEST)
 
+
+
+class GetBusySlot(APIView):
+    
+    def get(self, request):
+        user= request.user
+        evs= BusySlot.objects.filter(author= user)
+        serializer= BusySlotSerializer(evs, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
 
 
 class ListEvents(APIView):
@@ -142,32 +146,30 @@ class ListEvents(APIView):
 
     def get(self, request):
         user= request.user
-        print("\nLIST\n {}".format(user))
         evs= Event.objects.filter(author= user)
-        print("\nLIST\n {}".format(evs))
         serializer= EventSerializer(evs, many= True)
         return Response(serializer.data, status= status.HTTP_200_OK)
-
-
-
-class TestEvent(APIView):
-    def get(self, request):
-        username= request.GET['name']
-        print("USER is "+username)
-        uid= username_to_id(username)
-        print("USER ID is "+str(uid)) 
-
-        evs= Event.objects.filter(author= uid)
-        serializer= EventSerializer(evs, many= True)
-        return Response(serializer.data, status= status.HTTP_200_OK)
-
 
 
 
 class CreatePE(APIView):
+
+    def check_busy_slots(self, author, date_start, date_end):
+        start_dt= parse(date_start)
+        end_dt= parse(date_end)
+        start_dt= start_dt + timedelta(seconds= 1)
+
+        week_day= start_dt.weekday() 
+        start_time= start_dt.time()
+        end_time= end_dt.time()
+        bes= BusySlot.objects.filter(author= author, week_day= week_day, start_time__range= (start_time, end_time))
+        bel= len(bes)
+        bes= BusySlot.objects.filter(author= author, week_day= week_day, end_time__range= (start_time, end_time))
+        bel+= len(bes)
+        log.info("BusySlot len is {}".format(str(bel)))
+        return bel==0 
     
-    def check(self, author, date_start, date_end):
-        
+    def check_pending_event(self, author, date_start, date_end):       
         start_dt= parse(date_start)
         end_dt= parse(date_end)
         start_dt= start_dt + timedelta(seconds= 1)
@@ -176,27 +178,22 @@ class CreatePE(APIView):
         pel= len(pes)
         pes= PendingEvent.objects.filter(author= author, date_end__range= (start_dt, end_dt))
         pel+= len(pes)
-
-        print("EVEVEVEV len is ", str(pel))
-        if(pel==0):
-            return True
-        return False 
+        log.info("PendingEvent len is {}".format(str(pel)))
+        return pel==0
 
 
     def send_invite(self, pe, members, cuser):
-        print("### Sending invite of "+str(pe))
+        log.info("Sending invite of "+str(pe))
         for member in members:
-            # send invite
             user= User.objects.get(username= member)
             if(user==cuser):
                 invite= Invite(pe= pe, ref= user, accepted= True)
             else:
                 invite= Invite(pe= pe, ref= user, accepted= False)
             invite.save()
-            print("### Invite sent to "+str(user.username))
+            log.info("Invite sent to "+str(user.username))
 
     def post(self, request):
-        #author= request.data.get("author")
         author= request.user.id 
         title= request.data.get("title")
         date_start= request.data.get("date_start")
@@ -208,11 +205,11 @@ class CreatePE(APIView):
         if(include_author):
             members.append(str(request.user))
 
-        # Check for Event also 
-        # This is check for PendingEvent
-        is_slot_empty= self.check(author, date_start, date_end)
-        if(not is_slot_empty):
-            return Response({"Error": "Given time slot already contains a pending event"})
+        if(not self.check_busy_slots(author, date_start, date_end)):
+            return JsonResponse({"error": "Slot not available: Busy Slot"})
+
+        if(not self.check_pending_event(author, date_start, date_end)):
+            return JsonResponse({"error": "Slot not available: Pending Event"})
 
         data= {
             "author": author,

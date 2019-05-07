@@ -57,3 +57,14 @@ class BusySlot(models.Model):
 
     def __str__(self):
         return str(self.title)+" on "+str(self.week_day) 
+
+
+class AASlot(models.Model):
+    author= models.ForeignKey(User, related_name= "aa_slot", on_delete= models.CASCADE)
+    title= models.CharField(max_length= 200)
+    week_day= models.PositiveIntegerField()
+    start_time= models.TimeField()
+    end_time= models.TimeField() 
+
+    def __str__(self):
+        return str(self.title)+" on "+str(self.week_day) 
