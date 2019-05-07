@@ -161,14 +161,26 @@ class CreatePE(APIView):
         noti.save() 
         log.info("Notified") 
 
-    def send_invite(self, pe, members, cuser):
+    def send_invite(self, pe, members, cuser, start_dt, end_dt):
         log.info("Sending invite of "+str(pe))
         for member in members:
             user= User.objects.get(username= member)
             if(user==cuser):
                 invite= Invite(pe= pe, ref= user, accepted= True)
             else:
-                # Check for auto approve
+                ##Check for auto approve####################
+
+                start_tm= start_dt.time()        
+                end_tim= end_dt.time()            
+                week_day= start_dt.weekday()   
+                aas= AASlot.objects.filter(author= user, week_day= week_day, start_time__lte= start_tm, end_time__gte= end_tim)
+                if(len(ass)>0):
+                    pass 
+                    # Auto aprove
+                else: 
+                    pass                     
+                    # Can't auto aprove
+                ############################################
                 invite= Invite(pe= pe, ref= user, accepted= False)
                 self.notify(user, "{} sent you a meeting invitation".format(cuser))
             invite.save()
@@ -180,6 +192,9 @@ class CreatePE(APIView):
         date_start= request.data.get("date_start")
         date_end= request.data.get("date_end")
         include_author= request.data.get("include_author")
+
+        start_dt= datetime.strptime(date_start, "%Y-%m-%dT%H:%M")
+        end_dt= datetime.strptime(date_end, "%Y-%m-%dT%H:%M")
         
         raw_members= request.data.get("members")
         members= raw_members.split()
@@ -202,7 +217,7 @@ class CreatePE(APIView):
         serializer= PendingEventSerializer(data= data)
         if(serializer.is_valid()):
             pe= serializer.save()
-            self.send_invite(pe, members, request.user)
+            self.send_invite(pe, members, request.user, start_dt, end_dt)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
