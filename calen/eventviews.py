@@ -168,6 +168,7 @@ class CreatePE(APIView):
             if(user==cuser):
                 invite= Invite(pe= pe, ref= user, accepted= True)
             else:
+                # Check for auto approve
                 invite= Invite(pe= pe, ref= user, accepted= False)
                 self.notify(user, "{} sent you a meeting invitation".format(cuser))
             invite.save()
@@ -262,10 +263,6 @@ from datetime import datetime
 
 class AvailableSlots(APIView):
 
-    #### MAKE MEETING BOOK TIMES TIMEZONE FREE
-    #### AT PRESENT IT IS TAKING INPUT, ADDING 5:30 INTO IT AND STORING AS UTC (0:00)
-    #### INSHORT WHILE ADD MEETING TAKE PROPER DATETIME INPUT KEEPING TIMEZONE IN MIND
-
     def post(self, request):
         start_date= request.data.get("start_date")
         end_date= request.data.get("end_date")
@@ -280,20 +277,15 @@ class AvailableSlots(APIView):
         el1= [ev for ev in evs1]
         el2= [ev for ev in evs2]
         el= list(set(el1) | (set(el2)))
-        print("## EL is {}".format(str(el1)))
 
         na_slots= []
         for ev in el:
-            print("## Start DT: {}".format(ev.date_start))
             ds= datetime.timestamp(ev.date_start)
             ct= datetime.fromtimestamp(ds)
             #new_ct= ct.astimezone(timezone('utc'))
-            print("## Conve DT: {}".format(str(ct)))
 
             de= datetime.timestamp(ev.date_end)
             na_slots.append((ds, de))
-
-        print("## NA_SLOTS are {}".format(str(na_slots)))
 
 
         start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
@@ -301,18 +293,15 @@ class AvailableSlots(APIView):
         
         out= ""
         out+= "<h3>Required slot</h3>"
-
         out+= "Start: {}".format(str(start_dt))+"<br>"
         out+= "End  : {}".format(str(end_dt))+"<br><br>"
         out+= "Duration :{}".format(str(duration))+"<br>"
-
         out+= "<h3>Not available slots</h3>"
 
         for ds, de in na_slots:
             dsn= datetime.fromtimestamp(ds)
             den= datetime.fromtimestamp(de)            
             out+= "From "+str(dsn)+" to "+str(den)+"<br>"
-
 
         na_slots.append((0 , datetime.timestamp(start_dt)))
         na_slots.append((datetime.timestamp(end_dt), 0))
