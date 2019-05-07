@@ -156,7 +156,7 @@ class CreatePE(APIView):
         return pel==0
 
     def notify(self, user, msg):
-        log.info("Notifying "+user) 
+        log.info("Notifying "+str(user)) 
         noti= Notification(user= user, text= msg, seen= False)   
         noti.save() 
         log.info("Notified") 
@@ -174,7 +174,7 @@ class CreatePE(APIView):
                 end_tim= end_dt.time()            
                 week_day= start_dt.weekday()   
                 aas= AASlot.objects.filter(author= user, week_day= week_day, start_time__lte= start_tm, end_time__gte= end_tim)
-                if(len(ass)>0):
+                if(len(aas)>0):
                     pass 
                     # Auto aprove
                 else: 
@@ -227,40 +227,52 @@ class ShowPMSatus(APIView):
     def get(self, request):
         user= request.user
         pes= PendingEvent.objects.filter(author= user)
-        out= ""
+
+        data= []
         for pe in pes:
-            out+= "<h4>"+str(pe)+"</h4>"
-            out+= "<table border= '1px solid black'>"
+            out= {}
+            out['id']= pe.id
+            out['title']= pe.title 
             invs= pe.invite_set.all()
-            total= len(invs)
-            accepted= 0
+            out['total']= len(invs)  
+            out['accepted']= 0
+            accepted_members= []
+            remaining_members= []
             for inv in invs:
                 if(inv.accepted):
-                    accepted+=1
-                    out+= "<tr><td>"+str(inv.ref)+"</td><td>Accepted</td></tr>"
+                    out['accepted']+= 1
+                    accepted_members.append(str(inv.ref))
                 else:
-                    out+= "<tr><td>"+str(inv.ref)+"</td><td>Not accepted</td></tr>"
-            out+= "</table>"
-            out+= "<br><b>"+str(accepted)+" invites have been accepted out of "+str(total)+"</b>"
-        if(out==""):
-            return HttpResponse("No event")
-        return HttpResponse(out)
+                    remaining_members.append(str(inv.ref))
+            out['accepted_by']= accepted_members
+            out['remaining_members']= remaining_members
+            data.append(out)
+        return JsonResponse({"pending_events": data})
+
 
 class ShowInvites(APIView):
     def get(self, request):
         user= request.user
         invites= user.invite_set.all()
-        serializer= InviteSerializer(invites, many= True)
-        return Response(serializer.data, status= status.HTTP_200_OK)
-        if(len(invites)<=0):
-            return HttpResponse("No Invite")
-        res= ""
+        data= []
         for invite in invites:
-            res+= "<br>Your invite is "+str(invite)
-        return HttpResponse(res)
+            if(invite.accepted):
+                continue
+            out= {}
+            out['id']= invite.id 
+            out['event_title']= invite.pe.title 
+            out['invited_by']= invite.ref.username
+            data.append(out) 
+        return JsonResponse({"invites": data})
 
 
 class AcceptInvite(APIView):
+
+    def notify(self, user, msg):
+        noti= Notification(user= user, text= msg, seen= False)   
+        noti.save() 
+        log.info("Notified "+str(user))
+
     def get(self, request):
         user= request.user
         id= request.GET['id']
@@ -268,9 +280,10 @@ class AcceptInvite(APIView):
         if(invite.ref==user):
             invite.accepted= True   
             invite.save()
-            return HttpResponse(str(invite)+" successfully accepted")
+            self.notify(invite.pe.author, "{} accepted {} meeting invite.".format(user, invite.pe.title))
+            return JsonResponse({"status": "success"})
         else:
-            return HttpResponse("Unauthenticated try")
+            return JsonResponse({"status": "error"})
 
 
 from datetime import datetime

@@ -2,7 +2,7 @@ from django.urls import path
 
 from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot
 
-from .useriviews import Home, CreateUser, LoginView, Welcome
+from .useriviews import Verify, Register, GetToken
 
 from .nlpviews import Talk
 
@@ -13,9 +13,10 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     #path('', Welcome.as_view(), name= "welcome"),
     path('', TemplateView.as_view(template_name='home.html'), name='welcom'),
-    path('signup/', CreateUser.as_view(), name= 'make_user'),
-    path('login/', LoginView.as_view(), name= "login_view"),
-    path('home/', Home.as_view(), name= "who_am_i"),
+
+    path('register/', Register.as_view(), name= 'make_user'),
+    path('get_token/', GetToken.as_view(), name= "login_view"),
+    path('verify/', Verify.as_view(), name= "verify"),
 
     path('make_pending_event/', CreatePE.as_view(), name= 'make_pending_event'),
     path('show_pending_event_status/', ShowPMSatus.as_view(), name= 'show_pe_status'),

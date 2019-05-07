@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 
 from django.contrib.auth import authenticate
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 
 from .models import Event
 from .serializers import EventSerializer, UserSerializer
@@ -12,26 +12,25 @@ from .serializers import EventSerializer, UserSerializer
 from dateutil.parser import parse
 from datetime import timedelta
 
-class Welcome(APIView):
-    def get(self, request):
-        out= "<h2>Welcome to Scheduling Bot</h2>"
-        return HttpResponse(out, status= status.HTTP_200_OK)
 
-class Home(APIView):
+
+class Verify(APIView):
     def get(self, request):
         user= str(request.user)
-        res= "<h2> Hello, Welcome "+user+"</h2>"
-        return HttpResponse(res , status= status.HTTP_200_OK)
+        return JsonResponse({
+            "status": "success",
+            "user": user
+        } , status= status.HTTP_200_OK)
 
 
 
-class CreateUser(generics.CreateAPIView):
+class Register(generics.CreateAPIView):
     authentication_classes= ()
     permission_classes= ()
     serializer_class= UserSerializer
 
 
-class LoginView(APIView):
+class GetToken(APIView):
     permission_classes= ()
 
     def post(self, request):
