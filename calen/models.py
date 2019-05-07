@@ -68,3 +68,15 @@ class AASlot(models.Model):
 
     def __str__(self):
         return str(self.title)+" on "+str(self.week_day) 
+
+
+class Notification(models.Model):
+    user= models.ForeignKey(User, related_name= "notification", on_delete= models.CASCADE)
+    text= models.CharField(max_length= 500)
+    seen= models.BooleanField()
+    #link_text= models.CharField(max_length= 200)
+    #link= models.CharField(max_length= 200)
+    #link_data= models.CharField(max_length= 1500)
+
+    def __str__(self):
+        return "For {}".format(self.user)+ ", {}".format(self.text)

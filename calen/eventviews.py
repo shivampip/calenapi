@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse, JsonResponse
 
-from .models import Event, PendingEvent, Invite, BusySlot, AASlot
-from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer
+from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification
+from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer, NotificationSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -19,31 +19,16 @@ import json
 from .mylog import log 
 
 
-class CreateAASlot(APIView):
-    
-    def post(self, request):
-        author= request.user.id 
-        title= request.data.get("title")
-        week_day= request.data.get("week_day")
-        start_time= request.data.get("start_time")
-        end_time= request.data.get("end_time")
-        
-        data= {
-            "author": author,
-            "title": title,
-            "week_day": week_day,
-            "start_time": start_time,
-            "end_time": end_time
-        }
-        serializer= AASlotSerializer(data= data)
-        if(serializer.is_valid()):
-            event= serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
 
 class CreateAASlots(APIView):
+
+    def check(self ,author, week_day, start_time, end_time):
+        start_time+= timedelta(seconds= 1)
+        busy_slots= BusySlot.objects.filter(author= author, week_day= week_day, start_time__range= (start_time, end_time))
+        bsl= len(busy_slots)
+        busy_slots= BusySlot.objects.filter(author= author, week_day= week_day, end_time__range= (start_time, end_time))
+        bsl+= len(busy_slots)
+        return bsl==0
     
     def post(self, request):
         author= request.user.id 
@@ -52,9 +37,14 @@ class CreateAASlots(APIView):
         start_time= request.data.get("start_time")
         end_time= request.data.get("end_time")
         
+        start_tm= datetime.strptime(start_time,"%H:%M")
+        end_tm= datetime.strptime(end_time,"%H:%M")
+
         week_days= [int(x) for x in week_days.split(',')]
         is_error= False 
         for day in week_days:
+            if(not self.check(author, day, start_tm, end_tm)):
+                return JsonResponse({"error": "Slot already filled with busy slot"}, status= status.HTTP_400_BAD_REQUEST)
             data= {
                 "author": author,
                 "title": title,
@@ -75,31 +65,14 @@ class CreateAASlots(APIView):
             return JsonResponse({"status": "error"}, status= status.HTTP_400_BAD_REQUEST)
 
 
-
-class CreateBusySlot(APIView):
+class GetAASlot(APIView):
     
-    def post(self, request):
-        author= request.user.id 
-        title= request.data.get("title")
-        week_day= request.data.get("week_day")
-        start_time= request.data.get("start_time")
-        end_time= request.data.get("end_time")
-        
-        data= {
-            "author": author,
-            "title": title,
-            "week_day": week_day,
-            "start_time": start_time,
-            "end_time": end_time
-        }
-        serializer= BusySlotSerializer(data= data)
-        if(serializer.is_valid()):
-            event= serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+    def get(self, request):
+        user= request.user
+        evs= AASlot.objects.filter(author= user)
+        serializer= AASlotSerializer(evs, many= True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
 
-  
 
 class CreateBusySlots(APIView):
     
@@ -155,6 +128,7 @@ class ListEvents(APIView):
 class CreatePE(APIView):
 
     def check_busy_slots(self, author, date_start, date_end):
+        # 2019-04-24T06:00:00Z
         start_dt= parse(date_start)
         end_dt= parse(date_end)
         start_dt= start_dt + timedelta(seconds= 1)
@@ -181,6 +155,11 @@ class CreatePE(APIView):
         log.info("PendingEvent len is {}".format(str(pel)))
         return pel==0
 
+    def notify(self, user, msg):
+        log.info("Notifying "+user) 
+        noti= Notification(user= user, text= msg, seen= False)   
+        noti.save() 
+        log.info("Notified") 
 
     def send_invite(self, pe, members, cuser):
         log.info("Sending invite of "+str(pe))
@@ -190,6 +169,7 @@ class CreatePE(APIView):
                 invite= Invite(pe= pe, ref= user, accepted= True)
             else:
                 invite= Invite(pe= pe, ref= user, accepted= False)
+                self.notify(user, "{} sent you a meeting invitation".format(cuser))
             invite.save()
             log.info("Invite sent to "+str(user.username))
 

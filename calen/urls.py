@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlot, CreateBusySlots, GetBusySlot
+from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot
 
 from .useriviews import Home, CreateUser, LoginView, Welcome
 
@@ -17,17 +17,19 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name= "login_view"),
     path('home/', Home.as_view(), name= "who_am_i"),
 
-    path('mpe/', CreatePE.as_view(), name= 'make_pending_event'),
-    path('le/', ListEvents.as_view(), name= "list_evens"),
-    path('si/', ShowInvites.as_view(), name= 'show_invites'),
-    path('ai', AcceptInvite.as_view(), name= 'accept_invite'),
-    path('spes/', ShowPMSatus.as_view(), name= 'show_pe_status'),
-    #path('llogin/', obtain_auth_token, name= "llogin_view"),
-    path('bs/', CreateBusySlot.as_view(), name= "busy_slot"),
-    path('bss/', CreateBusySlots.as_view(), name= "busy_slots"),
-    path('getbs/', GetBusySlot.as_view(), name= "get_busy_slots"),
+    path('make_pending_event/', CreatePE.as_view(), name= 'make_pending_event'),
+    path('show_pending_event_status/', ShowPMSatus.as_view(), name= 'show_pe_status'),
+    path('list_events/', ListEvents.as_view(), name= "list_evens"),
 
-    path('as/', AvailableSlots.as_view(), name= 'availabel_slots'),
+    path('show_invites/', ShowInvites.as_view(), name= 'show_invites'),
+    path('accept_invite/', AcceptInvite.as_view(), name= 'accept_invite'),
+    
+    path('make_busy_slots/', CreateBusySlots.as_view(), name= "busy_slots"),
+    path('get_busy_slots/', GetBusySlot.as_view(), name= "get_busy_slots"),
 
-    #path('bot/', Talk.as_view(), name= 'talk'),
+    path('make_aa_slots/', CreateAASlots.as_view(), name= "always_available_slots"),
+    path('get_aa_slots/', GetAASlot.as_view(), name= "get_always_available_slots"),
+    
+    path('get_available_slots/', AvailableSlots.as_view(), name= 'availabel_slots'),
+
 ]
