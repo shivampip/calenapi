@@ -19,6 +19,22 @@ import json
 from .mylog import log 
 
 
+############TODO########################################
+
+# When converting PendingEvent to Event,
+# Timezone information is lost.
+# in PendingEvent 07:00
+# in Event, it becomes 01:30
+
+
+
+
+
+
+########################################################
+
+
+
 
 class CreateAASlots(APIView):
 
@@ -155,6 +171,18 @@ class CreatePE(APIView):
         log.info("PendingEvent len is {}".format(str(pel)))
         return pel==0
 
+    def check_event(self, author, date_start, date_end):       
+        start_dt= parse(date_start)
+        end_dt= parse(date_end)
+        start_dt= start_dt + timedelta(seconds= 1)
+
+        pes= Event.objects.filter(author= author, date_start__range= (start_dt, end_dt))
+        pel= len(pes)
+        pes= Event.objects.filter(author= author, date_end__range= (start_dt, end_dt))
+        pel+= len(pes)
+        log.info("Event len is {}".format(str(pel)))
+        return pel==0
+
     def notify(self, user, msg):
         log.info("Notifying "+str(user)) 
         noti= Notification(user= user, text= msg, seen= False)   
@@ -205,6 +233,9 @@ class CreatePE(APIView):
 
         if(not self.check_pending_event(author, date_start, date_end)):
             return JsonResponse({"error": "Slot not available: Pending Event"})
+
+        if(not self.check_event(author, date_start, date_end)):
+            return JsonResponse({"error": "Slot not available: Event"})
 
         data= {
             "author": author,
@@ -273,7 +304,13 @@ class AcceptInvite(APIView):
         log.info("Notified: {}, Message: {}".format(str(user), msg))
 
     def delete_things(self, pe):
-        pass 
+        #Delete Invites
+        invs= pe.invite_set.all()
+        invs.delete()   
+        log.info("Invites Deleted")
+        #Delete Pending event 
+        pe.delete()
+        log.info("Pending Event Deleted")
 
     def make_event(self, pe):
         log.info("Making permanent event of {}".format(str(pe)))
@@ -297,6 +334,7 @@ class AcceptInvite(APIView):
             for member in members:
                 user= User.objects.get(username= member)
                 self.notify(user, "Meeting {} confirmed".format(pe.title))
+            self.delete_things(pe)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
@@ -337,7 +375,50 @@ class AcceptInvite(APIView):
 from datetime import datetime
 #from pytz import timezone 
 
+
+#TODO
+#Currently checking only Event
+#Add PendingEvent and BusySlots
 class AvailableSlots(APIView):
+
+    def get_events(self, user, start_date, end_date):
+        evs1= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
+        evs2= Event.objects.filter(author= user, date_end__range= (start_date, end_date))
+
+        el1= [ev for ev in evs1]
+        el2= [ev for ev in evs2]
+        el= list(set(el1) | (set(el2)))
+
+        event_slots= []
+        for ev in el:
+            ds= datetime.timestamp(ev.date_start)
+            #ct= datetime.fromtimestamp(ds)
+            #new_ct= ct.astimezone(timezone('utc'))
+            de= datetime.timestamp(ev.date_end)
+            event_slots.append((ds, de))
+        return event_slots
+
+    def get_pending_events(self, user, start_date, end_date):
+        evs1= PendingEvent.objects.filter(author= user, date_start__range= (start_date, end_date))
+        evs2= PendingEvent.objects.filter(author= user, date_end__range= (start_date, end_date))
+
+        el1= [ev for ev in evs1]
+        el2= [ev for ev in evs2]
+        el= list(set(el1) | (set(el2)))
+
+        event_slots= []
+        for ev in el:
+            ds= datetime.timestamp(ev.date_start)
+            #ct= datetime.fromtimestamp(ds)
+            #new_ct= ct.astimezone(timezone('utc'))
+            de= datetime.timestamp(ev.date_end)
+            event_slots.append((ds, de))
+        return event_slots
+
+    #Implement it
+    def get_busy_slots(self, user, start_date, end_date):
+        pass 
+
 
     def post(self, request):
         start_date= request.data.get("start_date")
@@ -348,7 +429,7 @@ class AvailableSlots(APIView):
         user= request.user
         
         evs1= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
-        evs2= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
+        evs2= Event.objects.filter(author= user, date_end__range= (start_date, end_date))
 
         el1= [ev for ev in evs1]
         el2= [ev for ev in evs2]
@@ -357,33 +438,19 @@ class AvailableSlots(APIView):
         na_slots= []
         for ev in el:
             ds= datetime.timestamp(ev.date_start)
-            ct= datetime.fromtimestamp(ds)
+            #ct= datetime.fromtimestamp(ds)
             #new_ct= ct.astimezone(timezone('utc'))
-
             de= datetime.timestamp(ev.date_end)
             na_slots.append((ds, de))
 
 
         start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
         end_dt= datetime.strptime(end_date, "%Y-%m-%dT%H:%M")
-        
-        out= ""
-        out+= "<h3>Required slot</h3>"
-        out+= "Start: {}".format(str(start_dt))+"<br>"
-        out+= "End  : {}".format(str(end_dt))+"<br><br>"
-        out+= "Duration :{}".format(str(duration))+"<br>"
-        out+= "<h3>Not available slots</h3>"
-
-        for ds, de in na_slots:
-            dsn= datetime.fromtimestamp(ds)
-            den= datetime.fromtimestamp(de)            
-            out+= "From "+str(dsn)+" to "+str(den)+"<br>"
 
         na_slots.append((0 , datetime.timestamp(start_dt)))
         na_slots.append((datetime.timestamp(end_dt), 0))
         na_slots.sort()
 
-        out+= "<h3>Available slots</h3>"
         result= []
 
         for i in range(1, len(na_slots)):
@@ -396,12 +463,7 @@ class AvailableSlots(APIView):
                     my_start= e_end
                     dsn= datetime.fromtimestamp(s_start)
                     den= datetime.fromtimestamp(e_end)            
-                    out+= "From "+str(dsn)+" to "+str(den)+"<br>"
                     result.append({"from": dsn, "to": den})
-            #out+= "<br>"
-
-        # Readable response
-        #return HttpResponse(out, status= status.HTTP_200_OK)
 
         astatus= ""
         if(len(result)<=0):
