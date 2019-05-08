@@ -11,7 +11,6 @@ class Event(models.Model):
     title= models.CharField(max_length= 200)
     date_start= models.DateTimeField("From")
     date_end= models.DateTimeField("To")
-    #members= models.ManyToManyField(User)
     members = models.CharField(max_length=200)
 
     '''

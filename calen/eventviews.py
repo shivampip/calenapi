@@ -159,32 +159,31 @@ class CreatePE(APIView):
         log.info("Notifying "+str(user)) 
         noti= Notification(user= user, text= msg, seen= False)   
         noti.save() 
-        log.info("Notified") 
 
     def send_invite(self, pe, members, cuser, start_dt, end_dt):
         log.info("Sending invite of "+str(pe))
         for member in members:
             user= User.objects.get(username= member)
+            invite= Invite(pe= pe, ref= user, accepted= False)
             if(user==cuser):
                 invite= Invite(pe= pe, ref= user, accepted= True)
             else:
-                ##Check for auto approve####################
-
                 start_tm= start_dt.time()        
                 end_tim= end_dt.time()            
                 week_day= start_dt.weekday()   
                 aas= AASlot.objects.filter(author= user, week_day= week_day, start_time__lte= start_tm, end_time__gte= end_tim)
+                log.info("AAS is {}".format(str(aas)))
                 if(len(aas)>0):
-                    pass 
-                    # Auto aprove
+                    log.info("Auto approving for {}".format(user))
+                    invite= Invite(pe= pe, ref= user, accepted= True)
+                    self.notify(user, "Meeting invite sent by {} has been auto approved".format(cuser))
                 else: 
-                    pass                     
-                    # Can't auto aprove
-                ############################################
-                invite= Invite(pe= pe, ref= user, accepted= False)
-                self.notify(user, "{} sent you a meeting invitation".format(cuser))
+                    invite= Invite(pe= pe, ref= user, accepted= False)
+                    self.notify(user, "{} sent you a meeting invitation".format(cuser))
+                    log.info("Invite sent to "+str(user.username))
             invite.save()
-            log.info("Invite sent to "+str(user.username))
+
+
 
     def post(self, request):
         author= request.user.id 
@@ -261,7 +260,7 @@ class ShowInvites(APIView):
             out= {}
             out['id']= invite.id 
             out['event_title']= invite.pe.title 
-            out['invited_by']= invite.ref.username
+            out['invited_by']= invite.pe.author.username
             data.append(out) 
         return JsonResponse({"invites": data})
 
@@ -271,7 +270,54 @@ class AcceptInvite(APIView):
     def notify(self, user, msg):
         noti= Notification(user= user, text= msg, seen= False)   
         noti.save() 
-        log.info("Notified "+str(user))
+        log.info("Notified: {}, Message: {}".format(str(user), msg))
+
+    def delete_things(self, pe):
+        pass 
+
+    def make_event(self, pe):
+        log.info("Making permanent event of {}".format(str(pe)))
+        data= {
+            "author": pe.author.id,
+            "title": pe.title,
+            "date_start": pe.date_start.strftime("%Y-%m-%dT%H:%M"),
+            "date_end": pe.date_end.strftime("%Y-%m-%dT%H:%M"),
+            "members": pe.members 
+        }
+        log.info("Data is: {}".format(data))
+        serializer= EventSerializer(data= data)
+        if(serializer.is_valid()):
+            ev= serializer.save()
+            log.info("Event successfully created")
+            self.notify(pe.author, "All members have accepted {} meeting invite.".format(pe.title))
+            members= json.loads(pe.members) 
+            log.info("Members is {}".format(str(members)))
+            log.info("Type of members is {}".format(type(members)))
+            log.info("Lenght is {}".format(len(members)))
+            for member in members:
+                user= User.objects.get(username= member)
+                self.notify(user, "Meeting {} confirmed".format(pe.title))
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
+
+    def check(self, pe):
+        log.info("Checking pending event status")
+        invs= pe.invite_set.all()
+        total = len(invs)  
+        accepted= 0
+        for inv in invs:
+            if(inv.accepted):
+                accepted+= 1
+        log.info("Total: {}, Accepted: {}".format(total, accepted))
+        if(total== accepted):
+            self.make_event(pe) 
+            return True 
+        else:
+            return False 
+        
 
     def get(self, request):
         user= request.user
@@ -280,7 +326,9 @@ class AcceptInvite(APIView):
         if(invite.ref==user):
             invite.accepted= True   
             invite.save()
+            log.info("Invite accepted by {}".format(str(user)))
             self.notify(invite.pe.author, "{} accepted {} meeting invite.".format(user, invite.pe.title))
+            self.check(invite.pe)
             return JsonResponse({"status": "success"})
         else:
             return JsonResponse({"status": "error"})

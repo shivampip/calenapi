@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "65f26fd1-e4e4-45ec-a0f0-80ce4d29ad23",
+		"_postman_id": "ce26be99-b439-457c-9e95-97399c037c4c",
 		"name": "SchedulingBot",
 		"description": "Scheduling bot RESTful APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -130,9 +130,6 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -144,7 +141,10 @@
 						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8000/calen/verify/",
 					"protocol": "http",
@@ -162,7 +162,7 @@
 			"response": []
 		},
 		{
-			"name": "Make Pending Event",
+			"name": "Make Busy Slots",
 			"event": [
 				{
 					"listen": "test",
@@ -184,7 +184,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token c18be3f0d166639ab7127a651fd563a6c4e910d8"
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
 					}
 				],
 				"body": {
@@ -192,243 +192,28 @@
 					"formdata": [
 						{
 							"key": "title",
-							"value": "Morning Tea",
-							"type": "text"
-						},
-						{
-							"key": "date_start",
-							"value": "2019-05-05T07:00:00Z",
-							"type": "text"
-						},
-						{
-							"key": "date_end",
-							"value": "2019-05-05T07:15:00Z",
-							"type": "text"
-						},
-						{
-							"key": "include_author",
-							"value": "True",
-							"type": "text"
-						},
-						{
-							"key": "members",
-							"value": "shivam gg",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8000/calen/mpe/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"mpe",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "List Events",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8000/calen/le/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"le",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Show Invites",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8000/calen/si/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"si",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Accept Invite",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8000/calen/ai?id=24",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"ai"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "24"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Set Busy Slot",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "title",
-							"value": "Lunch Break",
+							"value": "Bath and fresh",
 							"type": "text"
 						},
 						{
 							"key": "week_day",
-							"value": "0",
+							"value": "0,1,2,3,4,5,6",
 							"type": "text"
 						},
 						{
 							"key": "start_time",
-							"value": "13:00",
+							"value": "07:00",
 							"type": "text"
 						},
 						{
 							"key": "end_time",
-							"value": "13:45",
+							"value": "08:00",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8000/calen/bs/",
+					"raw": "http://localhost:8000/calen/make_busy_slots/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -436,74 +221,7 @@
 					"port": "8000",
 					"path": [
 						"calen",
-						"bs",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Set Busy Slots",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "title",
-							"value": "Lunch Break",
-							"type": "text"
-						},
-						{
-							"key": "week_day",
-							"value": "0,3,4,5",
-							"type": "text"
-						},
-						{
-							"key": "start_time",
-							"value": "13:00",
-							"type": "text"
-						},
-						{
-							"key": "end_time",
-							"value": "13:45",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8000/calen/bss/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"bss",
+						"make_busy_slots",
 						""
 					]
 				}
@@ -536,12 +254,12 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
 					}
 				],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:8000/calen/getbs/",
+					"raw": "http://localhost:8000/calen/get_busy_slots/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -549,7 +267,192 @@
 					"port": "8000",
 					"path": [
 						"calen",
-						"getbs",
+						"get_busy_slots",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Always Available Slot",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Bath and fresh",
+							"type": "text"
+						},
+						{
+							"key": "week_day",
+							"value": "0,1,2,3,4,5,6",
+							"type": "text"
+						},
+						{
+							"key": "start_time",
+							"value": "07:00",
+							"type": "text"
+						},
+						{
+							"key": "end_time",
+							"value": "08:00",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/make_aa_slots/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"make_aa_slots",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Always Available Slot",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/calen/get_aa_slots/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"get_aa_slots",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Pending Event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Project expension plan",
+							"type": "text"
+						},
+						{
+							"key": "date_start",
+							"value": "2019-05-08T16:00",
+							"type": "text"
+						},
+						{
+							"key": "date_end",
+							"value": "2019-05-08T06:30",
+							"type": "text"
+						},
+						{
+							"key": "include_author",
+							"value": "True",
+							"type": "text"
+						},
+						{
+							"key": "members",
+							"value": "gg sittu",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/make_pending_event/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"make_pending_event",
 						""
 					]
 				}
@@ -582,7 +485,10 @@
 						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8000/calen/show_pending_event_status/",
 					"protocol": "http",
@@ -593,6 +499,149 @@
 					"path": [
 						"calen",
 						"show_pending_event_status",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Invites",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/si/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"si",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Invite",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/ai?id=24",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"ai"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "24"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Events",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/le/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"le",
 						""
 					]
 				}
