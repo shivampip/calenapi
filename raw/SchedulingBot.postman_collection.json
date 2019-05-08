@@ -89,12 +89,12 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "shivam",
+							"value": "sittu",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "shivam123",
+							"value": "sittu123",
 							"type": "text"
 						}
 					]
@@ -297,7 +297,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 3ff13328874216ed2a46abdedfd406f016ff8860"
 					}
 				],
 				"body": {
@@ -305,22 +305,22 @@
 					"formdata": [
 						{
 							"key": "title",
-							"value": "Bath and fresh",
+							"value": "I am GG, Auto approve afternoon",
 							"type": "text"
 						},
 						{
 							"key": "week_day",
-							"value": "0,1,2,3,4,5,6",
+							"value": "0,1,2,3,4",
 							"type": "text"
 						},
 						{
 							"key": "start_time",
-							"value": "07:00",
+							"value": "15:00",
 							"type": "text"
 						},
 						{
 							"key": "end_time",
-							"value": "08:00",
+							"value": "18:00",
 							"type": "text"
 						}
 					]
@@ -367,7 +367,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 3ff13328874216ed2a46abdedfd406f016ff8860"
 					}
 				],
 				"body": {},
@@ -478,7 +478,7 @@
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
@@ -528,7 +528,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+						"value": "Token 9eb0314472c718bf574373476ff4d42f5e2453bb"
 					}
 				],
 				"body": {
@@ -536,7 +536,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8000/calen/si/",
+					"raw": "http://localhost:8000/calen/show_invites/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -544,7 +544,7 @@
 					"port": "8000",
 					"path": [
 						"calen",
-						"si",
+						"show_invites",
 						""
 					]
 				}
@@ -574,7 +574,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
+						"value": "Token 9eb0314472c718bf574373476ff4d42f5e2453bb"
 					}
 				],
 				"body": {
@@ -582,7 +582,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8000/calen/ai?id=24",
+					"raw": "http://localhost:8000/calen/accept_invite?id=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -590,12 +590,12 @@
 					"port": "8000",
 					"path": [
 						"calen",
-						"ai"
+						"accept_invite"
 					],
 					"query": [
 						{
 							"key": "id",
-							"value": "24"
+							"value": "2"
 						}
 					]
 				}
@@ -642,6 +642,68 @@
 					"path": [
 						"calen",
 						"le",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Available Slots",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "start_date",
+							"value": "2019-05-08T16:00",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-05-08T22:00",
+							"type": "text"
+						},
+						{
+							"key": "duration",
+							"value": "1800",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/get_available_slots/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"get_available_slots",
 						""
 					]
 				}
