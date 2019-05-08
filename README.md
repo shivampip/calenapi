@@ -30,6 +30,8 @@ python manage.py runserver
 
 * API can be tested by importing [this file](/raw/SchedulingBot.postman_collection.json) in [Postman](https://www.getpostman.com/)
 * Documentation will be available once basic version is completed. _Currently, lots of change are being made_ 
+* Some of the below mentioned requests may not work or through error as it is under developement.
+
 
 | Action  | Request type |  URL  |  arguments  | response | Authentication |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
