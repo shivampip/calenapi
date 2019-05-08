@@ -60,8 +60,8 @@ python manage.py runserver
 * Before NLP was included in Scheduling server. it was mess up.
 * Now NLP is seperate layer
 
-![Updated model](raw/high_level_model.jpg)
+![Updated model](raw/high_level_model.png)
 
 * Detailed Scheduling backend
 
-![Scheduling flow](raw/VSchedule.jpg)
+![Scheduling flow](raw/VSchedule.png)
