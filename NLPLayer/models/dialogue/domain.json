@@ -1,0 +1,24 @@
+{
+  "states": [
+    "intent_greet",
+    "intent_set_meeting",
+    "intent_show_events",
+    "entity_time",
+    "entity_person",
+    "entity_duration",
+    "slot_time_0",
+    "prev_action_listen",
+    "prev_action_restart",
+    "prev_action_default_fallback",
+    "prev_action_deactivate_form",
+    "prev_action_revert_fallback_events",
+    "prev_action_default_ask_affirmation",
+    "prev_action_default_ask_rephrase",
+    "prev_utter_ok",
+    "prev_utter_greet",
+    "prev_utter_thanks_for_pi",
+    "prev_utter_wait",
+    "prev_meeting_manager",
+    "active_form_meeting_manager"
+  ]
+}

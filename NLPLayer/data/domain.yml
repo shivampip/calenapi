@@ -1,0 +1,67 @@
+intents:
+  - set_meeting
+  - greet
+  - show_events
+##--------------------------------------------------
+
+
+actions:
+  - utter_ok
+  - utter_greet
+  - utter_thanks_for_pi
+  - utter_wait
+  - action_default_fallback
+
+
+
+entities:
+ - time
+ - person
+ - duration
+
+
+slots:
+  time:
+    type: text
+  person:
+    type: unfeaturized
+  duration:
+    type: unfeaturized
+
+
+
+forms:
+  - meeting_manager
+
+templates:
+  utter_ask_duration:
+  - text: "What is the duration of meeting?"
+  - text: "What is the time duration?"
+  
+  utter_ask_time:
+  - text: "What is the timing?"
+  - text: "Please specify the time frame"
+
+  utter_ask_person:
+  - text: "What members do you want to add?"
+
+  utter_ok:
+  - text: "OK"
+  - text: "Alright"
+  - text: "Okay"
+
+  utter_greet:
+  - text: "hello"
+  - text: "Hi"
+
+  utter_thanks_for_pi:
+  - text: "Thanks for providing information"
+
+  utter_wait:
+  - text: "Please wait..."
+
+  utter_default:
+  - text: "Performing Default Aciton"
+
+  action_default_fallback:
+  - text: "default fallback action performing"
