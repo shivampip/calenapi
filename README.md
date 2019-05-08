@@ -52,8 +52,8 @@ python manage.py runserver
 
 ## Progress
 
-*  [![Generic badge](https://img.shields.io/badge/Scheduling Backend-ONGOING-1abc9c.svg)](https://shields.io/)
-*  [![Generic badge](https://img.shields.io/badge/NLP Layer-ONGOING-1abc9c.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/Scheduling_Backend-ONGOING-1abc9c.svg)](https://shields.io/)
+*  [![Generic badge](https://img.shields.io/badge/NLP_Layer-ONGOING-1abc9c.svg)](https://shields.io/)
 *  [![Generic badge](https://img.shields.io/badge/Nothing-DONE-green.svg)](https://shields.io/)
 
 
