@@ -33,6 +33,10 @@ python manage.py runserver
 | Signup  | POST  | http://localhost:8000/calen/register/  |  username, password  | username  | False |
 | Get Auth Token  | POST  | http://localhost:8000/calen/get_token/  |  username, password  | auth-token  | False |
 | Verify  | POST  | http://localhost:8000/calen/verify/  |  None  | html  | True |
+| Make Busy Slot  | POST  | http://localhost:8000/calen/make_busy_slots/  |  title, week_day, start_time, end_time  | html  | True |
+| GET Busy Slot  | GET  | http://localhost:8000/calen/get_busy_slots/  |  None  | html  | True |
+| Make AutoApprove Slot  | POST  | http://localhost:8000/calen/make_aa_slots/  |  title, week_day, start_time, end_time  | html  | True |
+| GET AutoApprove Slot  | GET  | http://localhost:8000/calen/get_aa_slots/  |  None  | html  | True |
 | Create Pending Event  | POST  | http://localhost:8000/calen/make_pending_event/  |  title, date_start, date_end, members, include_author  | Ack  | True |
 | Pending Event Status  | GET  | http://localhost:8000/calen/show_pending_event_status/  |  None  | All pending events status  | True |
 | Show Invites  | GET  | http://localhost:8000/calen/show_invites/  |  None  | Invite list  | True |
