@@ -28,6 +28,9 @@ python manage.py runserver
 
 ## API Documentation
 
+* API can be tested by importing [this file](/raw/SchedulingBot.postman_collection.json) in [Postman](https://www.getpostman.com/)
+* Documentation will be available once basic version is completed. _Currently, lots of change are being made_ 
+
 | Action  | Request type |  URL  |  arguments  | response | Authentication |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | Signup  | POST  | http://localhost:8000/calen/register/  |  username, password  | json  | False |
@@ -44,7 +47,6 @@ python manage.py runserver
 | Get Available Slots  | POST  | http://localhost:8000/calen/get_available_slots/  |  start_date, end_date, duration  | json  | True |
 | List Event  | GET  | http://localhost:8000/calen/list_events/  |  None  | json  | True |
 
-Detailed formats will be provided, once its completed.
 
 ## Progress
 
