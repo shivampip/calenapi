@@ -6,6 +6,7 @@ actions:
 - utter_thanks_for_pi
 - utter_wait
 - action_default_fallback
+- show_invites_action
 config:
   store_entities_as_slots: true
 entities:
@@ -20,6 +21,8 @@ intents:
 - greet:
     use_entities: true
 - show_events:
+    use_entities: true
+- show_invites:
     use_entities: true
 slots:
   duration:

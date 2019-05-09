@@ -66,8 +66,6 @@ class MyBot:
 
 bot= Bot()
 bot.trainNlu()
-
-
 bot.trainCore()
 bot.runBoth()
 exit()

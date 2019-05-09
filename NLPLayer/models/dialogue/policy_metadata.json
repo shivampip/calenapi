@@ -11,9 +11,12 @@
     },
     "utter_thanks_for_pi": {
       "slots": []
+    },
+    "show_invites_action": {
+      "slots": []
     }
   },
-  "python": "3.6.8",
+  "python": "3.6.7",
   "max_histories": [
     5,
     null,
@@ -27,8 +30,8 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.form_policy.FormPolicy"
   ],
-  "trained_at": "20190505-230617",
-  "rasa_core": "0.13.1",
-  "tensorflow": "1.12.0",
-  "sklearn": "0.20.3"
+  "trained_at": "20190509-122706",
+  "rasa_core": "0.13.2",
+  "tensorflow": "1.13.1",
+  "sklearn": "0.20.2"
 }

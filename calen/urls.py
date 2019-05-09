@@ -4,8 +4,6 @@ from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPM
 
 from .useriviews import Verify, Register, GetToken
 
-from .nlpviews import Talk
-
 from rest_framework.authtoken.views import obtain_auth_token
 
 from django.views.generic.base import TemplateView

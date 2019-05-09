@@ -3,6 +3,7 @@
     "intent_greet",
     "intent_set_meeting",
     "intent_show_events",
+    "intent_show_invites",
     "entity_time",
     "entity_person",
     "entity_duration",
@@ -18,6 +19,7 @@
     "prev_utter_greet",
     "prev_utter_thanks_for_pi",
     "prev_utter_wait",
+    "prev_show_invites_action",
     "prev_meeting_manager",
     "active_form_meeting_manager"
   ]

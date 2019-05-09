@@ -2,6 +2,8 @@ intents:
   - set_meeting
   - greet
   - show_events
+  - show_invites
+  - accept_invite
 ##--------------------------------------------------
 
 
@@ -11,6 +13,7 @@ actions:
   - utter_thanks_for_pi
   - utter_wait
   - action_default_fallback
+  - show_invites_action
 
 
 
@@ -18,6 +21,7 @@ entities:
  - time
  - person
  - duration
+ - invite_id
 
 
 slots:
@@ -27,6 +31,8 @@ slots:
     type: unfeaturized
   duration:
     type: unfeaturized
+  invite_id:
+    type: text
 
 
 

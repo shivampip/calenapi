@@ -1,28 +1,32 @@
 import requests
 
-from duckling import DucklingWrapper
-dw= DucklingWrapper()
+#from duckling import DucklingWrapper
+#dw= DucklingWrapper()
 
 from dateutil.parser import parse 
 from datetime import timedelta, datetime 
 
 class Caller:
     def __init__(self):
-        pass
+        user= 'shivam'
+        token= '7e556fd76814776d47907c2e2bc1c8ab39c7fc46'
+        base_url= "http://localhost:8000/calen/"
+        self.set(user, token, base_url)
 
-    def set(self, user, token):
+    def set(self, user, token, base_url):
         self.user= user
-        self.token= token 
+        self.token= "Token {}".format(token) 
+        self.base_url= base_url
 
     def make_url(self, path):
-        return "http://localhost:8000/"+path 
+        return self.base_url+path
 
     def just_get(self, url):
-        response= requests.get(url, headers= {'Authorization': "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"})
+        response= requests.get(url, headers= {'Authorization': self.token})
         return response
 
     def just_post(self, url, data):
-        response= requests.post(url, data, headers= {'Authorization': "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"})
+        response= requests.post(url, data, headers= {'Authorization': self.token})
         return response
 
     def get_time(self, msg):
@@ -74,6 +78,17 @@ class Caller:
         out+= "<b>Total duration in seconds: "+str(total)+"</b><br>"
         return out, total 
     
+    
+    def get_invites(self):
+        url= self.make_url('show_invites/') 
+        out= self.just_get(url) 
+        return out.content
+
+    def accept_invite(self, id):
+        url= self.make_url('accept_invite?id={}'.format(id))
+        out= self.just_get(url) 
+        return out.content 
+        
 
     
 

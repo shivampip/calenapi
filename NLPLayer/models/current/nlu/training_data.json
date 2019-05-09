@@ -3,6 +3,60 @@
     "common_examples": [
       {
         "intent": "set_meeting",
+        "text": "set meeting"
+      },
+      {
+        "intent": "set_meeting",
+        "text": "set meeting tomorrow"
+      },
+      {
+        "intent": "set_meeting",
+        "entities": [
+          {
+            "start": 17,
+            "end": 20,
+            "value": "ram",
+            "entity": "person"
+          },
+          {
+            "start": 21,
+            "end": 27,
+            "value": "shivam",
+            "entity": "person"
+          },
+          {
+            "start": 32,
+            "end": 36,
+            "value": "alok",
+            "entity": "person"
+          }
+        ],
+        "text": "set meeting with ram shivam and alok tomorrow"
+      },
+      {
+        "intent": "set_meeting",
+        "entities": [
+          {
+            "start": 23,
+            "end": 28,
+            "value": "sapna",
+            "entity": "person"
+          },
+          {
+            "start": 33,
+            "end": 40,
+            "value": "akansha",
+            "entity": "person"
+          }
+        ],
+        "text": "set meeting today with sapna and akansha"
+      },
+      {
+        "intent": "set_meeting",
+        "text": "fix a meeting today"
+      },
+      {
+        "intent": "set_meeting",
         "entities": [
           {
             "start": 12,
@@ -448,6 +502,30 @@
       {
         "intent": "show_events",
         "text": "show upcoming event list"
+      },
+      {
+        "intent": "show_invites",
+        "text": "show me invites"
+      },
+      {
+        "intent": "show_invites",
+        "text": "show invites"
+      },
+      {
+        "intent": "show_invites",
+        "text": "show my invites"
+      },
+      {
+        "intent": "show_invites",
+        "text": "did someone invited me"
+      },
+      {
+        "intent": "show_invites",
+        "text": "what are my invites"
+      },
+      {
+        "intent": "show_invites",
+        "text": "show meeting invites"
       }
     ],
     "regex_features": [],

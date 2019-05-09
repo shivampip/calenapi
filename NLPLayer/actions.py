@@ -10,15 +10,12 @@ from rasa_core_sdk.events import ActionExecuted, FollowupAction
 
 import math
 import json
-import logging as l 
+from mylog import log
+log.info("Inside Action Server")
 
-from calen import forchat
-l.debug("FORCHAT imported")
+from caller import Caller 
 
-
-
-l.basicConfig(level=l.DEBUG)
-l.debug('This will get logged')
+call= Caller() 
 
 
 
@@ -40,7 +37,7 @@ class SetMeetingForm(FormAction):
       ]
 
    def slot_mappings(self):
-      print("inside slot_mappings")
+      log.info("Slot Mapping")
       return {
          "person": self.from_text(),
          "time": self.from_text(),
@@ -49,18 +46,23 @@ class SetMeetingForm(FormAction):
 
 
    def validate(self, dispatcher, tracker, domain):
-      print("inside validate")
+      log.info("Validating")
       slot_values = self.extract_other_slots(dispatcher, tracker, domain)
       slot_to_fill = tracker.get_slot(REQUESTED_SLOT)
       if slot_to_fill:
             slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
       
       for slot, value in slot_values.items():
-         print("### Slot: {}, Value: {}".format(slot, value))
+         log.info("Slot: {}, Value: {}".format(slot, value))
          
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
 
+
+
+
    def submit(self, dispatcher, tracker, domain):
+      log.info("Submitting")
+      log.info(str(call.get_invites()))
       dispatcher.utter_template("utter_thanks_for_pi", tracker)
       return []
 
@@ -75,3 +77,45 @@ class ActionDefaultFallback(Action):
    def run(self, dispatcher, tracker, domain):
       dispatcher.utter_template('utter_default', tracker)
       return [UserUtteranceReverted()]
+
+
+
+class ShowInviteAction(Action):
+
+   def name(self):
+      return "show_invites_action"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Showing Invites, please wait")
+      invites= call.get_invites() 
+      invites= json.loads(invites)      
+      invites= invites['invites']
+      for invite in invites:
+         text= "Name: {}".format(invite['event_title'])
+         text+= "\nBy:   {}".format(invite['invited_by'])
+         buttons= [{
+            'title': 'Accept',
+            'payload': '/accept_invite{"invite_id":'+str(invite['id'])+'}'
+         }]
+         dispatcher.utter_button_message(
+            text= text,
+            buttons= buttons
+         )
+      return [] 
+
+
+
+class AcceptInviteAction(Action):
+   def name(self):
+      return "accept_invite_action"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Accepting invite, please wait...")
+      invite_id= tracker.get_slot("invite_id") 
+      out= call.accept_invite(int(invite_id))
+      dispatcher.utter_message(out) 
+
+
+
+
+      

@@ -1,5 +1,11 @@
 
 ## intent:set_meeting
+- set meeting
+- set meeting tomorrow
+- set meeting with [ram](person) [shivam](person) and [alok](person) tomorrow
+- set meeting today with [sapna](person) and [akansha](person)
+- fix a meeting today
+
 - set meeting [tomorrow](time)
 - can you please set a meeting [today](time)
 - schedule a meeting in the [evening](time)
@@ -33,6 +39,16 @@
 - show upcoming events
 - what are my upcoming events
 - show upcoming event list
+
+
+
+## intent:show_invites
+- show me invites
+- show invites
+- show my invites
+- did someone invited me
+- what are my invites
+- show meeting invites
 
 
 <!------------------------------------------------------------------------------>
