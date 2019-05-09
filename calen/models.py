@@ -25,7 +25,6 @@ class Event(models.Model):
         return self.title
 
 
-
 class PendingEvent(models.Model):
     author= models.ForeignKey(User, related_name="pending_events", on_delete= models.CASCADE)
     title= models.CharField(max_length= 200)

@@ -88,6 +88,14 @@ class Caller:
         url= self.make_url('accept_invite?id={}'.format(id))
         out= self.just_get(url) 
         return out.content 
+
+    def show_pending_event_status(self):
+        url= self.make_url('show_pending_event_status/')
+        out= self.just_get(url)
+        return out.content
+
+    def pending_event_detail(self, id):
+        return "ID is {}, Welcome Shivam".format(id)
         
 
     

@@ -526,6 +526,26 @@
       {
         "intent": "show_invites",
         "text": "show meeting invites"
+      },
+      {
+        "intent": "show_pending_events",
+        "text": "show pending events"
+      },
+      {
+        "intent": "show_pending_events",
+        "text": "upcoming pending events"
+      },
+      {
+        "intent": "show_pending_events",
+        "text": "show pending event status"
+      },
+      {
+        "intent": "show_pending_events",
+        "text": "what is the status of pending meetings"
+      },
+      {
+        "intent": "show_pending_events",
+        "text": "show pending meeting status"
       }
     ],
     "regex_features": [],

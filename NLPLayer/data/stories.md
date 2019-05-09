@@ -19,9 +19,15 @@
 #Show Invites
 * show_invites
   - show_invites_action
-
-#Accept Invite
 * accept_invite{"invite_id": "3"}
   - slot{"invite_id": "3"}
   - utter_ok
   - accept_invite_action
+
+
+#Show pending events status
+* show_pending_events
+  - show_pending_events_action
+* pending_event_details{"event_id": "2"}
+  - slot{"event_id": "2"} 
+  - pending_event_detail_action

@@ -116,6 +116,36 @@ class AcceptInviteAction(Action):
       dispatcher.utter_message(out) 
 
 
+class ShowPendingEventStatus(Action):
+   def name(self):
+      return "show_pending_events_action"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching details, please wait...")
+      out= call.show_pending_event_status()
+      out= json.loads(out)
+      pending_events= out['pending_events']
+      for pending_event in pending_events:
+         text= pending_event['title']+"\n"
+         text+="{} out of {} members accepted".format(pending_event['accepted'], pending_event['total'])
+         buttons= [{
+            'title': 'Show details',
+            'payload': '/pending_event_details{"event_id":'+str(pending_event['id'])+'}'
+         }]
+         dispatcher.utter_button_message(
+            text= text,
+            buttons= buttons
+         )
+      return []
 
 
+class PendingEventDetailAction(Action):
+   def name(self):
+      return "pending_event_detail_action"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching event details, please wait...")
+      event_id= tracker.get_slot("event_id") 
+      out= call.pending_event_detail(int(event_id))
+      dispatcher.utter_message(out) 
       

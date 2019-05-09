@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\10650637\\p\\pro\\calenapi\\NLPLayer\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
-all_model_checkpoint_paths: "C:\\Users\\10650637\\p\\pro\\calenapi\\NLPLayer\\models\\current\\nlu\\intent_classifier_tensorflow_embedding.ckpt"
+model_checkpoint_path: "/home/shiva/p/pro/calenapi/NLPLayer/models/current/nlu/intent_classifier_tensorflow_embedding.ckpt"
+all_model_checkpoint_paths: "/home/shiva/p/pro/calenapi/NLPLayer/models/current/nlu/intent_classifier_tensorflow_embedding.ckpt"

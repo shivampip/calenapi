@@ -51,6 +51,14 @@
 - show meeting invites
 
 
+## intent:show_pending_events
+- show pending events
+- upcoming pending events
+- show pending event status
+- what is the status of pending meetings
+- show pending meeting status
+
+
 <!------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------>

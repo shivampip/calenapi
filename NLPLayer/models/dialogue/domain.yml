@@ -7,12 +7,17 @@ actions:
 - utter_wait
 - action_default_fallback
 - show_invites_action
+- accept_invite_action
+- show_pending_events_action
+- pending_event_detail_action
 config:
   store_entities_as_slots: true
 entities:
 - time
 - person
 - duration
+- invite_id
+- event_id
 forms:
 - meeting_manager
 intents:
@@ -24,11 +29,25 @@ intents:
     use_entities: true
 - show_invites:
     use_entities: true
+- accept_invite:
+    use_entities: true
+- show_pending_events:
+    use_entities: true
+- pending_event_details:
+    use_entities: true
 slots:
   duration:
     auto_fill: true
     initial_value: null
     type: rasa_core.slots.UnfeaturizedSlot
+  event_id:
+    auto_fill: true
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  invite_id:
+    auto_fill: true
+    initial_value: null
+    type: rasa_core.slots.TextSlot
   person:
     auto_fill: true
     initial_value: null

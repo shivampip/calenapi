@@ -4,6 +4,8 @@ intents:
   - show_events
   - show_invites
   - accept_invite
+  - show_pending_events
+  - pending_event_details
 ##--------------------------------------------------
 
 
@@ -14,6 +16,9 @@ actions:
   - utter_wait
   - action_default_fallback
   - show_invites_action
+  - accept_invite_action
+  - show_pending_events_action
+  - pending_event_detail_action
 
 
 
@@ -22,6 +27,7 @@ entities:
  - person
  - duration
  - invite_id
+ - event_id
 
 
 slots:
@@ -33,6 +39,8 @@ slots:
     type: unfeaturized
   invite_id:
     type: text
+  event_id:
+    type: text 
 
 
 
