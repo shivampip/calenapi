@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification
+from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification, ShareableLink
 
 # Register your models here.
 
@@ -10,3 +10,4 @@ admin.site.register(Invite)
 admin.site.register(BusySlot)
 admin.site.register(AASlot) 
 admin.site.register(Notification)
+admin.site.register(ShareableLink)

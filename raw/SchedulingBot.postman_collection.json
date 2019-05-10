@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ce26be99-b439-457c-9e95-97399c037c4c",
+		"_postman_id": "13f0ba15-d6d0-4cb2-90cb-d5509177b6e8",
 		"name": "SchedulingBot",
 		"description": "Scheduling bot RESTful APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -243,9 +243,6 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -257,7 +254,10 @@
 						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8000/calen/get_busy_slots/",
 					"protocol": "http",
@@ -356,9 +356,6 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -370,7 +367,10 @@
 						"value": "Token 3ff13328874216ed2a46abdedfd406f016ff8860"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8000/calen/get_aa_slots/",
 					"protocol": "http",
@@ -705,6 +705,171 @@
 						"calen",
 						"get_available_slots",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Day Schedule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "dt",
+							"value": "2019-05-08T16:00",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "all",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/get_day_schedule/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"get_day_schedule",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Shareable Link",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Book Career Cunsultancy",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Improve yourself after this career cunsultantion.",
+							"type": "text"
+						},
+						{
+							"key": "duration_sec",
+							"value": "1800",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/get_shareable_link/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"get_shareable_link",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Browse Link",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/calen/browse?id=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"browse"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						}
 					]
 				}
 			},

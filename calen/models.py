@@ -78,3 +78,13 @@ class Notification(models.Model):
 
     def __str__(self):
         return "For {}".format(self.user)+ ", {}".format(self.text)
+
+
+class ShareableLink(models.Model):
+    user= models.ForeignKey(User, related_name= "shareable_link", on_delete= models.CASCADE)
+    title= models.CharField(max_length= 200)
+    description= models.CharField(max_length= 1000)
+    duration= models.IntegerField()
+
+    def __str__(self):
+        return self.title+" by "+str(self.user) 

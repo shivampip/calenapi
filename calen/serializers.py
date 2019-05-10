@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification
+from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification, ShareableLink
 
 from django.contrib.auth.models import User
 
@@ -39,6 +39,10 @@ class NotificationSerializer(serializers.ModelSerializer):
         model= Notification 
         fields= '__all__'
 
+class ShareableLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= ShareableLink 
+        fields= '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse, JsonResponse
 
-from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification
-from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer, NotificationSerializer
+from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification, ShareableLink
+from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer, NotificationSerializer, ShareableLinkSerializer
 
 from dateutil.parser import parse
 from datetime import timedelta
@@ -479,21 +479,86 @@ class DaySchedule(APIView):
     
     def post(self, request):
         dt= request.POST.get("dt")
+        etype= request.POST.get("type")
         dt= datetime.strptime(dt, "%Y-%m-%dT%H:%M")
 
         dt_start= dt.date()
-        dt_end= dt_start+ timedelta(day= 1)
-
+        dt_end= dt_start+ timedelta(days= 1)
         user= request.user
         
-        #Change logic to Start_dt>= start and end_dt<= end
-        evs1= Event.objects.filter(author= user, date_start__range= (dt_start, dt_end))
-        evs2= Event.objects.filter(author= user, date_end__range= (dt_start, dt_end))
+        data= {}
+        
+        if(etype in ['all','events']):
+            evs= Event.objects.filter(author= user, date_start__gte= dt_start, date_end__lte= dt_end)
+            evt_serializer= EventSerializer(evs, many= True)
+            log.info("Events are {}".format(evt_serializer.data))
+            data['events']= evt_serializer.data 
 
-        evt1= [ev for ev in evs1]
-        evt2= [ev for ev in evs2]
-        evt= list(set(evt1) | (set(evt2)))
- 
+        if(etype in ['all', 'pending_events']):    
+            pevs= PendingEvent.objects.filter(author= user, date_start__gte= dt_start, date_end__lte= dt_end)
+            pevs_serializer= PendingEventSerializer(pevs, many= True) 
+            log.info("Pending Events are {}".format(pevs_serializer.data))
+            data['pending_events']= pevs_serializer.data 
+
+        if(etype in ['all', 'busy_slots']):
+            week_day= dt_start.weekday() 
+            bss= BusySlot.objects.filter(author= user, week_day= week_day)
+            bs_serializer= BusySlotSerializer(bss, many= True)              
+            log.info("Busy slots are {}".format(bs_serializer.data))     
+            data['busy_slots']= bs_serializer.data  
+
+        return JsonResponse(data, status= status.HTTP_200_OK)
+
+
+
+
+class GetShareableLink(APIView):
+    
+    def post(self, request):
+        user= request.user                       
+        title= request.POST.get("title") 
+        description= request.POST.get("description")
+        # Duration in seconds
+        duration= request.POST.get('duration_sec')
+
+        data= {
+            "user": user.id, 
+            "title": title, 
+            "description": description,
+            "duration": duration
+        }
+
+        serializer= ShareableLinkSerializer(data= data)
+        if(serializer.is_valid()):
+            event= serializer.save()
+            out= serializer.data 
+            id= out['id']
+            link= 'http://localhost:8000/calen/browse?id={}'.format(id) 
+            return JsonResponse({
+                "status": "success",
+                "link": link
+            }, status= status.HTTP_200_OK)
+        else:
+            return JsonResponse({
+                "status": "error",
+                "error_msg": serializer.error_messages,
+                "error": serializer.errors
+            }, status= status.HTTP_400_BAD_REQUEST)
+
+
+
+class BrowseLink(APIView):
+    authentication_classes= ()
+    permission_classes= ()
+
+    def get(self, request):
+        id= request.GET.get('id') 
+        log.info("ID is "+str(id))
+        sl= ShareableLink.objects.get(id= id) 
+        log.info("sl is {}".format(sl))
+        serializer= ShareableLinkSerializer(sl) 
+        log.info("serializer data is {}".format(serializer.data))
+        return JsonResponse(serializer.data, status= status.HTTP_200_OK) 
 
 
 
