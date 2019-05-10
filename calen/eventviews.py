@@ -474,3 +474,28 @@ class AvailableSlots(APIView):
         output= {"status": astatus, "data": result}
         return JsonResponse(output, status= status.HTTP_200_OK)
 
+
+class DaySchedule(APIView):
+    
+    def post(self, request):
+        dt= request.POST.get("dt")
+        dt= datetime.strptime(dt, "%Y-%m-%dT%H:%M")
+
+        dt_start= dt.date()
+        dt_end= dt_start+ timedelta(day= 1)
+
+        user= request.user
+        
+        #Change logic to Start_dt>= start and end_dt<= end
+        evs1= Event.objects.filter(author= user, date_start__range= (dt_start, dt_end))
+        evs2= Event.objects.filter(author= user, date_end__range= (dt_start, dt_end))
+
+        evt1= [ev for ev in evs1]
+        evt2= [ev for ev in evs2]
+        evt= list(set(evt1) | (set(evt2)))
+ 
+
+
+
+
+        
