@@ -551,6 +551,28 @@ class BrowseLink(APIView):
     authentication_classes= ()
     permission_classes= ()
 
+    def get_page(self, data):
+        title= data['title']
+        description= data['description']
+        duration= data['duration']
+
+        out= "<h2>{}</h2>".format(title)
+        out+= "<h3>{}</h3>".format(description)
+        out+= "Duration: <b>{}</b><br>".format(duration)
+        timing= self.get_today_slots(duration)
+        out+= "Start Time: {}<br>".format(timing['start_time'])
+        out+= "End Time: {}<br>".format(timing['end_time'])
+        return out 
+
+    def get_today_slots(self, duration):
+        start_time= datetime.now()   
+        end_time= start_time.date() + timedelta(days= 1) 
+        data={
+            "start_time": str(start_time),
+            "end_time": str(end_time)
+        }
+        return data 
+
     def get(self, request):
         id= request.GET.get('id') 
         log.info("ID is "+str(id))
@@ -558,8 +580,9 @@ class BrowseLink(APIView):
         log.info("sl is {}".format(sl))
         serializer= ShareableLinkSerializer(sl) 
         log.info("serializer data is {}".format(serializer.data))
-        return JsonResponse(serializer.data, status= status.HTTP_200_OK) 
 
+        #return JsonResponse(serializer.data, status= status.HTTP_200_OK) 
+        return HttpResponse(self.get_page(serializer.data))
 
 
 
