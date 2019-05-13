@@ -17,9 +17,20 @@ pip install -r requirements.txt
 
 ## Run
 
-* Run server
+* Run scheduling server
 ```
 python manage.py runserver
+```
+
+* Run NLP action server (in separate terminal/cmd)
+```
+cd NLPLayer
+python as.py
+```
+
+* Talking to bot (in separate terminal/cmd)
+```
+python bot.py
 ```
 
 
