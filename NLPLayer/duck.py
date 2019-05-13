@@ -9,6 +9,8 @@ dw= DucklingWrapper()
 
 
 
+#Input- message
+#Output- is_found, time
 def get_time(self, data):
     out={}
     for dd in data:
@@ -35,6 +37,8 @@ def get_time(self, data):
     return out 
 
 
+#Input- message
+#Output- is_found, duration
 def get_duration(self, data):
     out= ""
     total= 0

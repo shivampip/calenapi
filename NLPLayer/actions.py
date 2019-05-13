@@ -14,6 +14,7 @@ from mylog import log
 log.info("Inside Action Server")
 
 from caller import Caller 
+import duck 
 
 call= Caller() 
 
@@ -54,6 +55,13 @@ class SetMeetingForm(FormAction):
       
       for slot, value in slot_values.items():
          log.info("Slot: {}, Value: {}".format(slot, value))
+         if(slot=='time'):
+            found, value= duck.get_time(value)
+            if(found)
+         elif(slot=='duration'):
+            found, value= duck.get_duration(value)  
+         elif(slot== 'member'):
+            pass 
          
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
 
