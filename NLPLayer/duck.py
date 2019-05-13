@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime 
 from dateutil.parser import parse 
-from .mylog import log
+from mylog import log
 from duckling import DucklingWrapper
 
 

@@ -2,8 +2,8 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "event_id",
-        "invite_id"
+        "invite_id",
+        "event_id"
       ]
     },
     "utter_greet": {
@@ -22,7 +22,7 @@
       "slots": []
     }
   },
-  "python": "3.6.8",
+  "python": "3.6.7",
   "max_histories": [
     5,
     null,
@@ -36,8 +36,8 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.form_policy.FormPolicy"
   ],
-  "trained_at": "20190510-000423",
-  "rasa_core": "0.13.1",
-  "tensorflow": "1.12.0",
-  "sklearn": "0.20.3"
+  "trained_at": "20190513-231736",
+  "rasa_core": "0.13.2",
+  "tensorflow": "1.13.1",
+  "sklearn": "0.20.2"
 }

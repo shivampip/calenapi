@@ -14,7 +14,7 @@ from mylog import log
 log.info("Inside Action Server")
 
 from caller import Caller 
-import duck 
+import duck  
 
 call= Caller() 
 
@@ -49,19 +49,30 @@ class SetMeetingForm(FormAction):
    def validate(self, dispatcher, tracker, domain):
       log.info("Validating")
       slot_values = self.extract_other_slots(dispatcher, tracker, domain)
-      slot_to_fill = tracker.get_slot(REQUESTED_SLOT)
-      if slot_to_fill:
-            slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
-      
-      for slot, value in slot_values.items():
-         log.info("Slot: {}, Value: {}".format(slot, value))
-         if(slot=='time'):
-            found, value= duck.get_time(value)
-            if(found)
-         elif(slot=='duration'):
-            found, value= duck.get_duration(value)  
-         elif(slot== 'member'):
-            pass 
+      slot = tracker.get_slot(REQUESTED_SLOT)
+      log.info("Validation {}".format(slot))
+
+      if slot:
+         slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
+         if slot_values:
+            value= slot_values[slot]
+            log.info("Slot is "+slot+" Value is "+value)
+         if not slot_values:
+            log.info("Value couldn't be extracted")
+            if(slot=="time"):
+               msg= str((tracker.latest_message)['text'])
+               log.info("Extraction time from {}".format(msg))
+               ttime= dw.parse_time(msg)
+               out= duck.get_time(ttime)
+               log.info("Time out is {}".format(out))
+               slot_values['time'] = out
+            if(slot=="duration"):
+               msg= str((tracker.latest_message)['text'])
+               log.info("Extraction duration from {}".format(msg))
+               duration= dw.parse_duration(msg)
+               _, out= duck.get_duration(duration)
+               log.info("Duration out is {}".format(out))
+               slot_values['duration'] = out
          
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
 
