@@ -28,23 +28,30 @@ class SetMeetingForm(FormAction):
    def name(self):
       return "meeting_manager"
 
+   adata={}
+
    @staticmethod
    def required_slots(tracker):
       log.info("Get required slots")
       msg= str((tracker.latest_message)['text'])
       rs=['person']
 
-      _, out= duck.get_duration(msg) 
-      if(out==0):
-         rs.append("duration")
-      else:
-         log.info("duration: {}".format(out))
+      if('duration' not in SetMeetingForm.adata):
+         _, out= duck.get_duration(msg) 
+         if(out==0):
+            rs.append("duration")
+         else:
+            SetMeetingForm.adata['duration']= out 
+            log.info("duration: {}".format(out))
 
-      out= duck.get_time(msg)
-      if(out=="{}"):
-         rs.append("time")
-      else:
-         log.info("time: {}".format(out))
+      if('time' not in SetMeetingForm.adata):
+         out= duck.get_time(msg)
+         if(out=="{}"):
+            rs.append("time")
+         else:
+            SetMeetingForm.adata['time']= out 
+            log.info("time: {}".format(out))
+      
       return rs 
 
    def slot_mappings(self):
@@ -86,8 +93,14 @@ class SetMeetingForm(FormAction):
    def submit(self, dispatcher, tracker, domain):
       log.info("Submitting")
       log.info("Members: {}".format(tracker.get_slot("person")))
-      log.info("Duration: {}".format(tracker.get_slot("duration")))
-      log.info("Time: {}".format(tracker.get_slot("time")))
+      if('duration' in SetMeetingForm.adata):
+         log.info("Duration: {}".format(SetMeetingForm.adata['duration']))
+      else:
+         log.info("Duration: {}".format(tracker.get_slot("duration")))
+      if('time' in SetMeetingForm.adata):
+         log.info("Time: {}".format(SetMeetingForm.adata['time']))
+      else:
+         log.info("Time: {}".format(tracker.get_slot("time")))
       
       #log.info(str(call.get_invites()))
       dispatcher.utter_template("utter_thanks_for_pi", tracker)
