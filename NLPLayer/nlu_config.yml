@@ -11,7 +11,7 @@ pipeline:
 #  intent_split_symbol: "+"
 
 
-- name: "ner_duckling_http"
-  url: "http://duckling:8000"
-  dimensions: ["number", "amount-of-money", "time"]
-  locale: "en_US"
+#- name: "ner_duckling_http"
+#  url: "http://duckling:8000"
+#  dimensions: ["number", "amount-of-money", "time"]
+#  locale: "en_US"

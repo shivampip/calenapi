@@ -11,8 +11,9 @@ dw= DucklingWrapper()
 
 #Input- message
 #Output- is_found, time
-def get_time(self, data):
+def get_time(data):
     out={}
+    data= dw.parse_time(data)
     for dd in data:
         value= dd['value']
         in_value= value['value']
@@ -39,9 +40,10 @@ def get_time(self, data):
 
 #Input- message
 #Output- is_found, duration
-def get_duration(self, data):
+def get_duration(data):
     out= ""
     total= 0
+    data= dw.parse_duration(data)
     for dd in data:
         out+= "Dimention: "+dd['dim']+"<br>"
         out+= "Text: "+dd['text']+"<br>"

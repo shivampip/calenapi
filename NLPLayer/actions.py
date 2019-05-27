@@ -31,11 +31,21 @@ class SetMeetingForm(FormAction):
    @staticmethod
    def required_slots(tracker):
       log.info("Get required slots")
-      return [
-         "person",
-         "time",
-         "duration"
-      ]
+      msg= str((tracker.latest_message)['text'])
+      rs=['person']
+
+      _, out= duck.get_duration(msg) 
+      if(out==0):
+         rs.append("duration")
+      else:
+         log.info("duration: {}".format(out))
+
+      out= duck.get_time(msg)
+      if(out=="{}"):
+         rs.append("time")
+      else:
+         log.info("time: {}".format(out))
+      return rs 
 
    def slot_mappings(self):
       log.info("Slot Mapping")
@@ -45,43 +55,41 @@ class SetMeetingForm(FormAction):
          "duration": self.from_text()
          }
 
-
    def validate(self, dispatcher, tracker, domain):
-      log.info("Validating")
+      log.info("Inside Validation")
       slot_values = self.extract_other_slots(dispatcher, tracker, domain)
-      slot = tracker.get_slot(REQUESTED_SLOT)
-      log.info("Validation {}".format(slot))
+      
+      slot_to_fill = tracker.get_slot(REQUESTED_SLOT)
+      log.info("Validation requested slot is {}".format(slot_to_fill))
 
-      if slot:
+      msg= str((tracker.latest_message)['text'])
+      log.info("Latest msg is {}".format(msg))
+      
+      if slot_to_fill:
          slot_values.update(self.extract_requested_slot(dispatcher, tracker, domain))
-         if slot_values:
-            value= slot_values[slot]
-            log.info("Slot is "+slot+" Value is "+value)
-         if not slot_values:
-            log.info("Value couldn't be extracted")
-            if(slot=="time"):
-               msg= str((tracker.latest_message)['text'])
-               log.info("Extraction time from {}".format(msg))
-               ttime= dw.parse_time(msg)
-               out= duck.get_time(ttime)
-               log.info("Time out is {}".format(out))
-               slot_values['time'] = out
-            if(slot=="duration"):
-               msg= str((tracker.latest_message)['text'])
-               log.info("Extraction duration from {}".format(msg))
-               duration= dw.parse_duration(msg)
-               _, out= duck.get_duration(duration)
-               log.info("Duration out is {}".format(out))
-               slot_values['duration'] = out
-         
+
+      for slot, value in slot_values.items():
+         if(slot == 'duration'):
+            _, out= duck.get_duration(value) 
+            if(out==0):
+               slot_values['duration']= None 
+            else:
+               slot_values['duration']= out
+         if(slot=='time'):
+            out= duck.get_time(value)
+            slot_values['time']= out    
+
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
-
-
-
+         
+                
 
    def submit(self, dispatcher, tracker, domain):
       log.info("Submitting")
-      log.info(str(call.get_invites()))
+      log.info("Members: {}".format(tracker.get_slot("person")))
+      log.info("Duration: {}".format(tracker.get_slot("duration")))
+      log.info("Time: {}".format(tracker.get_slot("time")))
+      
+      #log.info(str(call.get_invites()))
       dispatcher.utter_template("utter_thanks_for_pi", tracker)
       return []
 
