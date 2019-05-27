@@ -66,6 +66,8 @@ class MyBot:
 
 bot= Bot()
 bot.trainNlu()
+
+'''
 bot.trainCore()
 bot.runBoth()
 exit()
@@ -81,4 +83,5 @@ while(True):
     out= mb.runNlu(msg)
     out= json.dumps(out, indent=4)
     print("\n\n\n\nBot:- ",out)
-'''
+
+        

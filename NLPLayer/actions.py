@@ -30,7 +30,7 @@ class SetMeetingForm(FormAction):
 
    @staticmethod
    def required_slots(tracker):
-      print("##### In Meeting Form Action")
+      log.info("Get required slots")
       return [
          "person",
          "time",

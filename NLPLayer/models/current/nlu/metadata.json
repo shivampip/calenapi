@@ -94,9 +94,21 @@
             "name": "intent_classifier_tensorflow_embedding",
             "classifier_file": "intent_classifier_tensorflow_embedding.ckpt",
             "class": "rasa_nlu.classifiers.embedding_intent_classifier.EmbeddingIntentClassifier"
+        },
+        {
+            "dimensions": [
+                "number",
+                "amount-of-money",
+                "time"
+            ],
+            "url": "http://0.0.0.0:8000",
+            "locale": "en_US",
+            "timezone": null,
+            "name": "ner_duckling_http",
+            "class": "rasa_nlu.extractors.duckling_http_extractor.DucklingHTTPExtractor"
         }
     ],
     "training_data": "training_data.json",
-    "trained_at": "20190513-231641",
+    "trained_at": "20190515-115756",
     "rasa_nlu_version": "0.14.3"
 }
