@@ -46,6 +46,20 @@ class Caller:
     def pending_event_detail(self, id):
         return "ID is {}, Welcome Shivam".format(id)
         
+    def get_available_slots(self, start_dt, end_dt, duration):
+        url= self.make_url('get_available_slots/')
+        data={
+            'start_date': start_dt,
+            'end_date': end_dt,
+            'duration': duration
+        } 
+        out= self.just_post(url, data)
+        return out.content
+
+    def make_pending_event(self):
+        # make_pending_event
+        pass 
+
 
     
 

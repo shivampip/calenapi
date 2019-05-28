@@ -84,8 +84,10 @@ class SetMeetingForm(FormAction):
                slot_values['duration']= out
          if(slot=='time'):
             out= duck.get_time(value)
-            slot_values['time']= out    
-
+            if(len(out)>0):
+               slot_values['time']= out    
+            else:
+               slot_values[   'time']= None 
       return [SlotSet(slot, value) for slot, value in slot_values.items()]
          
                 
@@ -94,14 +96,29 @@ class SetMeetingForm(FormAction):
       log.info("Submitting")
       log.info("Members: {}".format(tracker.get_slot("person")))
       if('duration' in SetMeetingForm.adata):
-         log.info("Duration: {}".format(SetMeetingForm.adata['duration']))
+         duration= SetMeetingForm.adata['duration']
       else:
-         log.info("Duration: {}".format(tracker.get_slot("duration")))
+         duration= tracker.get_slot("duration")
+      log.info("Duration: {}".format(duration))
       if('time' in SetMeetingForm.adata):
-         log.info("Time: {}".format(SetMeetingForm.adata['time']))
+         ttime= SetMeetingForm.adata['time']
       else:
-         log.info("Time: {}".format(tracker.get_slot("time")))
+         ttime= tracker.get_slot("time")
+      log.info("Time: {}".format(ttime))
+      start_dt= ttime['from']
+      end_dt= ttime['to']
+
+      log.info("From: {}".format(start_dt))
+      log.info("Type: {}".format(type(start_dt)))
       
+
+      out= call.get_available_slots(start_dt, end_dt, duration)
+      out= json.loads(out)
+      if(out['status']=='success'):
+         dispatcher.utter_message("Response:- {}".format(out))
+      else:
+         dispatcher.utter_message("Response me Error aa gyi")
+
       #log.info(str(call.get_invites()))
       dispatcher.utter_template("utter_thanks_for_pi", tracker)
       return []

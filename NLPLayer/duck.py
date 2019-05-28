@@ -14,6 +14,7 @@ dw= DucklingWrapper()
 def get_time(data):
     out={}
     data= dw.parse_time(data)
+    log.info("IN DUCK Raw data: {}".format(data))
     for dd in data:
         value= dd['value']
         in_value= value['value']
