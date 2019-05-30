@@ -34,7 +34,7 @@ class SetMeetingForm(FormAction):
    def required_slots(tracker):
       log.info("Get required slots")
       msg= str((tracker.latest_message)['text'])
-      rs=['person']
+      rs=['person', 'title']
 
       if('duration' not in SetMeetingForm.adata):
          _, out= duck.get_duration(msg) 
@@ -59,7 +59,8 @@ class SetMeetingForm(FormAction):
       return {
          "person": self.from_text(),
          "time": self.from_text(),
-         "duration": self.from_text()
+         "duration": self.from_text(),
+         "title": self.from_text()
          }
 
    def validate(self, dispatcher, tracker, domain):
@@ -94,6 +95,8 @@ class SetMeetingForm(FormAction):
 
    def submit(self, dispatcher, tracker, domain):
       log.info("Submitting")
+      title= tracker.get_slot("title")
+      members= tracker.get_slot("person")
       log.info("Members: {}".format(tracker.get_slot("person")))
       if('duration' in SetMeetingForm.adata):
          duration= SetMeetingForm.adata['duration']
@@ -109,6 +112,12 @@ class SetMeetingForm(FormAction):
       start_dt= ttime['from']
       end_dt= ttime['to']
 
+      in_data= "Title: {}\n".format(title)
+      in_data+= "Members: {}\n".format(members)
+      in_data+= "Duration: {}\n".format(duration) 
+      in_data+= "Start: {}\n".format(start_dt)
+      in_data+= "End: {}\n".format(end_dt)
+      log.info(in_data)
 
       out= call.get_available_slots(start_dt, end_dt, duration)
       out= json.loads(out)

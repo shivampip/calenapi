@@ -16,6 +16,7 @@ entities:
 - time
 - person
 - duration
+- title
 - invite_id
 - event_id
 forms:
@@ -60,6 +61,10 @@ slots:
     auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
+  title:
+    auto_fill: true
+    initial_value: null
+    type: rasa_core.slots.UnfeaturizedSlot
 templates:
   action_default_fallback:
   - text: default fallback action performing
@@ -71,6 +76,9 @@ templates:
   utter_ask_time:
   - text: What is the timing?
   - text: Please specify the time frame
+  utter_ask_title:
+  - text: Please provide suitable title?
+  - text: What is title of meeting?
   utter_default:
   - text: Performing Default Aciton
   utter_greet:

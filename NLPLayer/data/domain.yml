@@ -26,6 +26,7 @@ entities:
  - time
  - person
  - duration
+ - title
  - invite_id
  - event_id
 
@@ -36,6 +37,8 @@ slots:
   person:
     type: unfeaturized
   duration:
+    type: unfeaturized
+  title:
     type: unfeaturized
   invite_id:
     type: text
@@ -58,6 +61,10 @@ templates:
 
   utter_ask_person:
   - text: "What members do you want to add?"
+
+  utter_ask_title:
+  - text: "Please provide suitable title?"
+  - text: "What is title of meeting?"
 
   utter_ok:
   - text: "OK"

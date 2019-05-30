@@ -10,6 +10,7 @@
     "entity_time",
     "entity_person",
     "entity_duration",
+    "entity_title",
     "entity_invite_id",
     "entity_event_id",
     "slot_event_id_0",
