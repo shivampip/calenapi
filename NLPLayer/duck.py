@@ -7,6 +7,10 @@ from pprint import pprint
 log.debug("DUCK")
 dw= DucklingWrapper()
 
+def make_std(dt):
+    return parse(dt).strftime("%Y-%m-%dT%H:%M")
+
+
 #Input- message
 #Output- is_found, time
 def get_time(data):
@@ -26,11 +30,9 @@ def get_time(data):
     value= obj['value']
     in_value= value['value']
     if('grain' not in value):
-        out['to']= in_value['to']
-        out['from']= in_value['from']
+        out['to']= make_std(in_value['to'])
+        out['from']= make_std(in_value['from'])
     else:
-        out['value']= in_value
-        out['grain']= value['grain']
         grain= value['grain']
         out['from']= in_value 
         if(grain=='day'):
@@ -42,7 +44,9 @@ def get_time(data):
             log.info('After converting: {}'.format(out_from))
             #log.info('Type: {}'.format(type(out_from)))
             out['to']= out_from + timedelta(days=1) 
-            log.info('Final to: {}'.format(out['to']))
+            out['to']= out['to'].strftime("%Y-%m-%dT%H:%M")
+            out['from']= make_std(out['from'])
+            log.info("New From: {}".format(out['from']))
     log.info("OUT IS:")
     pprint(out)
     return out 

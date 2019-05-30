@@ -99,6 +99,7 @@ class SetMeetingForm(FormAction):
          duration= SetMeetingForm.adata['duration']
       else:
          duration= tracker.get_slot("duration")
+      duration= int(duration)
       log.info("Duration: {}".format(duration))
       if('time' in SetMeetingForm.adata):
          ttime= SetMeetingForm.adata['time']
@@ -108,9 +109,6 @@ class SetMeetingForm(FormAction):
       start_dt= ttime['from']
       end_dt= ttime['to']
 
-      log.info("From: {}".format(start_dt))
-      log.info("Type: {}".format(type(start_dt)))
-      
 
       out= call.get_available_slots(start_dt, end_dt, duration)
       out= json.loads(out)
