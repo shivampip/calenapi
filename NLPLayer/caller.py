@@ -61,6 +61,17 @@ class Caller:
         out= self.just_post(url, data)
         return out
 
+
+    def get_best_available_slots(self, start_dt, end_dt, duration):
+        url= self.make_url('get_best_available_slots/')
+        data={
+            'start_date': start_dt,
+            'end_date': end_dt,
+            'duration': duration
+        } 
+        out= self.just_post(url, data)
+        return out
+
     def make_pending_event(self):
         # make_pending_event
         pass 

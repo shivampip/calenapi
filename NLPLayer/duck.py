@@ -11,6 +11,16 @@ def make_std(dt):
     return parse(dt).strftime("%Y-%m-%dT%H:%M")
 
 
+def str_to_dt(text):
+    return parse(text) 
+
+
+def dt_to_date(dt):
+    return dt.strftime("%d/%m/%Y")
+
+def dt_to_time(dt):
+    return dt.strftime("%H:%M")
+
 #Input- message
 #Output- is_found, time
 def get_time(data):

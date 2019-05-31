@@ -475,6 +475,22 @@ class AvailableSlots(APIView):
         return JsonResponse(output, status= status.HTTP_200_OK)
 
 
+class GetBestAvailableSlot(APIView):
+
+    def post(self, request):
+        avs= AvailableSlots()
+        response= avs.post(request) 
+        out= json.loads(response.content)
+        if(out['status']=='success'):
+            data= out['data']
+            mid= len(data)/2
+            best_slot= data[int(mid)]
+            output= {"status":"success", "data":best_slot}
+            return JsonResponse(output, status= status.HTTP_200_OK) 
+        return JsonResponse(response.content, status= status.HTTP_200_OK)
+
+
+
 class DaySchedule(APIView):
     
     def post(self, request):

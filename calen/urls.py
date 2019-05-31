@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink
+from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink, GetBestAvailableSlot
 
 from .useriviews import Verify, Register, GetToken
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('get_aa_slots/', GetAASlot.as_view(), name= "get_always_available_slots"),
     
     path('get_available_slots/', AvailableSlots.as_view(), name= 'availabel_slots'),
+    path('get_best_available_slots/', GetBestAvailableSlot.as_view(), name= 'best_availabel_slots'),
 
     path('get_day_schedule/', DaySchedule.as_view(), name= "get_schedule"),
 
