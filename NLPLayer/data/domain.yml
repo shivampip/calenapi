@@ -29,6 +29,7 @@ entities:
  - title
  - invite_id
  - event_id
+ - meeting_data
 
 
 slots:
@@ -44,6 +45,9 @@ slots:
     type: text
   event_id:
     type: text 
+
+  meeting_data:
+    type: unfeaturized
 
 
 

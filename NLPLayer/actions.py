@@ -96,42 +96,37 @@ class SetMeetingForm(FormAction):
 
    def submit(self, dispatcher, tracker, domain):
       log.info("Submitting")
-      title= tracker.get_slot("title")
-      members= tracker.get_slot("person")
-      log.info("Members: {}".format(tracker.get_slot("person")))
+      md= {}
+      md['title']= tracker.get_slot("title")
+      md['members']= tracker.get_slot("person")
+
       if('duration' in SetMeetingForm.adata):
-         duration= SetMeetingForm.adata['duration']
+         md['duration']= SetMeetingForm.adata['duration']
       else:
-         duration= tracker.get_slot("duration")
-      duration= int(duration)
-      log.info("Duration: {}".format(duration))
+         md['duration']= tracker.get_slot("duration")
+      md['duration']= int(md['duration'])
+
       if('time' in SetMeetingForm.adata):
          ttime= SetMeetingForm.adata['time']
       else:
          ttime= tracker.get_slot("time")
-      log.info("Time: {}".format(ttime))
-      start_dt= ttime['from']
-      end_dt= ttime['to']
+      md['from_dt']= ttime['from']
+      md['to_dt']= ttime['to']
 
-      in_data= "Title: {}\n".format(title)
-      in_data+= "Members: {}\n".format(members)
-      in_data+= "Duration: {}\n".format(duration) 
-      in_data+= "Start: {}\n".format(start_dt)
-      in_data+= "End: {}\n".format(end_dt)
-      log.info(in_data)
+      log.info(str(md))
 
-      out= call.get_best_available_slots(start_dt, end_dt, duration)
+      out= call.get_best_available_slots(md['from_dt'], md['to_dt'], md['duration'])
       out= json.loads(out)
       if(out['status']=='success'):
          #dispatcher.utter_message("Response:- {}".format(out))
          data= out['data']
-         dt_from= data['from']
-         dt_to= data['to']
+         md['from']= dt_from= data['from']
+         md['to']= dt_to= data['to']
          dt_from= duck.str_to_dt(dt_from)
          dt_to= duck.str_to_dt(dt_to)
          text= "On {}, are you fine with {} to {}".format(duck.dt_to_date(dt_from), duck.dt_to_time(dt_from), duck.dt_to_time(dt_to))
          buttons= []
-         buttons.append({"title":"Book", 'payload': '/book', 'type': "postback"})
+         buttons.append({"title":"Book", 'payload': '/book_meeting', 'type': "postback"})
          buttons.append({"title":"Show more slots", 'payload': '/show_more_slots', 'type': "postback"})
 
          dispatcher.utter_button_message(
@@ -142,7 +137,7 @@ class SetMeetingForm(FormAction):
       else:
          dispatcher.utter_message("Response me Error aa gyi")
 
-      return []
+      return [SlotSet("meeting_data", json.dumps(md) )]
 
 ################################################################################################
 
