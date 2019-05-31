@@ -2,8 +2,8 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "event_id",
-        "invite_id"
+        "invite_id",
+        "event_id"
       ]
     },
     "utter_greet": {
@@ -36,7 +36,7 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.form_policy.FormPolicy"
   ],
-  "trained_at": "20190530-164848",
+  "trained_at": "20190531-112541",
   "rasa_core": "0.13.2",
   "tensorflow": "1.13.1",
   "sklearn": "0.20.2"

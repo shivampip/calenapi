@@ -52,6 +52,7 @@ class SetMeetingForm(FormAction):
             SetMeetingForm.adata['time']= out 
             log.info("time: {}".format(out))
       
+      log.info("Required Slots are: {}".format(str(rs)))
       return rs 
 
    def slot_mappings(self):

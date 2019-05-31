@@ -26,6 +26,8 @@ def get_time(data):
             obj= dd 
     log.info("Choosen is:")
     pprint(obj)
+    if(obj==None):
+        return "{}"
 
     value= obj['value']
     in_value= value['value']
