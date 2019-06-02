@@ -114,6 +114,7 @@ class SetMeetingForm(FormAction):
       md['to_dt']= ttime['to']
 
       log.info(str(md))
+      SetMeetingForm.adata= {}
 
       out= call.get_best_available_slots(md['from_dt'], md['to_dt'], md['duration'])
       out= json.loads(out)
@@ -138,6 +139,39 @@ class SetMeetingForm(FormAction):
          dispatcher.utter_message("Response me Error aa gyi")
 
       return [SlotSet("meeting_data", json.dumps(md) )]
+
+
+
+
+class ActionBookMeeting(Action):
+
+   def name(self):
+      return "action_book_meeting"
+
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Booking, please wait..")
+
+      md= tracker.get_slot("meeting_data")
+      md= json.loads(md)
+      dispatcher.utter_message("Data is {}".format(md))
+      return []
+
+
+class ActionShowMoreSlots(Action):
+
+   def name(self):
+      return "action_show_more_slots"
+
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching more slots, please wait..")
+
+      md= tracker.get_slot("meeting_data")
+      md= json.loads(md)
+      dispatcher.utter_message("Data is {}".format(md))
+      return []
+   
 
 ################################################################################################
 

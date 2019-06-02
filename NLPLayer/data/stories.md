@@ -4,6 +4,18 @@
   - utter_wait
   - meeting_manager
   - form{"name": "meeting_manager"}
+* book_meeting
+  - action_book_meeting
+
+
+## Meeting2
+* set_meeting
+  - utter_wait
+  - meeting_manager
+  - form{"name": "meeting_manager"}
+* show_more_slots
+  - action_show_more_slots
+
 
 
 ##Greet

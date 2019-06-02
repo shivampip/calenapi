@@ -10,6 +10,8 @@ actions:
 - accept_invite_action
 - show_pending_events_action
 - pending_event_detail_action
+- action_book_meeting
+- action_show_more_slots
 config:
   store_entities_as_slots: true
 entities:
@@ -19,6 +21,7 @@ entities:
 - title
 - invite_id
 - event_id
+- meeting_data
 forms:
 - meeting_manager
 intents:
@@ -36,6 +39,10 @@ intents:
     use_entities: true
 - pending_event_details:
     use_entities: true
+- book_meeting:
+    use_entities: true
+- show_more_slots:
+    use_entities: true
 slots:
   duration:
     auto_fill: true
@@ -49,6 +56,10 @@ slots:
     auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
+  meeting_data:
+    auto_fill: true
+    initial_value: null
+    type: rasa_core.slots.UnfeaturizedSlot
   person:
     auto_fill: true
     initial_value: null

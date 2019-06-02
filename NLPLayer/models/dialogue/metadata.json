@@ -6,38 +6,46 @@
         "event_id"
       ]
     },
-    "utter_greet": {
+    "meeting_manager": {
       "slots": []
     },
-    "accept_invite_action": {
+    "action_show_more_slots": {
+      "slots": []
+    },
+    "utter_greet": {
       "slots": []
     },
     "pending_event_detail_action": {
       "slots": []
     },
-    "meeting_manager": {
+    "utter_thanks_for_pi": {
       "slots": []
     },
-    "utter_thanks_for_pi": {
+    "accept_invite_action": {
+      "slots": []
+    },
+    "action_book_meeting": {
       "slots": []
     }
   },
-  "python": "3.6.7",
+  "python": "3.7.3",
   "max_histories": [
     5,
     null,
     5,
-    2
+    2,
+    5
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.keras_policy.KerasPolicy",
     "rasa_core.policies.fallback.FallbackPolicy",
     "rasa_core.policies.memoization.MemoizationPolicy",
-    "rasa_core.policies.form_policy.FormPolicy"
+    "rasa_core.policies.form_policy.FormPolicy",
+    "rasa_core.policies.mapping_policy.MappingPolicy"
   ],
-  "trained_at": "20190531-112541",
-  "rasa_core": "0.13.2",
+  "trained_at": "20190602-215202",
+  "rasa_core": "0.14.4",
   "tensorflow": "1.13.1",
-  "sklearn": "0.20.2"
+  "sklearn": "0.20.3"
 }
