@@ -170,6 +170,9 @@ class ActionShowMoreSlots(Action):
       md= tracker.get_slot("meeting_data")
       md= json.loads(md)
       dispatcher.utter_message("Data is {}".format(md))
+
+
+
       return []
    
 
@@ -183,6 +186,26 @@ class ActionDefaultFallback(Action):
 
    def run(self, dispatcher, tracker, domain):
       dispatcher.utter_template('utter_default', tracker)
+
+      sender= tracker.sender_id
+      
+      if(sender is None):
+         dispatcher.utter_message("Sender is NONE")
+      else:
+         dispatcher.utter_message("Sender is {}".format(sender))
+
+      '''
+      text= "This is buttons testing"
+      buttons= []
+      buttons.append({"title":"Long button 1 'payload': '/book_meeting'})
+      buttons.append({"title":"Long button 2", 'payload': '/show_more_slots'})
+
+      dispatcher.utter_button_message(
+         text= text,
+         buttons= buttons
+      )
+      '''
+
       return [UserUtteranceReverted()]
 
 
