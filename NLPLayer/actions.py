@@ -111,10 +111,13 @@ class SetMeetingForm(FormAction):
       else:
          ttime= tracker.get_slot("time")
       md['from_dt']= ttime['from']
-      md['to_dt']= ttime['to']
-
+      if('to' in ttime):
+         md['to_dt']= ttime['to']
+      else:
+         tto= duck.add_duration(duck.str_to_dt(md['from_dt']), md['duration'])
+         md['to_dt']= tto.strftime("%Y-%m-%dT%H:%M")
+         
       log.info(str(md))
-      SetMeetingForm.adata= {}
 
       out= call.get_best_available_slots(md['from_dt'], md['to_dt'], md['duration'])
       out= json.loads(out)
@@ -140,42 +143,6 @@ class SetMeetingForm(FormAction):
 
       return [SlotSet("meeting_data", json.dumps(md) )]
 
-
-
-
-class ActionBookMeeting(Action):
-
-   def name(self):
-      return "action_book_meeting"
-
-
-   def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Booking, please wait..")
-
-      md= tracker.get_slot("meeting_data")
-      md= json.loads(md)
-      dispatcher.utter_message("Data is {}".format(md))
-      return []
-
-
-class ActionShowMoreSlots(Action):
-
-   def name(self):
-      return "action_show_more_slots"
-
-
-   def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Fatching more slots, please wait..")
-
-      md= tracker.get_slot("meeting_data")
-      md= json.loads(md)
-      dispatcher.utter_message("Data is {}".format(md))
-
-
-
-      return []
-   
-
 ################################################################################################
 
 
@@ -186,26 +153,6 @@ class ActionDefaultFallback(Action):
 
    def run(self, dispatcher, tracker, domain):
       dispatcher.utter_template('utter_default', tracker)
-
-      sender= tracker.sender_id
-      
-      if(sender is None):
-         dispatcher.utter_message("Sender is NONE")
-      else:
-         dispatcher.utter_message("Sender is {}".format(sender))
-
-      '''
-      text= "This is buttons testing"
-      buttons= []
-      buttons.append({"title":"Long button 1 'payload': '/book_meeting'})
-      buttons.append({"title":"Long button 2", 'payload': '/show_more_slots'})
-
-      dispatcher.utter_button_message(
-         text= text,
-         buttons= buttons
-      )
-      '''
-
       return [UserUtteranceReverted()]
 
 

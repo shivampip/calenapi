@@ -483,11 +483,14 @@ class GetBestAvailableSlot(APIView):
         out= json.loads(response.content)
         if(out['status']=='success'):
             data= out['data']
-            mid= len(data)/2
-            best_slot= data[int(mid)]
+            if(len(data)==1):
+                best_slot= data[0]
+            else:
+                mid= len(data)/2
+                best_slot= data[int(mid)]
             output= {"status":"success", "data":best_slot}
             return JsonResponse(output, status= status.HTTP_200_OK) 
-        return JsonResponse(response.content, status= status.HTTP_200_OK)
+        return JsonResponse(out, status= status.HTTP_200_OK)
 
 
 

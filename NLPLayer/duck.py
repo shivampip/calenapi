@@ -21,6 +21,9 @@ def dt_to_date(dt):
 def dt_to_time(dt):
     return dt.strftime("%H:%M")
 
+def add_duration(dt, duration):
+    return dt + timedelta(seconds= duration)
+
 #Input- message
 #Output- is_found, time
 def get_time(data):
@@ -28,7 +31,7 @@ def get_time(data):
     data= dw.parse_time(data)
     log.info("IN DUCK Raw data:")
     pprint(data)
-    mdiff,obj= 0, None 
+    mdiff,obj= 2, None 
     for dd in data:
         diff= dd['end']- dd['start']
         if(diff>mdiff):
@@ -61,6 +64,11 @@ def get_time(data):
             log.info("New From: {}".format(out['from']))
     log.info("OUT IS:")
     pprint(out)
+    if('to' not in out):
+        tto= add_duration(str_to_dt(out['from']), 1800)
+        out['to']= tto.strftime("%Y-%m-%dT%H:%M")
+        out['from']= make_std(out['from'])
+    pprint(out) 
     return out 
 
 

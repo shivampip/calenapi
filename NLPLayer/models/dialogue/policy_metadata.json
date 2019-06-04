@@ -1,0 +1,49 @@
+{
+  "action_fingerprints": {
+    "action_listen": {
+      "slots": [
+        "event_id",
+        "invite_id"
+      ]
+    },
+    "meeting_manager": {
+      "slots": []
+    },
+    "action_book_meeting": {
+      "slots": []
+    },
+    "accept_invite_action": {
+      "slots": []
+    },
+    "utter_greet": {
+      "slots": []
+    },
+    "action_show_more_slots": {
+      "slots": []
+    },
+    "utter_thanks_for_pi": {
+      "slots": []
+    },
+    "pending_event_detail_action": {
+      "slots": []
+    }
+  },
+  "python": "3.6.7",
+  "max_histories": [
+    5,
+    null,
+    5,
+    2
+  ],
+  "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
+  "policy_names": [
+    "rasa_core.policies.keras_policy.KerasPolicy",
+    "rasa_core.policies.fallback.FallbackPolicy",
+    "rasa_core.policies.memoization.MemoizationPolicy",
+    "rasa_core.policies.form_policy.FormPolicy"
+  ],
+  "trained_at": "20190604-123031",
+  "rasa_core": "0.13.2",
+  "tensorflow": "1.13.1",
+  "sklearn": "0.20.2"
+}
