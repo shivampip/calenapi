@@ -72,35 +72,6 @@ def get_time(data):
     return out 
 
 
-#Input- message
-#Output- is_found, time
-def get_time_bk(data):
-    out={}
-    data= dw.parse_time(data)
-    log.info("IN DUCK Raw data: {}".format(data))
-    for dd in data:
-        value= dd['value']
-        in_value= value['value']
-        if('grain' not in value):
-            out['to']= in_value['to']
-            out['from']= in_value['from']
-        else:
-            out['value']= in_value
-            out['grain']= value['grain']
-            grain= value['grain']
-            out['from']= in_value 
-            if(grain=='day'):
-                log.info('Before converting: {}'.format(in_value))
-                #out_from= datetime.strptime(in_value, "%Y-%m-%dT%H:%M")
-                #out_from= datetime.strptime(in_value, "YYYY-MM-DDTHH:MM:SS.mmmmmm")
-                # yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffzz
-                out_from= parse(in_value)
-                log.info('After converting: {}'.format(out_from))
-                log.info('Type: {}'.format(type(out_from)))
-                out['to']= out_from + timedelta(days=1) 
-                log.info('Final to: {}'.format(out['to']))
-    return out 
-
 
 #Input- message
 #Output- is_found, duration

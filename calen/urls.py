@@ -28,7 +28,7 @@ urlpatterns = [
 
     path('make_aa_slots/', CreateAASlots.as_view(), name= "always_available_slots"),
     path('get_aa_slots/', GetAASlot.as_view(), name= "get_always_available_slots"),
-    
+        
     path('get_available_slots/', AvailableSlots.as_view(), name= 'availabel_slots'),
     path('get_best_available_slots/', GetBestAvailableSlot.as_view(), name= 'best_availabel_slots'),
 

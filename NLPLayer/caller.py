@@ -72,9 +72,18 @@ class Caller:
         out= self.just_post(url, data)
         return out
 
-    def make_pending_event(self):
-        # make_pending_event
-        pass 
+    def make_pending_event(self, title, dt_start, dt_end, include_author, members):
+        url= self.make_url('make_pending_event/')
+        data= {
+            'title': title, 
+            'date_start': dt_start,
+            'date_end': dt_end,
+            'include_author': include_author,
+            'members': members
+        }
+        print("\n\nDATA SENDING ON SERVER IS : {}\n\n".format(str(data)))
+        out= self.just_post(url, data)   
+        return out 
 
 
     

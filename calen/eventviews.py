@@ -220,6 +220,8 @@ class CreatePE(APIView):
         date_end= request.data.get("date_end")
         include_author= request.data.get("include_author")
 
+        #start_dt= datetime.strptime(date_start, "%Y-%m-%dT%H:%M:%S")
+        #end_dt= datetime.strptime(date_end, "%Y-%m-%dT%H:%M:%S")
         start_dt= datetime.strptime(date_start, "%Y-%m-%dT%H:%M")
         end_dt= datetime.strptime(date_end, "%Y-%m-%dT%H:%M")
         
@@ -229,13 +231,13 @@ class CreatePE(APIView):
             members.append(str(request.user))
 
         if(not self.check_busy_slots(author, date_start, date_end)):
-            return JsonResponse({"error": "Slot not available: Busy Slot"})
+            return JsonResponse({"status":"error", "data": "Slot not available: Busy Slot"})
 
         if(not self.check_pending_event(author, date_start, date_end)):
-            return JsonResponse({"error": "Slot not available: Pending Event"})
+            return JsonResponse({"status":"error", "data": "Slot not available: Pending Event"})
 
         if(not self.check_event(author, date_start, date_end)):
-            return JsonResponse({"error": "Slot not available: Event"})
+            return JsonResponse({"status":"error", "data": "Slot not available: Event"})
 
         data= {
             "author": author,
@@ -248,9 +250,11 @@ class CreatePE(APIView):
         if(serializer.is_valid()):
             pe= serializer.save()
             self.send_invite(pe, members, request.user, start_dt, end_dt)
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
+            out= {"status":"success", "data": serializer.data}
+            return JsonResponse(out, status= status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+            out= {"status":"error", "data": serializer.errors}
+            return JsonResponse(out, status= status.HTTP_400_BAD_REQUEST)
 
 
 class ShowPMSatus(APIView):

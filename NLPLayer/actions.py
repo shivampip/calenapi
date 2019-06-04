@@ -138,11 +138,57 @@ class SetMeetingForm(FormAction):
             buttons= buttons
          )
 
+         return [SlotSet("meeting_data", json.dumps(md) )]
+
       else:
          dispatcher.utter_message("Response me Error aa gyi")
+         return []
 
-      return [SlotSet("meeting_data", json.dumps(md) )]
+      
 
+
+
+class ActionBookMeeting(Action):
+    
+   def name(self):
+      return "action_book_meeting"
+
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Booking, please wait..")
+
+      md= tracker.get_slot("meeting_data")
+      md= json.loads(md)
+      dispatcher.utter_message("Data is {}".format(md))
+      
+      title= md['title']
+      dt_from= duck.make_std(md['from'])
+      dt_to= duck.make_std(md['to'])
+      include_author= True 
+      members= md['members']
+
+      out= call.make_pending_event(title, dt_from, dt_to, include_author, members) 
+      dispatcher.utter_message("RESPONSE: {}".format(str(out)))
+      
+      return []
+
+
+class ActionShowMoreSlots(Action):
+
+   def name(self):
+      return "action_show_more_slots"
+
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching more slots, please wait..")
+
+      md= tracker.get_slot("meeting_data")
+      md= json.loads(md)
+      dispatcher.utter_message("Data is {}".format(md))
+
+
+
+      return []
 ################################################################################################
 
 
