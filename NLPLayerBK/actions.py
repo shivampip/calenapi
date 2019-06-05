@@ -121,7 +121,6 @@ class SetMeetingForm(FormAction):
 
       out= call.get_best_available_slots(md['from_dt'], md['to_dt'], md['duration'])
       out= json.loads(out)
-      log.info("\nOUT: {}".format(str(out)))
       if(out['status']=='success'):
          #dispatcher.utter_message("Response:- {}".format(out))
          data= out['data']
@@ -202,7 +201,7 @@ class ActionDefaultFallback(Action):
       dispatcher.utter_template('utter_default', tracker)
       return [UserUtteranceReverted()]
 
-from time import sleep
+
 
 class ShowInviteAction(Action):
 
@@ -210,30 +209,21 @@ class ShowInviteAction(Action):
       return "show_invites_action"
 
    def run(self, dispatcher, tracker, domain):
-      log.info("Inside Showing inviets")
       dispatcher.utter_message("Showing Invites, please wait")
-      invites= call.get_invites()
-      log.info("Got invites") 
+      invites= call.get_invites() 
       invites= json.loads(invites)      
       invites= invites['invites']
-      log.info("Invites are: {}".format(str(invites)))
       for invite in invites:
-         log.info("Next Invite is: {}".format(invite))
          text= "Name: {}".format(invite['event_title'])
          text+= "\nBy:   {}".format(invite['invited_by'])
          buttons= [{
             'title': 'Accept',
-            'payload': '/accept_invite{"invite_id":'+str(invite['id'])+'}'
-         },{
-            'title': 'Decline',
             'payload': '/accept_invite{"invite_id":'+str(invite['id'])+'}'
          }]
          dispatcher.utter_button_message(
             text= text,
             buttons= buttons
          )
-         sleep(0.2)
-      
       return [] 
 
 

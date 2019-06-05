@@ -8,7 +8,7 @@ from requests.exceptions import ConnectionError
 class Caller:
     def __init__(self):
         user= 'shivam'
-        token= '9eb0314472c718bf574373476ff4d42f5e2453bb'
+        token= '7e556fd76814776d47907c2e2bc1c8ab39c7fc46'
         base_url= "http://localhost:8000/calen/"
         self.set(user, token, base_url)
 
