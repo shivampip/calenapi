@@ -11,7 +11,7 @@ from .models import Event, PendingEvent, Invite, BusySlot, AASlot, Notification,
 from .serializers import EventSerializer, UserSerializer, PendingEventSerializer, InviteSerializer, BusySlotSerializer, AASlotSerializer, NotificationSerializer, ShareableLinkSerializer
 
 from dateutil.parser import parse
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from .hiutil import username_to_id
 import json 
@@ -432,6 +432,7 @@ class AvailableSlots(APIView):
 
         user= request.user
         
+        # Check Events
         evs1= Event.objects.filter(author= user, date_start__range= (start_date, end_date))
         evs2= Event.objects.filter(author= user, date_end__range= (start_date, end_date))
 
@@ -446,6 +447,32 @@ class AvailableSlots(APIView):
             #new_ct= ct.astimezone(timezone('utc'))
             de= datetime.timestamp(ev.date_end)
             na_slots.append((ds, de))
+
+        # Check Busy slots
+        start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+        end_dt= datetime.strptime(end_date, "%Y-%m-%dT%H:%M")
+        
+        start_pure_dt= start_dt.date()
+        week_day= start_pure_dt.weekday() 
+        start_time= start_dt.time()
+        end_time= end_dt.time()
+        log.info("Week day: {}\nStart time: {}\nEnd time: {}".format(week_day, start_time, end_time))
+        bss1= BusySlot.objects.filter(author= user, week_day= week_day, start_time__range= (start_time, end_time))
+        bss2= BusySlot.objects.filter(author= user, week_day= week_day, end_time__range= (start_time, end_time))
+        bs1= [bs for bs in bss1]
+        bs2= [bs for bs in bss2]
+        bs= list(set(bs1) | set(bs2))
+        log.info("BusySlot list is : {}".format(str(bs)))
+        for bss in bs:
+            ts= bss.start_time
+            te= bss.end_time
+            ds= datetime.timestamp(datetime.combine(start_pure_dt, ts))
+            es= datetime.timestamp(datetime.combine(start_pure_dt, te))
+            na_slots.append((ds, es))
+            
+
+        log.info("NOW NA is : {}".format(str(na_slots)))
+
 
 
         start_dt= datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
