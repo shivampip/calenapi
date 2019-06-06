@@ -63,10 +63,7 @@ def get_time(data):
             out['from']= make_std(out['from'])
             log.info("New From: {}".format(out['from']))
     log.info("OUT IS:")
-    pprint(out)
     if('to' not in out):
-        tto= add_duration(str_to_dt(out['from']), 1800)
-        out['to']= tto.strftime("%Y-%m-%dT%H:%M")
         out['from']= make_std(out['from'])
     pprint(out) 
     return out 

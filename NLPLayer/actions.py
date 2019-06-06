@@ -114,10 +114,12 @@ class SetMeetingForm(FormAction):
       if('to' in ttime):
          md['to_dt']= ttime['to']
       else:
+         log.info("combining duration for dt_end")
          tto= duck.add_duration(duck.str_to_dt(md['from_dt']), md['duration'])
          md['to_dt']= tto.strftime("%Y-%m-%dT%H:%M")
          
       log.info(str(md))
+      SetMeetingForm.adata= {}
 
       out= call.get_best_available_slots(md['from_dt'], md['to_dt'], md['duration'])
       out= json.loads(out)
@@ -141,6 +143,9 @@ class SetMeetingForm(FormAction):
 
          return [SlotSet("meeting_data", json.dumps(md) )]
 
+      elif(out['status']=='error'):
+         dispatcher.utter_message(out['data'])
+         return []
       else:
          dispatcher.utter_message("Response me Error aa gyi")
          return []
@@ -160,7 +165,7 @@ class ActionBookMeeting(Action):
 
       md= tracker.get_slot("meeting_data")
       md= json.loads(md)
-      dispatcher.utter_message("Data is {}".format(md))
+      #dispatcher.utter_message("Data is {}".format(md))
       
       title= md['title']
       dt_from= duck.make_std(md['from'])
@@ -169,8 +174,21 @@ class ActionBookMeeting(Action):
       members= md['members']
 
       out= call.make_pending_event(title, dt_from, dt_to, include_author, members) 
-      dispatcher.utter_message("RESPONSE: {}".format(str(out)))
-      
+      #dispatcher.utter_message("RESPONSE: {}".format(str(out)))
+      out= json.loads(out)
+      status= out['status']
+      if(status=='success'):
+         dispatcher.utter_message("Meeting booked successfully")
+         data= out['data']
+         pout= data['title']+"\n"
+         pout+= str(data['date_start'])+" to "+str(data['date_end'])+"\n"
+         pout+= str(data['members'])
+         dispatcher.utter_message(pout) 
+      elif(status=='error'):
+         dispatcher.utter_message("Error: {}".format(out['data']))
+      else:
+         dispatcher.utter_message("Unknown error occured")
+
       return []
 
 
@@ -199,8 +217,11 @@ class ActionDefaultFallback(Action):
       return "action_default_fallback"
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_template('utter_default', tracker)
+      sender_id= tracker.sender_id 
+      dispatcher.utter_message("Sender ID is {}".format(sender_id))
       return [UserUtteranceReverted()]
+
+
 
 from time import sleep
 
@@ -217,6 +238,9 @@ class ShowInviteAction(Action):
       invites= json.loads(invites)      
       invites= invites['invites']
       log.info("Invites are: {}".format(str(invites)))
+      if(len(invites)==0):
+         dispatcher.utter_message("You have no invite pending")
+         return []
       for invite in invites:
          log.info("Next Invite is: {}".format(invite))
          text= "Name: {}".format(invite['event_title'])
@@ -237,6 +261,23 @@ class ShowInviteAction(Action):
       return [] 
 
 
+class ActionNoti(Action):
+   def name(self):
+      return "action_noti"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching notifications, please wait...")
+      out= call.get_notifications()
+      out= json.loads(out) 
+      if(out['status']=='success'):
+         data= out['data']
+         for noti in data:
+            text= noti['text']
+            dispatcher.utter_message(text)
+      else:
+         dispatcher.utter_message("Couldn't fatch notifications") 
+
+   
 
 class AcceptInviteAction(Action):
    def name(self):
@@ -246,7 +287,11 @@ class AcceptInviteAction(Action):
       dispatcher.utter_message("Accepting invite, please wait...")
       invite_id= tracker.get_slot("invite_id") 
       out= call.accept_invite(int(invite_id))
-      dispatcher.utter_message(out) 
+      out= json.loads(out)
+      if(out['status']=='success'):
+         dispatcher.utter_message("Invite accepted successfully")
+      else:
+         dispatcher.utter_message("Error while accepting invite.") 
 
 
 class ShowPendingEventStatus(Action):
@@ -322,7 +367,68 @@ class BusySlotAction(Action):
             out_data+= week_data
             log.info(out_data)
             dispatcher.utter_message(out_data)
+      return []
+
+
+
+class AASlotAction(Action):
+   def name(self):
+      return "action_aa_slots"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching aa slots, please wait...")
+      out= call.get_aa_slots()
+      log.info("AlwaysAvailable OUT: {}".format(out))
+      out= json.loads(out)
+      if(len(out)==0):
+         dispatcher.utter_message("Currently you don't have any aa slot")
+      else:
+         data= []
+         week_days= {}
+         for slot in out:
+            ss= (slot['title'], slot['start_time'], slot['end_time'])
+            if(ss not in data):
+               data.append(ss)
+               week_days[ss]= [slot['week_day']]
+            else:
+               temp= week_days[ss]
+               temp.append(slot['week_day'])
+               week_days[ss]= temp 
+         log.info("WEEKOUT: {}".format(week_days))
+         for wd in week_days:
+            out_data=""
+            title, ts, te= wd 
+            wds= week_days[wd]
+            out_data+= title+"\n"
+            out_data+= str(ts)+" - "+str(te)+"\n"
+            week_data= ""
+            for ww in wds:
+               week_data+= str(ww)
+            week_data+="\n"
+            out_data+= week_data
+            log.info(out_data)
+            dispatcher.utter_message(out_data)
 
             
       
+class LoginAction(Action):
+   def name(self):
+      return "action_login"
+
+   def run(self, dispatcher, tracker, domain):
+      user= tracker.get_slot("person")
+      if(user is None):
+         dispatcher.utter_message("Please specify the user")
+         return []
+      
+      dispatcher.utter_message("Logging as {}, please wait..".format(user))
+      out= call.set_user(user)
+      dispatcher.utter_message(out) 
+
+      out= call.verify()
+      out= json.loads(out)
+      if(out['status']=='success'):
+         dispatcher.utter_message("Welcome {}".format(out['user']))
+      else:
+         dispatcher.utter_message("Invalid User")
 

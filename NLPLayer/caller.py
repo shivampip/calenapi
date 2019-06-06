@@ -5,10 +5,19 @@ from dateutil.parser import parse
 from datetime import timedelta, datetime 
 from requests.exceptions import ConnectionError
 
+
+USER_LOOKUP= {
+    "shivam": "d552571123e4f715892fbed3b1a6675d0413752a",
+    "sittu": "316f63eecb7f68b3e28a803e3523be20882500c6",
+    "gg": "4556c42a5905bd00e5b1bcd7c4d9ba2c1696c09f",
+    "ram": "b6703df7e5bc99a360fac99f30632e852142723e"
+}
+
+
 class Caller:
     def __init__(self):
-        user= 'shivam'
-        token= '9eb0314472c718bf574373476ff4d42f5e2453bb'
+        user= 'ram'
+        token= 'b6703df7e5bc99a360fac99f30632e852142723e'
         base_url= "http://localhost:8000/calen/"
         self.set(user, token, base_url)
 
@@ -16,6 +25,15 @@ class Caller:
         self.user= user
         self.token= "Token {}".format(token) 
         self.base_url= base_url
+
+    def set_user(self, user):
+        if(user not in USER_LOOKUP):
+            return "User not registered"
+        else:
+            self.user= user 
+            self.token= "Token {}".format(USER_LOOKUP[user])
+            return "User successfully logged in"
+
 
     def make_url(self, path):
         return self.base_url+path
@@ -33,6 +51,11 @@ class Caller:
             return json.dumps(response)
     
     
+    def verify(self):
+        url= self.make_url("verify/")
+        out= self.just_get(url)
+        return out
+
     def get_invites(self):
         url= self.make_url('show_invites/') 
         out= self.just_get(url) 
@@ -91,4 +114,14 @@ class Caller:
         out= self.just_get(url) 
         return out 
 
+
+    def get_aa_slots(self):
+        url= self.make_url("get_aa_slots/")
+        out= self.just_get(url) 
+        return out 
+
+    def get_notifications(self):
+        url= self.make_url("notifications/")
+        out= self.just_get(url)
+        return out 
     

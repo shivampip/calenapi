@@ -66,6 +66,33 @@
 - can you show me busy slots
 
 
+## intent:show_aa_slots
+- show auto approve slots
+- show aa slots
+- show always available slots
+- when am i always available
+- can you show me aa slots
+
+## intent:login
+- i am [shivam](person)
+- i am [ram](person)
+- i am [kavita](person)
+- i am [anuj](person)
+- i am [samar](person)
+- i am [gg](person)
+- i ma [sittu](person)
+
+
+## intent:show_noti
+- show notifications
+- show noti
+- please show notifications
+- please show noti
+- just show the notifications
+- can you please show the notifications
+- just show noti
+
+
 <!------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------>

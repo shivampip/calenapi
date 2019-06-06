@@ -31,10 +31,17 @@
 #Show Invites
 * show_invites
   - show_invites_action
+
+#Accept Invite
 * accept_invite{"invite_id": "3"}
   - slot{"invite_id": "3"}
   - utter_ok
   - accept_invite_action
+
+
+#Show Notifications
+* show_noti
+  - action_noti
 
 
 #Show pending events status
@@ -48,3 +55,12 @@
 #Show Busy Slots
 * show_busy_slots
   - action_busy_slots
+
+#Show AA Slots
+* show_aa_slots
+  - action_aa_slots
+
+#Login
+* login{"person":"shivam"}
+  - slot{"person":"shivam"}
+  - action_login

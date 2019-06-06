@@ -11,6 +11,9 @@ intents:
   - show_more_slots
 
   - show_busy_slots
+  - show_aa_slots
+  - login
+  - show_noti
 ##--------------------------------------------------
 
 
@@ -28,6 +31,9 @@ actions:
   - action_show_more_slots
 
   - action_busy_slots
+  - action_aa_slots
+  - action_login
+  - action_noti
 
 
 

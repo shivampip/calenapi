@@ -130,6 +130,20 @@ class GetBusySlot(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
 
 
+
+class GetNotifications(APIView):
+    
+    def get(self, request):
+        user= request.user
+        nos= Notification.objects.filter(user= user)
+        serializer= NotificationSerializer(nos, many= True)
+        res= {
+            "status":"success",
+            "data":serializer.data
+        }
+        return JsonResponse(res, status= status.HTTP_200_OK)
+
+
 class ListEvents(APIView):
     permission_classes= ()
 
@@ -498,7 +512,8 @@ class AvailableSlots(APIView):
 
         astatus= ""
         if(len(result)<=0):
-            astatus= "no slot available"
+            astatus= "error"
+            result= "No slot available in given timeframe"
         else:
             astatus= "success"
 
