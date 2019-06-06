@@ -180,10 +180,19 @@ class ActionBookMeeting(Action):
       if(status=='success'):
          dispatcher.utter_message("Meeting booked successfully")
          data= out['data']
-         pout= data['title']+"\n"
-         pout+= str(data['date_start'])+" to "+str(data['date_end'])+"\n"
-         pout+= str(data['members'])
-         dispatcher.utter_message(pout) 
+         pout= "**"+data['title']+"**\n"
+         dt= duck.str_to_dt(data['date_start'])
+         ddt= dt.date()
+         pout+= "Date: {}\n".format(ddt)
+         ts= dt.strftime("%H:%M")
+         te= duck.str_to_dt(data['date_end']).strftime("%H:%M")
+         pout+= "Time: {} - {}\n".format(ts, te)
+         pout+= "Members: _"
+         for member in json.loads(data['members']):
+            pout+= member+", "
+         pout+="_"
+         #pout+= "\n **Bold** and *italic* and _pata_"
+         dispatcher.utter_message(pout)
       elif(status=='error'):
          dispatcher.utter_message("Error: {}".format(out['data']))
       else:
@@ -256,7 +265,6 @@ class ShowInviteAction(Action):
             text= text,
             buttons= buttons
          )
-         sleep(0.2)
       
       return [] 
 
@@ -273,7 +281,21 @@ class ActionNoti(Action):
          data= out['data']
          for noti in data:
             text= noti['text']
-            dispatcher.utter_message(text)
+            data= noti['data']
+            if(data==""):
+               dispatcher.utter_message(text)
+            else:
+               data= json.loads(data)
+               #log.info("PAYLOAD: {}".format("/"+data['intent']+"{'id':"+str(data['id'])+"}"))
+               buttons= [{
+                  'title': data['text'],
+                  'payload': "/"+data['intent']+'{"event_id":'+str(data['id'])+"}"
+               }]
+               dispatcher.utter_button_message(
+                  text= text,
+                  buttons= buttons
+               )
+               log.info("Button was {}".format(str(buttons)))
       else:
          dispatcher.utter_message("Couldn't fatch notifications") 
 
@@ -326,7 +348,23 @@ class EventDetailAction(Action):
       dispatcher.utter_message("Fatching event details, please wait...")
       event_id= tracker.get_slot("event_id") 
       out= call.event_details(int(event_id))
-      dispatcher.utter_message(out) 
+      out= json.loads(out)
+      if(out['status']=='success'):
+         data= out['data']
+         pout= "**"+data['title']+"**\n"
+         dt= duck.str_to_dt(data['date_start'])
+         ddt= dt.date()
+         pout+= "Date: {}\n".format(ddt)
+         ts= dt.strftime("%H:%M")
+         te= duck.str_to_dt(data['date_end']).strftime("%H:%M")
+         pout+= "Time: {} - {}\n".format(ts, te)
+         pout+= "Members: _"
+         for member in json.loads(data['members']):
+            pout+= member+", "
+         pout+= "\n **Bold** and *italic* and _pata_"
+         dispatcher.utter_message(pout)
+      else:
+         dispatcher.utter_message("Error aa gyi") 
 
 
 class PendingEventDetailAction(Action):

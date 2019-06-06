@@ -480,13 +480,16 @@ class AvailableSlots(APIView):
         week_day= start_pure_dt.weekday() 
         start_time= start_dt.time()
         end_time= end_dt.time()
+        if(start_time==end_time):
+            end_time= end_time.replace(hour= 23)
         log.info("Week day: {}\nStart time: {}\nEnd time: {}".format(week_day, start_time, end_time))
         bss1= BusySlot.objects.filter(author= user, week_day= week_day, start_time__range= (start_time, end_time))
         bss2= BusySlot.objects.filter(author= user, week_day= week_day, end_time__range= (start_time, end_time))
         bs1= [bs for bs in bss1]
         bs2= [bs for bs in bss2]
         bs= list(set(bs1) | set(bs2))
-        log.info("BusySlot list is : {}".format(str(bs)))
+        log.info("BusySlot LEN: {}".format(len(bs)))
+        log.info("BusySlot list is : {}".format(bs))
         for bss in bs:
             ts= bss.start_time
             te= bss.end_time
@@ -495,7 +498,7 @@ class AvailableSlots(APIView):
             na_slots.append((ds, es))
             
 
-        log.info("NOW NA is : {}".format(str(na_slots)))
+        log.info("NOW NA is : {}".format(na_slots))
 
 
 
