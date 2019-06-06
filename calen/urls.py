@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink, GetBestAvailableSlot, GetNotifications
+from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink, GetBestAvailableSlot, GetNotifications, GetEventDetails
 
 from .useriviews import Verify, Register, GetToken
 
@@ -38,6 +38,8 @@ urlpatterns = [
 
     path('browse/', BrowseLink.as_view(), name= "browse_link"),
 
-    path('notifications/', GetNotifications.as_view(), name= "get_notifications")
+    path('notifications/', GetNotifications.as_view(), name= "get_notifications"),
+
+    path("event_details/", GetEventDetails.as_view(), name= "event_details")
 
 ]

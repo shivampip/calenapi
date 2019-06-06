@@ -2,6 +2,7 @@ intents:
   - set_meeting
   - greet
   - show_events
+  - show_event_details
   - show_invites
   - accept_invite
   - show_pending_events
@@ -29,6 +30,7 @@ actions:
   - pending_event_detail_action
   - action_book_meeting
   - action_show_more_slots
+  - action_event_details
 
   - action_busy_slots
   - action_aa_slots

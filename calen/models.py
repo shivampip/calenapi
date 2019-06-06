@@ -75,6 +75,7 @@ class Notification(models.Model):
     #link_text= models.CharField(max_length= 200)
     #link= models.CharField(max_length= 200)
     #link_data= models.CharField(max_length= 1500)
+    data= models.CharField(max_length= 1000,  blank=True) 
 
     def __str__(self):
         return "For {}".format(self.user)+ ", {}".format(self.text)

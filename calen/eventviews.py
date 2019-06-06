@@ -245,13 +245,13 @@ class CreatePE(APIView):
             members.append(str(request.user))
 
         if(not self.check_busy_slots(author, date_start, date_end)):
-            return JsonResponse({"status":"error", "data": "Slot not available: Busy Slot"})
+            return JsonResponse({"status":"error", "data": "There is a busy slot in given timeframe"})
 
         if(not self.check_pending_event(author, date_start, date_end)):
-            return JsonResponse({"status":"error", "data": "Slot not available: Pending Event"})
+            return JsonResponse({"status":"error", "data": "There is a pending event in given timeframe"})
 
         if(not self.check_event(author, date_start, date_end)):
-            return JsonResponse({"status":"error", "data": "Slot not available: Event"})
+            return JsonResponse({"status":"error", "data": "There is an existing event in given timeframe"})
 
         data= {
             "author": author,
@@ -316,8 +316,12 @@ class ShowInvites(APIView):
 
 class AcceptInvite(APIView):
 
-    def notify(self, user, msg):
-        noti= Notification(user= user, text= msg, seen= False)   
+    def notify(self, user, msg, add_data=None):
+        noti= None 
+        if(add_data is None):
+            noti= Notification(user= user, text= msg, seen= False)   
+        else:
+            noti= Notification(user= user, text= msg, seen= False, data= add_data)  
         noti.save() 
         log.info("Notified: {}, Message: {}".format(str(user), msg))
 
@@ -349,9 +353,15 @@ class AcceptInvite(APIView):
             log.info("Members is {}".format(str(members)))
             log.info("Type of members is {}".format(type(members)))
             log.info("Lenght is {}".format(len(members)))
+            add_data= {
+                "text": "Show Event Details",
+                "intent":"show_event_details",
+                "id": ev.id
+            }
+            add_data= json.dumps(add_data)
             for member in members:
                 user= User.objects.get(username= member)
-                self.notify(user, "Meeting {} confirmed".format(pe.title))
+                self.notify(user, "Meeting {} confirmed".format(pe.title), add_data= add_data)
             self.delete_things(pe)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         else:
@@ -652,3 +662,22 @@ class BrowseLink(APIView):
 
 
         
+class GetEventDetails(APIView):
+    
+    def get(self, request):
+        user= request.user                       
+        event_id= request.GET.get("id") 
+
+        evt= Event.objects.get(id= event_id)
+        if(evt is None):
+            return JsonResponse({"status":"error", "data":"Event not found"})
+        
+        members= evt.members
+        if(user.username not in members):
+            return JsonResponse({"status":"error", "data": "Unauthororized access"})
+        
+        serializer= EventSerializer(evt)
+        return JsonResponse({
+            "status":"success",
+            "data": serializer.data 
+        })

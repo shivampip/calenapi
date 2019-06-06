@@ -317,6 +317,18 @@ class ShowPendingEventStatus(Action):
       return []
 
 
+
+class EventDetailAction(Action):
+   def name(self):
+      return "action_event_details"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching event details, please wait...")
+      event_id= tracker.get_slot("event_id") 
+      out= call.event_details(int(event_id))
+      dispatcher.utter_message(out) 
+
+
 class PendingEventDetailAction(Action):
    def name(self):
       return "pending_event_detail_action"

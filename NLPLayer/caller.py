@@ -62,7 +62,7 @@ class Caller:
         return out
 
     def accept_invite(self, id):
-        url= self.make_url('accept_invite?id={}'.format(id))
+        url= self.make_url('accept_invite?id={}'.format(id))        
         out= self.just_get(url) 
         return out 
 
@@ -70,6 +70,12 @@ class Caller:
         url= self.make_url('show_pending_event_status/')
         out= self.just_get(url)
         return out
+
+
+    def event_details(self, id):
+        url= self.make_url('event_details?id={}'.format(id))
+        out= self.just_get(url)
+        return out  
 
     def pending_event_detail(self, id):
         return "ID is {}, Welcome Shivam".format(id)

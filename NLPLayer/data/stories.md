@@ -4,6 +4,8 @@
   - utter_wait
   - meeting_manager
   - form{"name": "meeting_manager"}
+
+## Just Book now
 * book_meeting
   - action_book_meeting
 
@@ -13,6 +15,8 @@
   - utter_wait
   - meeting_manager
   - form{"name": "meeting_manager"}
+
+## More Slots show
 * show_more_slots
   - action_show_more_slots
 
@@ -50,6 +54,13 @@
 * pending_event_details{"event_id": "2"}
   - slot{"event_id": "2"} 
   - pending_event_detail_action
+
+
+
+#Show Event details
+* show_event_details{"event_id": "2"}
+  - slot{"event_id": "2"}
+  - action_event_details
 
 
 #Show Busy Slots
