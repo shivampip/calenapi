@@ -141,6 +141,7 @@ class GetNotifications(APIView):
             "status":"success",
             "data":serializer.data
         }
+        nos.delete()
         return JsonResponse(res, status= status.HTTP_200_OK)
 
 
