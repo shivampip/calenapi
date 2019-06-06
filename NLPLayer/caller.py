@@ -86,6 +86,9 @@ class Caller:
         return out 
 
 
-    
+    def get_busy_slots(self):
+        url= self.make_url("get_busy_slots/")
+        out= self.just_get(url) 
+        return out 
 
     

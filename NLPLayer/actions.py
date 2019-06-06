@@ -282,3 +282,47 @@ class PendingEventDetailAction(Action):
       out= call.pending_event_detail(int(event_id))
       dispatcher.utter_message(out) 
       
+
+
+
+class BusySlotAction(Action):
+   def name(self):
+      return "action_busy_slots"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Fatching busy slots, please wait...")
+      out= call.get_busy_slots()
+      log.info("BusySlot OUT: {}".format(out))
+      out= json.loads(out)
+      if(len(out)==0):
+         dispatcher.utter_message("Currently you don't have any busy slot")
+      else:
+         data= []
+         week_days= {}
+         for slot in out:
+            ss= (slot['title'], slot['start_time'], slot['end_time'])
+            if(ss not in data):
+               data.append(ss)
+               week_days[ss]= [slot['week_day']]
+            else:
+               temp= week_days[ss]
+               temp.append(slot['week_day'])
+               week_days[ss]= temp 
+         log.info("WEEKOUT: {}".format(week_days))
+         for wd in week_days:
+            out_data=""
+            title, ts, te= wd 
+            wds= week_days[wd]
+            out_data+= title+"\n"
+            out_data+= str(ts)+" - "+str(te)+"\n"
+            week_data= ""
+            for ww in wds:
+               week_data+= str(ww)
+            week_data+="\n"
+            out_data+= week_data
+            log.info(out_data)
+            dispatcher.utter_message(out_data)
+
+            
+      
+

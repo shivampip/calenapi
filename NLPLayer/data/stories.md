@@ -43,3 +43,8 @@
 * pending_event_details{"event_id": "2"}
   - slot{"event_id": "2"} 
   - pending_event_detail_action
+
+
+#Show Busy Slots
+* show_busy_slots
+  - action_busy_slots

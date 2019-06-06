@@ -9,6 +9,8 @@ intents:
 
   - book_meeting
   - show_more_slots
+
+  - show_busy_slots
 ##--------------------------------------------------
 
 
@@ -24,6 +26,8 @@ actions:
   - pending_event_detail_action
   - action_book_meeting
   - action_show_more_slots
+
+  - action_busy_slots
 
 
 
