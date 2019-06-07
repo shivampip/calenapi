@@ -162,7 +162,7 @@ class SetMeetingForm(FormAction):
          dispatcher.utter_message(out['data'])
          return []
       else:
-         dispatcher.utter_message("Response me Error aa gyi")
+         dispatcher.utter_message("Unknown error occured")
          return []
 
       
@@ -223,7 +223,7 @@ class ActionShowMoreSlots(Action):
 
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Fatching more slots, please wait..")
+      dispatcher.utter_message("Searching more slots....")
 
       md= tracker.get_slot("meeting_data")
       md= json.loads(md)
@@ -239,6 +239,12 @@ class ActionShowMoreSlots(Action):
       if(out['status']=='success'):
          #dispatcher.utter_message("Response:- {}".format(out))
          data= out['data']
+         if(len(data)==1):
+            dispatcher.utter_message("No other slot available in given timeframe")
+            return []
+         if(len(data)>5):
+            dispatcher.utter_message("Due to platform limits, showing only first 5 slots")
+            data= data[:5]
          for dd in data:
             dt_from= dd['from']
             dt_to= dd['to']
@@ -266,13 +272,13 @@ class ActionSelectSlot(Action):
 
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("In Selected Timeframe")
+      #dispatcher.utter_message("In Selected Timeframe")
 
       timef= tracker.get_slot("timeframe")
       log.info("TIMEFRAME: {}".format(timef))
-      dispatcher.utter_message("TIMEFRAME: {}".format(timef))
+      #dispatcher.utter_message("TIMEFRAME: {}".format(timef))
       
-      dispatcher.utter_message("Type: {}".format(type(timef)))
+      #dispatcher.utter_message("Type: {}".format(type(timef)))
       #timef= json.loads(timef) 
 
       md= tracker.get_slot("meeting_data")
@@ -315,7 +321,7 @@ class ShowInviteAction(Action):
 
    def run(self, dispatcher, tracker, domain):
       log.info("Inside Showing inviets")
-      dispatcher.utter_message("Showing Invites, please wait")
+      #dispatcher.utter_message("Showing Invites, please wait")
       invites= call.get_invites()
       log.info("Got invites") 
       invites= json.loads(invites)      
@@ -348,7 +354,7 @@ class ActionNoti(Action):
       return "action_noti"
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Fatching notifications, please wait...")
+      #dispatcher.utter_message("Fatching notifications, please wait...")
       out= call.get_notifications()
       out= json.loads(out) 
       if(out['status']=='success'):
@@ -383,7 +389,7 @@ class AcceptInviteAction(Action):
       return "accept_invite_action"
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Accepting invite, please wait...")
+      #dispatcher.utter_message("Accepting invite, please wait...")
       invite_id= tracker.get_slot("invite_id") 
       out= call.accept_invite(int(invite_id))
       out= json.loads(out)
@@ -480,7 +486,7 @@ class BusySlotAction(Action):
       return "action_busy_slots"
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Fatching busy slots, please wait...")
+      #dispatcher.utter_message("Fatching busy slots, please wait...")
       out= call.get_busy_slots()
       log.info("BusySlot OUT: {}".format(out))
       out= json.loads(out)
@@ -521,7 +527,7 @@ class AASlotAction(Action):
       return "action_aa_slots"
 
    def run(self, dispatcher, tracker, domain):
-      dispatcher.utter_message("Fatching aa slots, please wait...")
+      #dispatcher.utter_message("Fatching aa slots, please wait...")
       out= call.get_aa_slots()
       log.info("AlwaysAvailable OUT: {}".format(out))
       out= json.loads(out)
@@ -566,7 +572,7 @@ class LoginAction(Action):
          dispatcher.utter_message("Please specify the user")
          return []
       
-      dispatcher.utter_message("Logging as {}, please wait..".format(user))
+      #dispatcher.utter_message("Logging as {}, please wait..".format(user))
       out= call.set_user(user)
       dispatcher.utter_message(out) 
 
