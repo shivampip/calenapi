@@ -1,7 +1,6 @@
 intents:
   - set_meeting
   - greet
-  - show_events
   - show_event_details
   - show_invites
   - accept_invite
@@ -16,6 +15,8 @@ intents:
   - show_aa_slots
   - login
   - show_noti
+  - show_today_schedule
+  - who_am_i
 ##--------------------------------------------------
 
 
@@ -38,6 +39,8 @@ actions:
   - action_aa_slots
   - action_login
   - action_noti
+  - action_today_schedule
+  - action_verify
 
 
 

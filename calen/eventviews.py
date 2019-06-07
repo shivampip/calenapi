@@ -602,10 +602,16 @@ class DaySchedule(APIView):
         dt_end= dt_start+ timedelta(days= 1)
         user= request.user
         
+        log.info("Start DT: {}".format(dt_start))
+        log.info("End DT: {}".format(dt_end))
+        log.info("Username: {}".format(user.username))
+        
+
         data= {}
         
         if(etype in ['all','events']):
-            evs= Event.objects.filter(author= user, date_start__gte= dt_start, date_end__lte= dt_end)
+            evs= Event.objects.filter(members__contains= user.username, date_start__gte= dt_start, date_end__lte= dt_end)
+            #evs= Event.objects.filter(members__contains= user.username)
             evt_serializer= EventSerializer(evs, many= True)
             log.info("Events are {}".format(evt_serializer.data))
             data['events']= evt_serializer.data 

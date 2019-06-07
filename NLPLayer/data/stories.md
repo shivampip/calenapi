@@ -31,11 +31,9 @@
 * greet
   - utter_greet
 
-
-#List Events
-* show_events
-  - utter_thanks_for_pi
-
+##WhoAmI
+* who_am_i
+  - action_verify
 
 #Show Invites
 * show_invites
@@ -51,6 +49,11 @@
 #Show Notifications
 * show_noti
   - action_noti
+
+
+#Show Today Schedule
+* show_today_schedule
+  - action_today_schedule
 
 
 #Show pending events status

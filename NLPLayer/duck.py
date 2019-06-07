@@ -11,6 +11,9 @@ def make_std(dt):
     return parse(dt).strftime("%Y-%m-%dT%H:%M")
 
 
+def get_now():
+    return datetime.now()
+
 def str_to_dt(text):
     return parse(text) 
 

@@ -35,12 +35,6 @@
 - hi
 
 
-## intent:show_events
-- show upcoming events
-- what are my upcoming events
-- show upcoming event list
-
-
 
 ## intent:show_invites
 - show me invites
@@ -92,6 +86,23 @@
 - can you please show the notifications
 - just show noti
 
+
+## intent:show_today_schedule
+- show today schedule
+- what is my todays schedule
+- what is my today schedule
+- show me today schedule
+- show me today's events
+- show today upcoming events
+- show today's upcoming event
+
+
+## intent:who_am_i
+- who am i
+- what is my name
+- verify
+- whom are you talking to
+- who m i
 
 <!------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------>

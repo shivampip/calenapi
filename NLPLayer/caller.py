@@ -133,3 +133,12 @@ class Caller:
         out= self.just_get(url)
         return out 
     
+
+    def get_day_schedule(self, day):
+        url= self.make_url("get_day_schedule/")
+        data={
+            "dt": day,
+            "type": "all"
+        }
+        out= self.just_post(url, data) 
+        return out 

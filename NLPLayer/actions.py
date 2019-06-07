@@ -18,9 +18,9 @@ import duck
 
 call= Caller() 
 
-
+'''
 class Restarted(Action):
-          
+
    def name(self):
       return 'action_restarted'
       
@@ -28,7 +28,7 @@ class Restarted(Action):
    def run(self, dispatcher, tracker, domain):
       dispatcher.utter_message("Resetarting...")
       return [Restarted(), AllSlotsReset()]
-      
+   '''   
 
         
 
@@ -353,6 +353,9 @@ class ActionNoti(Action):
       out= json.loads(out) 
       if(out['status']=='success'):
          data= out['data']
+         if(len(data)==0):
+            dispatcher.utter_message("No notification")
+            return []
          for noti in data:
             text= noti['text']
             data= noti['data']
@@ -574,3 +577,41 @@ class LoginAction(Action):
       else:
          dispatcher.utter_message("Invalid User")
 
+
+class VerifyAction(Action):
+   def name(self):
+      return "action_verify"
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("You are {}".format(call.user))
+      return []
+
+
+
+class TodaySchedule(Action):
+   def name(self):
+      return "action_today_schedule"
+
+   def run(self, dispatcher, tracker, domain):
+      
+      today= duck.get_now().strftime("%Y-%m-%dT%H:%M")
+      out= call.get_day_schedule(today)
+      out= json.loads(out) 
+      events= out['events']
+      if(len(events)==0):
+         dispatcher.utter_message("No meeting today")
+         return []
+
+      for data in events:
+         pout= "**"+data['title']+"**\n"
+         dt= duck.str_to_dt(data['date_start'])
+         ddt= dt.date()
+         pout+= "Date: {}\n".format(ddt)
+         ts= dt.strftime("%H:%M")
+         te= duck.str_to_dt(data['date_end']).strftime("%H:%M")
+         pout+= "Time: {} - {}\n".format(ts, te)
+         pout+= "Members: _"
+         for member in json.loads(data['members']):
+            pout+= member+", "
+         pout+= "\n **Bold** and *italic* and _pata_"
+         dispatcher.utter_message(pout)

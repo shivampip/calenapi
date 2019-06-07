@@ -21,5 +21,3 @@ Who am I
 
 Decline invite
 
-
-implement pending event status show
