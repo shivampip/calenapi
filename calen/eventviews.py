@@ -141,7 +141,7 @@ class GetNotifications(APIView):
             "status":"success",
             "data":serializer.data
         }
-        nos.delete()
+        #nos.delete()
         return JsonResponse(res, status= status.HTTP_200_OK)
 
 
@@ -299,6 +299,42 @@ class ShowPMSatus(APIView):
         return JsonResponse({"pending_events": data})
 
 
+class ShowPMSatusOne(APIView):
+    def get(self, request):
+        user= request.user
+        id= request.GET.get('id')
+        try:
+            pe= PendingEvent.objects.get(id=id)
+        except PendingEvent.DoesNotExist:
+            pe= None
+
+        if(pe is None):
+            return JsonResponse({
+                "status":"error",
+                "data":"Invalid ID"
+            })
+        out= {}
+        out['id']= pe.id
+        out['title']= pe.title 
+        invs= pe.invite_set.all()
+        out['total']= len(invs)  
+        out['accepted']= 0
+        accepted_members= []
+        remaining_members= []
+        for inv in invs:
+            if(inv.accepted):
+                out['accepted']+= 1
+                accepted_members.append(str(inv.ref))
+            else:
+                remaining_members.append(str(inv.ref))
+        out['accepted_by']= accepted_members
+        out['remaining_members']= remaining_members
+        return JsonResponse({
+            "status":"success",
+            "data": out
+        })
+
+
 class ShowInvites(APIView):
     def get(self, request):
         user= request.user
@@ -357,7 +393,8 @@ class AcceptInvite(APIView):
             add_data= {
                 "text": "Show Event Details",
                 "intent":"show_event_details",
-                "id": ev.id
+                "param":"event_id",
+                "value": ev.id
             }
             add_data= json.dumps(add_data)
             for member in members:

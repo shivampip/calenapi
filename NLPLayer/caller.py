@@ -78,7 +78,9 @@ class Caller:
         return out  
 
     def pending_event_detail(self, id):
-        return "ID is {}, Welcome Shivam".format(id)
+        url= self.make_url('show_pending_event_status_one?id={}'.format(id))
+        out= self.just_get(url)
+        return out 
         
     def get_available_slots(self, start_dt, end_dt, duration):
         url= self.make_url('get_available_slots/')

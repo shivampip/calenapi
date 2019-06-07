@@ -3,7 +3,7 @@ sys.path.append("..")
 
 from rasa_core_sdk import Action
 from rasa_core_sdk.events import SlotSet
-from rasa_core_sdk.events import Restarted
+from rasa_core_sdk.events import Restarted, AllSlotsReset
 from rasa_core_sdk.forms import FormAction, REQUESTED_SLOT
 from rasa_core_sdk.events import ConversationPaused, ConversationResumed, UserUtteranceReverted, UserUttered
 from rasa_core_sdk.events import ActionExecuted, FollowupAction
@@ -19,7 +19,16 @@ import duck
 call= Caller() 
 
 
+class Restarted(Action):
+          
+   def name(self):
+      return 'action_restarted'
+      
 
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("Resetarting...")
+      return [Restarted(), AllSlotsReset()]
+      
 
         
 
@@ -80,6 +89,7 @@ class SetMeetingForm(FormAction):
       for slot, value in slot_values.items():
          if(slot == 'duration'):
             _, out= duck.get_duration(value) 
+            log.info("VALIDATING DURATION: {}".format(out))
             if(out==0):
                slot_values['duration']= None 
             else:
@@ -104,7 +114,12 @@ class SetMeetingForm(FormAction):
          md['duration']= SetMeetingForm.adata['duration']
       else:
          md['duration']= tracker.get_slot("duration")
-      md['duration']= int(md['duration'])
+
+      try:
+         md['duration']= int(md['duration'])
+      except ValueError:
+         _, out= duck.get_duration(md['duration']) 
+         md['duration']= int(out)
 
       if('time' in SetMeetingForm.adata):
          ttime= SetMeetingForm.adata['time']
@@ -348,7 +363,7 @@ class ActionNoti(Action):
                #log.info("PAYLOAD: {}".format("/"+data['intent']+"{'id':"+str(data['id'])+"}"))
                buttons= [{
                   'title': data['text'],
-                  'payload': "/"+data['intent']+'{"event_id":'+str(data['id'])+"}"
+                  'payload': "/"+data['intent']+'{"'+data['param']+'":'+str(data['value'])+"}"
                }]
                dispatcher.utter_button_message(
                   text= text,
@@ -385,8 +400,11 @@ class ShowPendingEventStatus(Action):
       out= json.loads(out)
       pending_events= out['pending_events']
       for pending_event in pending_events:
-         text= pending_event['title']+"\n"
-         text+="{} out of {} members accepted".format(pending_event['accepted'], pending_event['total'])
+         text= "**"+pending_event['title']+"** \n"
+         text+="{} out of {} members have accepted\n".format(pending_event['accepted'], pending_event['total'])
+         text+= "Remaining: "
+         for member in pending_event['remaining_members']:
+            text+= member+", "
          buttons= [{
             'title': 'Show details',
             'payload': '/pending_event_details{"event_id":'+str(pending_event['id'])+'}'
@@ -434,7 +452,22 @@ class PendingEventDetailAction(Action):
       dispatcher.utter_message("Fatching event details, please wait...")
       event_id= tracker.get_slot("event_id") 
       out= call.pending_event_detail(int(event_id))
-      dispatcher.utter_message(out) 
+      out= json.loads(out) 
+      if(out['status']=='error'):
+         dispatcher.utter_message("Pending Event id is invalid")
+         return []
+
+      pe= out['data']
+      text= "**"+pe['title']+"**\n"
+      text+= "Status: {}/{}\n".format(pe['accepted'], pe['total'])
+      text+= "Remaining: "
+      for member in pe['remaining_members']:
+         text+= member+", "
+      text+= "\n"
+      text+= "Accepted By: "
+      for member in pe['accepted_by']:
+         text+= member+ ", "
+      dispatcher.utter_message(text)
       
 
 

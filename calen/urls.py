@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink, GetBestAvailableSlot, GetNotifications, GetEventDetails
+from .eventviews import  ListEvents, CreatePE, ShowInvites, AcceptInvite, ShowPMSatus, ShowPMSatusOne, AvailableSlots, CreateBusySlots, GetBusySlot, CreateAASlots, GetAASlot, DaySchedule, GetShareableLink, BrowseLink, GetBestAvailableSlot, GetNotifications, GetEventDetails
 
 from .useriviews import Verify, Register, GetToken
 
@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('make_pending_event/', CreatePE.as_view(), name= 'make_pending_event'),
     path('show_pending_event_status/', ShowPMSatus.as_view(), name= 'show_pe_status'),
+    path('show_pending_event_status_one/', ShowPMSatusOne.as_view(), name= 'show_pe_status_one'),
     path('list_events/', ListEvents.as_view(), name= "list_evens"),
 
     path('show_invites/', ShowInvites.as_view(), name= 'show_invites'),
