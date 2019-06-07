@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "13f0ba15-d6d0-4cb2-90cb-d5509177b6e8",
+		"_postman_id": "f1117ae3-e125-4edb-bf3d-e04a2aff17ad",
 		"name": "SchedulingBot",
 		"description": "Scheduling bot RESTful APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -32,17 +32,17 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "gg",
+							"value": "ram",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "gg123",
+							"value": "ram123",
 							"type": "text"
 						},
 						{
 							"key": "email",
-							"value": "gg@gmail.com",
+							"value": "ram@gmail.com",
 							"type": "text"
 						}
 					]
@@ -89,12 +89,12 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "sittu",
+							"value": "ram",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "sittu123",
+							"value": "ram123",
 							"type": "text"
 						}
 					]
@@ -138,7 +138,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -184,7 +184,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -192,7 +192,7 @@
 					"formdata": [
 						{
 							"key": "title",
-							"value": "Bath and fresh",
+							"value": "Breakfast",
 							"type": "text"
 						},
 						{
@@ -251,7 +251,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -297,7 +297,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 3ff13328874216ed2a46abdedfd406f016ff8860"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -305,7 +305,7 @@
 					"formdata": [
 						{
 							"key": "title",
-							"value": "I am GG, Auto approve afternoon",
+							"value": "Free in Afternoon",
 							"type": "text"
 						},
 						{
@@ -364,7 +364,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 3ff13328874216ed2a46abdedfd406f016ff8860"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -410,7 +410,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -482,7 +482,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -528,7 +528,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 9eb0314472c718bf574373476ff4d42f5e2453bb"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -574,7 +574,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 9eb0314472c718bf574373476ff4d42f5e2453bb"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -603,52 +603,6 @@
 			"response": []
 		},
 		{
-			"name": "List Events",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
-						"exec": [
-							"tests[\"response code is 200\"] = responseCode.code === 200;",
-							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token 7d257c1b1b8febefc09654eded7bb73957db17b1"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8000/calen/le/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"calen",
-						"le",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Get Available Slots",
 			"event": [
 				{
@@ -671,7 +625,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -733,7 +687,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -790,7 +744,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 7e556fd76814776d47907c2e2bc1c8ab39c7fc46"
+						"value": "Token 8d0f8aceba340ed082ea541b4d5f752f9984715d"
 					}
 				],
 				"body": {
@@ -844,16 +798,62 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "noauth"
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/calen/browse?id=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"calen",
+						"browse"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notifications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "562a6d66-ac9b-4371-a94e-287459e20ab4",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 200;",
+							"tests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8000/calen/browse?id=3",
 					"protocol": "http",

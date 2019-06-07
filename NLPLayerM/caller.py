@@ -7,17 +7,17 @@ from requests.exceptions import ConnectionError
 
 
 USER_LOOKUP= {
-    "shivam": "d552571123e4f715892fbed3b1a6675d0413752a",
-    "sittu": "316f63eecb7f68b3e28a803e3523be20882500c6",
-    "gg": "4556c42a5905bd00e5b1bcd7c4d9ba2c1696c09f",
-    "ram": "b6703df7e5bc99a360fac99f30632e852142723e"
+    "shivam": "b554ba4b5b005776d8e61588d672cd86ebab4007",
+    "sittu": "addecafcded82981e76368acdbf046dff5a368f8",
+    "gg": "b26c611166dbbeb52331c35774f5b7dcf9a499ba",
+    "ram": "8d0f8aceba340ed082ea541b4d5f752f9984715d"
 }
 
 
 class Caller:
     def __init__(self):
         user= 'ram'
-        token= 'b6703df7e5bc99a360fac99f30632e852142723e'
+        token= '8d0f8aceba340ed082ea541b4d5f752f9984715d'
         base_url= "http://localhost:8000/calen/"
         self.set(user, token, base_url)
 

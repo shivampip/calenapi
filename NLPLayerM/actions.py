@@ -253,7 +253,7 @@ class ActionShowMoreSlots(Action):
             dispatcher.utter_message("No other slot available in given timeframe")
             return []
          if(len(data)>5):
-            dispatcher.utter_message("Due to platform limits, showing only first 5 slots")
+            #dispatcher.utter_message("Due to platform limits, showing only first 5 slots")
             data= data[:5]
          for dd in data:
             dt_from= dd['from']
@@ -585,6 +585,7 @@ class LoginAction(Action):
       
       #dispatcher.utter_message("Logging as {}, please wait..".format(user))
       out= call.set_user(user)
+      log.info("OUT: {}".format(out))
       dispatcher.utter_message(out) 
 
       out= call.verify()
