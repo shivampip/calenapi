@@ -20,6 +20,10 @@
 * show_more_slots
   - action_show_more_slots
 
+## On Slot sleect
+* select_slot{"timeframe":"timeframedata"}
+  - slot{"timeframe":"timeframedata"}
+  - action_select_slot
 
 
 ##Greet

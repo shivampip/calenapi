@@ -5,3 +5,12 @@ one -> time
 Solution: (one -> time) means some 2001 time. 
 if time< current time:
     discart
+
+
+
+
+
+
+
+
+Make login 'person' seperate

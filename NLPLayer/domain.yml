@@ -10,6 +10,7 @@ intents:
 
   - book_meeting
   - show_more_slots
+  - select_slot
 
   - show_busy_slots
   - show_aa_slots
@@ -31,6 +32,7 @@ actions:
   - action_book_meeting
   - action_show_more_slots
   - action_event_details
+  - action_select_slot
 
   - action_busy_slots
   - action_aa_slots
@@ -47,6 +49,7 @@ entities:
  - invite_id
  - event_id
  - meeting_data
+ - timeframe
 
 
 slots:
@@ -65,7 +68,8 @@ slots:
 
   meeting_data:
     type: unfeaturized
-
+  timeframe:
+    type: unfeaturized
 
 
 forms:

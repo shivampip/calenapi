@@ -212,11 +212,70 @@ class ActionShowMoreSlots(Action):
 
       md= tracker.get_slot("meeting_data")
       md= json.loads(md)
-      dispatcher.utter_message("Data is {}".format(md))
+      log.info("Data is {}".format(md))
+      
+      dt_from= md['from_dt']
+      dt_to= md['to_dt']
+      duration= md['duration']
+
+      out= call.get_available_slots(dt_from, dt_to, duration)
+      out= json.loads(out)
+      log.info("\AVAILABLE SLOTS: {}".format(str(out)))
+      if(out['status']=='success'):
+         #dispatcher.utter_message("Response:- {}".format(out))
+         data= out['data']
+         for dd in data:
+            dt_from= dd['from']
+            dt_to= dd['to']
+            dt_from= duck.str_to_dt(dt_from)
+            dt_to= duck.str_to_dt(dt_to)
+            timef= {"from": dd['from'], "to": dd['to']}
+            timef= json.dumps(timef)
+            text= "On {}, From {} to {}".format(duck.dt_to_date(dt_from), duck.dt_to_time(dt_from), duck.dt_to_time(dt_to))
+            buttons= []
+            buttons.append({"title":"Select Timeslot", 'payload': '/select_slot{"timeframe":'+timef+'}' })
+            dispatcher.utter_button_message(
+               text= text,
+               buttons= buttons
+            )
 
 
 
       return []
+
+
+class ActionSelectSlot(Action):
+
+   def name(self):
+      return "action_select_slot"
+
+
+   def run(self, dispatcher, tracker, domain):
+      dispatcher.utter_message("In Selected Timeframe")
+
+      timef= tracker.get_slot("timeframe")
+      log.info("TIMEFRAME: {}".format(timef))
+      dispatcher.utter_message("TIMEFRAME: {}".format(timef))
+      
+      dispatcher.utter_message("Type: {}".format(type(timef)))
+      #timef= json.loads(timef) 
+
+      md= tracker.get_slot("meeting_data")
+      md= json.loads(md) 
+
+      md['from']= dt_from= timef['from']
+      md['to']= dt_to= timef['to']
+      dt_from= duck.str_to_dt(dt_from)
+      dt_to= duck.str_to_dt(dt_to)
+      text= "On {}, are you fine with {} to {}".format(duck.dt_to_date(dt_from), duck.dt_to_time(dt_from), duck.dt_to_time(dt_to))
+      buttons= []
+      buttons.append({"title":"Book", 'payload': '/book_meeting', 'type': "postback"})
+      dispatcher.utter_button_message(
+         text= text,
+         buttons= buttons
+      )
+      return [SlotSet("meeting_data", json.dumps(md) )]
+
 ################################################################################################
 
 
