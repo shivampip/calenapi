@@ -1,0 +1,270 @@
+intents:
+  - set_meeting
+  - greet
+  - show_event_details
+  - show_invites
+  - accept_invite
+  - show_pending_events
+  - pending_event_details
+
+  - book_meeting
+  - show_more_slots
+  - select_slot
+
+  - show_busy_slots
+  - show_aa_slots
+  - login
+  - show_noti
+  - show_today_schedule
+  - who_am_i
+
+  
+  - introduction
+  - annoying
+  - unhelpful
+  - boring
+  - boss
+  - help
+  - chatbot
+  - smart
+  - good
+  - marry
+  - occupation
+  - residence
+  - bad
+  - thanks
+  - welldone
+  - happy
+  - love
+  - goodbye
+  - howru
+
+##--------------------------------------------------
+
+
+actions:
+  - utter_ok
+  - utter_greet
+  - utter_thanks_for_pi
+  - utter_wait
+  - action_default_fallback
+  - show_invites_action
+  - accept_invite_action
+  - show_pending_events_action
+  - pending_event_detail_action
+  - action_book_meeting
+  - action_show_more_slots
+  - action_event_details
+  - action_select_slot
+
+  - action_busy_slots
+  - action_aa_slots
+  - action_login
+  - action_noti
+  - action_today_schedule
+  - action_verify
+
+
+  - utter_about_me
+  - utter_annoying
+  - utter_boring
+  - utter_unhelpful
+  - utter_improving
+  - utter_boss
+  - utter_chatbot
+  - utter_smart
+  - utter_good
+  - utter_marry
+  - utter_occupation
+  - utter_residence
+  - utter_bad
+  - utter_smile
+  - utter_thanks
+  - utter_me_happy
+  - utter_me_love
+
+  - utter_goodbye
+  - utter_welcome
+  - utter_fine
+
+
+
+entities:
+ - time
+ - person
+ - duration
+ - title
+ - invite_id
+ - event_id
+ - meeting_data
+ - timeframe
+ - username
+
+
+slots:
+  time:
+    type: text
+  person:
+    type: unfeaturized
+  duration:
+    type: unfeaturized
+  title:
+    type: unfeaturized
+  invite_id:
+    type: text
+  event_id:
+    type: text 
+
+  meeting_data:
+    type: unfeaturized
+  timeframe:
+    type: unfeaturized
+  username:
+    type: unfeaturized
+
+
+forms:
+  - meeting_manager
+
+templates:
+  utter_ask_duration:
+  - text: "What is the duration of meeting?"
+  - text: "What is the time duration? ⌛"
+  
+  utter_ask_time:
+  - text: "What is the timing? ⏱️"
+  - text: "Please specify the time frame"
+  - text: "What is the time ⌚ for meeting"
+
+  utter_ask_person:
+  - text: "What members do you want to add?"
+
+  utter_ask_title:
+  - text: "Please provide suitable title?"
+  - text: "What is title of meeting?"
+
+  utter_ok:
+  - text: "OK"
+  - text: "Alright"
+  - text: "Okay"
+
+  utter_greet:
+  - text: "Hello 🖐️"
+  - text: "Hi"
+  - text: "Hey"
+  - text: "Hii 👋"
+
+  utter_thanks_for_pi:
+  - text: "Thanks for providing information"
+
+  utter_wait:
+  - text: "Please wait..."
+
+
+  action_default_fallback:
+  - text: "default fallback action performing"
+
+
+
+
+  ##########################################################################################################
+
+  utter_goodbye:
+  - text: "Bye {username} 👋"
+  - text: "Goodbye {username} 👋"
+
+
+  utter_about_me:
+  - text: "I am Scheduling Bot 🤖 by Vegento"
+  - text: "I am AI bot 🤖 which can help you scheduling ⏰ your meetings."
+  
+
+  utter_annoying:
+  - text: "If you feel so, I am sorry 🙇" 
+  - text: "Sorry for annoying 🙇"
+
+  utter_unhelpful:
+  - text: "I try my best to help 😌"
+  - text: "I am trying my best 😌"
+  - text: "I tried everything in my capabilities 😌"
+
+  utter_improving:
+  - text: "I am imporving myself day by day"
+  - text: "I am working on myself"
+  - text: "I am continiously learning"
+
+  utter_boring:
+  - text: "I am not that boring 👻"
+  - text: "I am preety intresting 🤩"
+
+  utter_boss:
+  - text: "Pankaj Attarde"
+  - text: "Its Pankaj Attarde"
+
+
+  utter_chatbot:
+  - text: "Yes, I am AI Chatbot 🤖"
+  - text: "I am Artificial Intelligent Chatbot 🤖"
+
+  utter_smart:
+  - text: "Ya, I also feel so 😉"
+  - text: "Ohh, you think so, thanks 🤗"
+  - text: "Yaaa, thanks"
+
+  utter_good:
+  - text: "You are good too {username} 😊"
+  - text: "Only nice peopple can se the goodness 😊"
+
+  utter_marry:
+  - text: "I can't marry you 🙅‍"
+  - text: "I am virtual 🤖, You are real 🧔"
+  - text: "That's not possible 🙅"
+  - text: "A machine and human can't marry 🙅"
+
+  utter_occupation:
+  - text: "I am your personal scheduling assistant"
+  - text: "I work for Vegento"
+
+  utter_residence:
+  - text: "I live on Vegento servers 🖥️"
+  - text: "I live on internet 🌐"
+
+  utter_bad:
+  - text: "I try my best to serve you best results"
+  - text: "If you feel so, I apolozige 🙇"
+
+
+  utter_welcome:
+  - text: "You are welcome 😊"
+  - text: "Welcome 😊"
+  - text: "You are most welcome 😄"
+  - text: "Its my pleasure 🙂"
+
+  utter_smile:
+  - text: "hahaha"
+  - text: "that made me smile 😁"
+  - text: "that put smile on my face"
+
+  utter_me_happy:
+  - text: "I am happy 😊"
+  - text: "that made me happy"
+
+  utter_me_love:
+  - text: "Ohhh, thanks 😍"
+  - text: "I like you 😍"
+
+  utter_thanks:
+  - text: "Thankyou 🙏"
+  - text: "Thanks 😊"
+  - text: "Thankyou very mush"
+
+
+  utter_fine:
+  - text: "I am fine 👌"
+  - text: "First class 🤘"
+
+
+  utter_default:
+  - text: "I didn't understand 😕"
+  - text: "Sorry, I didn't get you"
+  - text: "I didn't get that 😞"

@@ -11,6 +11,9 @@ def make_std(dt):
     return parse(dt).strftime("%Y-%m-%dT%H:%M")
 
 
+def get_now():
+    return datetime.now()
+
 def str_to_dt(text):
     return parse(text) 
 
@@ -63,10 +66,7 @@ def get_time(data):
             out['from']= make_std(out['from'])
             log.info("New From: {}".format(out['from']))
     log.info("OUT IS:")
-    pprint(out)
     if('to' not in out):
-        tto= add_duration(str_to_dt(out['from']), 1800)
-        out['to']= tto.strftime("%Y-%m-%dT%H:%M")
         out['from']= make_std(out['from'])
     pprint(out) 
     return out 
