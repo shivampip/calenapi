@@ -74,13 +74,13 @@
 - can you show me aa slots
 
 ## intent:login
-- i am [shivam](person)
-- i am [ram](person)
-- i am [kavita](person)
-- i am [anuj](person)
-- i am [samar](person)
-- i am [gg](person)
-- i ma [sittu](person)
+- i am [shivam](username)
+- i am [ram](username)
+- i am [kavita](username)
+- i am [anuj](username)
+- i am [samar](username)
+- i am [gg](username)
+- i ma [sittu](username)
 
 
 ## intent:show_noti

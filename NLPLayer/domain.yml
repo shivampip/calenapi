@@ -50,6 +50,7 @@ entities:
  - event_id
  - meeting_data
  - timeframe
+ - username
 
 
 slots:
@@ -69,6 +70,8 @@ slots:
   meeting_data:
     type: unfeaturized
   timeframe:
+    type: unfeaturized
+  username:
     type: unfeaturized
 
 

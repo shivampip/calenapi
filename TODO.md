@@ -10,7 +10,16 @@ if time< current time:
 
 
 
+day after tomorrow ==> day= duration && day= time
 
 
 
-Make login 'person' seperate
+
+
+Who am I
+
+
+Decline invite
+
+
+implement pending event status show

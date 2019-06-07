@@ -525,7 +525,7 @@ class LoginAction(Action):
       return "action_login"
 
    def run(self, dispatcher, tracker, domain):
-      user= tracker.get_slot("person")
+      user= tracker.get_slot("username")
       if(user is None):
          dispatcher.utter_message("Please specify the user")
          return []

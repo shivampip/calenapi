@@ -76,6 +76,6 @@
   - action_aa_slots
 
 #Login
-* login{"person":"shivam"}
-  - slot{"person":"shivam"}
+* login{"username":"shivam"}
+  - slot{"username":"shivam"}
   - action_login
