@@ -13,6 +13,7 @@ from .serializers import EventSerializer, UserSerializer, PendingEventSerializer
 from dateutil.parser import parse
 from datetime import timedelta, datetime
 
+
 from .hiutil import username_to_id
 import json 
 
@@ -35,9 +36,11 @@ from .mylog import log
 
 
 
-
+## Always available/ Auto approval slots
+## If meeting invite lies in this slot, it will automatically get approved.
 class CreateAASlots(APIView):
 
+    ## Is there any busy slot in given timeframe?
     def check(self ,author, week_day, start_time, end_time):
         start_time+= timedelta(seconds= 1)
         busy_slots= BusySlot.objects.filter(author= author, week_day= week_day, start_time__range= (start_time, end_time))
@@ -71,14 +74,13 @@ class CreateAASlots(APIView):
             serializer= AASlotSerializer(data= data)
             if(serializer.is_valid()):
                 event= serializer.save()
-                #return Response(serializer.data, status= status.HTTP_201_CREATED)
             else:
                 is_error= True 
-                #return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
         if(not is_error):
             return JsonResponse({"status": "success"}, status= status.HTTP_201_CREATED)
         else: 
             return JsonResponse({"status": "error"}, status= status.HTTP_400_BAD_REQUEST)
+
 
 
 class GetAASlot(APIView):
@@ -90,6 +92,7 @@ class GetAASlot(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
 
 
+## Busy slots will be ignored while getting available slot list
 class CreateBusySlots(APIView):
     
     def post(self, request):
@@ -155,9 +158,11 @@ class ListEvents(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
 
 
-
+## Pending Event
+## Every new event will be in pending state until all the invites get accepted.
 class CreatePE(APIView):
 
+    ## It host busy in given timeframe?
     def check_busy_slots(self, author, date_start, date_end):
         # 2019-04-24T06:00:00Z
         start_dt= parse(date_start)
@@ -174,6 +179,7 @@ class CreatePE(APIView):
         log.info("BusySlot len is {}".format(str(bel)))
         return bel==0 
     
+    ## Is there already a meeting pending in given timeframe?
     def check_pending_event(self, author, date_start, date_end):       
         start_dt= parse(date_start)
         end_dt= parse(date_end)
@@ -186,6 +192,7 @@ class CreatePE(APIView):
         log.info("PendingEvent len is {}".format(str(pel)))
         return pel==0
 
+    ## Is there already a meeting scheuled in given timeframe?
     def check_event(self, author, date_start, date_end):       
         start_dt= parse(date_start)
         end_dt= parse(date_end)
@@ -198,11 +205,14 @@ class CreatePE(APIView):
         log.info("Event len is {}".format(str(pel)))
         return pel==0
 
+    ## Notify all the members included in meeting
     def notify(self, user, msg):
         log.info("Notifying "+str(user)) 
         noti= Notification(user= user, text= msg, seen= False)   
         noti.save() 
 
+    ## Sending meeting invite to the members
+    ## If invite lies in AA Slot, auto accept it.
     def send_invite(self, pe, members, cuser, start_dt, end_dt):
         log.info("Sending invite of "+str(pe))
         for member in members:
@@ -353,6 +363,7 @@ class ShowInvites(APIView):
 
 class AcceptInvite(APIView):
 
+    ## Notify host about acceptance
     def notify(self, user, msg, add_data=None):
         noti= None 
         if(add_data is None):
@@ -362,6 +373,7 @@ class AcceptInvite(APIView):
         noti.save() 
         log.info("Notified: {}, Message: {}".format(str(user), msg))
 
+    ## Delete the invite once it's accepted.
     def delete_things(self, pe):
         #Delete Invites
         invs= pe.invite_set.all()
@@ -371,6 +383,7 @@ class AcceptInvite(APIView):
         pe.delete()
         log.info("Pending Event Deleted")
 
+    ## Make confirm event / Finall book the meeting 
     def make_event(self, pe):
         log.info("Making permanent event of {}".format(str(pe)))
         data= {
@@ -406,7 +419,7 @@ class AcceptInvite(APIView):
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
-
+    ## If all members have accepted the invites, Book the meeting.
     def check(self, pe):
         log.info("Checking pending event status")
         invs= pe.invite_set.all()
@@ -438,8 +451,6 @@ class AcceptInvite(APIView):
             return JsonResponse({"status": "error"})
 
 
-from datetime import datetime
-#from pytz import timezone 
 
 
 #TODO
@@ -668,7 +679,7 @@ class GetShareableLink(APIView):
             }, status= status.HTTP_400_BAD_REQUEST)
 
 
-
+## Appointment booking page
 class BrowseLink(APIView):
     authentication_classes= ()
     permission_classes= ()
