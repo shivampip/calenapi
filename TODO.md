@@ -21,3 +21,8 @@ Who am I
 
 Decline invite
 
+## Add additional fields in meeting info
+
+* meeting-type
+* vanue
+

@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-
+#TODO
+#Add fields meeting-type and vanuess
 class Event(models.Model):
     author= models.ForeignKey(User, related_name= 'events', on_delete= models.CASCADE)
     title= models.CharField(max_length= 200)
