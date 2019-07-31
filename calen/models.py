@@ -13,6 +13,9 @@ class Event(models.Model):
     date_start= models.DateTimeField("From")
     date_end= models.DateTimeField("To")
     members = models.CharField(max_length=200)
+    
+    meeting_type= models.CharField(max_length= 50)
+    vanue= models.CharField(max_length= 1000)
 
     '''
     def set_members(self, x):
